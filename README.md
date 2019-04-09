@@ -1,6 +1,6 @@
-# fresh-managar
+# fresh-super-managar
 
-> 赞播优鲜-管理
+> 赞播优鲜总后台-管理
 
 ## Project setup
 
