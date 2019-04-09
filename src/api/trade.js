@@ -8,7 +8,7 @@ export default {
    * @returns {*}
    */
   getTradeOrderType(data = {}, loading = false) {
-    let url = '/social-shopping/api/backend/finance/trade-order-type'
+    let url = '/social-shopping/api/platform/trade-status'
     return request.get(url, data, loading)
   },
   /**
@@ -18,7 +18,7 @@ export default {
    * @returns {*}
    */
   getTradeList(data = {}, loading = false) {
-    let url = '/social-shopping/api/backend/finance/trade'
+    let url = '/social-shopping/api/platform/trades'
     return request.get(url, data, loading)
   },
   /**
@@ -28,7 +28,7 @@ export default {
    * @returns {*}
    */
   getTradeDetail(data = {}, loading = false) {
-    let url = '/social-shopping/api/backend/finance/trade-detail'
+    let url = '/social-shopping/api/platform/trade-statistics'
     return request.get(url, data, loading)
   }
 }

@@ -19,17 +19,7 @@ export default {
    * @returns {*}
    */
   getWithdrawalList(data = {}, loading = true) {
-    let url = '/social-shopping/api/backend/backend-shop-manager/withdrawal'
-    return request.get(url, data, loading)
-  },
-  /**
-   * 提现审核
-   * @param data
-   * @param loading
-   * @returns {*}
-   */
-  applyWithdrawal(data, loading = true) {
-    let url = '/social-shopping/api/backend/backend-shop-manager/withdrawal-apply'
+    let url = '/social-shopping/api/platform/withdrawal'
     return request.get(url, data, loading)
   },
   /**
@@ -39,7 +29,7 @@ export default {
    * @returns {*}
    */
   getWithdrawalStatus(data = {}, loading = false) {
-    let url = '/social-shopping/api/backend/backend-shop-manager/withdrawal-status'
+    let url = '/social-shopping/api/platform/withdrawal-status'
     return request.get(url, data, loading)
   },
   /**
@@ -49,7 +39,7 @@ export default {
    * @returns {*}
    */
   getShopBill(data = {}, loading = true) {
-    let url = '/social-shopping/api/backend/backend-shop-manager/shop-bill'
+    let url = '/social-shopping/api/platform/shop-bill'
     return request.get(url, data, loading)
   },
   /**
@@ -59,7 +49,7 @@ export default {
    * @returns {*}
    */
   getShopBillType(data = {}, loading = false) {
-    let url = '/social-shopping/api/backend/backend-shop-manager/shop-order-type'
+    let url = '/social-shopping/api/platform/shop-order-type'
     return request.get(url, data, loading)
   }
 }

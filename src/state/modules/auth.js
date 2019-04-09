@@ -30,25 +30,25 @@ export const actions = {
   },
   // 登录
   logIn({commit, dispatch, getters}, {username, password}) {
-    // if (getters.loggedIn) {
-    //   return dispatch('validate')
-    // }
-    // return API.Auth.logIn({username, password})
-    //   .then((res) => {
-    //     if (res.error !== app.$ERR_OK) {
-    //       app.$toast.show(res.message)
-    //       return null
-    //     }
-    //     const user = res.data
-    //     commit('SET_CURRENT_USER', user)
-    //     return user
-    //   })
-    //   .catch(() => {
-    //     return null
-    //   })
-    //   .finally(() => {
-    //     app.$loading.hide()
-    //   })
+    if (getters.loggedIn) {
+      return dispatch('validate')
+    }
+    return API.Auth.logIn({username, password})
+      .then((res) => {
+        if (res.error !== app.$ERR_OK) {
+          app.$toast.show(res.message)
+          return null
+        }
+        const user = res.data
+        commit('SET_CURRENT_USER', user)
+        return user
+      })
+      .catch(() => {
+        return null
+      })
+      .finally(() => {
+        app.$loading.hide()
+      })
   },
   // 退出
   logOut({commit}) {
@@ -83,7 +83,6 @@ export const actions = {
 function setDefaultAuthHeaders(state) {
   let commonHeaders = {
     'Current-Corp': process.env.VUE_APP_CURRENT_CORP,
-    'Current-Shop': process.env.VUE_APP_CURRENT_SHOP,
     Authorization: state.currentUser ? state.currentUser.access_token : ''
   }
   axios.defaults.headers.common = commonHeaders

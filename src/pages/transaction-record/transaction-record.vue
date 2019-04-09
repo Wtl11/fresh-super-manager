@@ -14,7 +14,7 @@
     <div class="down-content">
       <span class="down-tip">支付时间</span>
       <div class="down-item">
-        <base-date-select placeHolder="选择支付日期" :dateInfo="date" @getTime="changeDate"></base-date-select>
+        <base-date-select placeHolder="选择支付日期" :dateInfo="dateInfo" @getTime="changeDate"></base-date-select>
       </div>
       <span class="down-tip">搜索</span>
       <div class="down-item">
@@ -40,16 +40,12 @@
           <div v-for="(item,index) in listTitle" :key="index" class="list-item">{{item}}</div>
         </div>
         <div class="list">
-          <div class="list-content list-box">
-            <div class="list-item">
-              sfcsfsdf
-            </div>
-            <div class="list-item">
-              <span class="list-operation">dfs</span>
-            </div>
-            <div class="list-item">dfs}</div>
-            <div class="list-item">dfd</div>
-            <div class="list-item">dfs</div>
+          <div v-for="(item, index) in trades" :key="index" class="list-content list-box">
+            <div class="list-item">{{item.created_at}}</div>
+            <div class="list-item">{{item.order_sn}}</div>
+            <div class="list-item">{{item.out_trade_sn}}</div>
+            <div class="list-item">{{item.total}}</div>
+            <div class="list-item">{{item.trade_type}}</div>
           </div>
         </div>
       </div>
@@ -81,7 +77,7 @@
     type: 'default',
     data: []
   }
-  const EXCEL_URL = '/social-shopping/api/backend/finance/trade-excel'
+  const EXCEL_URL = '/social-shopping/api/platform/trade-excel'
 
   export default {
     name: PAGE_NAME,
@@ -92,10 +88,9 @@
       return {
         dispatchSelect: [{name: '全部', value: '', key: 'all', num: 0}, {
           name: '支付',
-          id: 1,
           key: 'wait_release',
           num: 0
-        }, {name: '退款', id: 2, key: 'wait_purchase', num: 0}],
+        }, {name: '退款', key: 'wait_purchase', num: 0}],
         listTitle: LIST_TITLE,
         tradeSelect: TRADE_SELECT,
         tradeDetail: {}
@@ -108,7 +103,6 @@
         let currentId = this.getCurrentId()
         let data = {
           current_corp: currentId,
-          current_shop: process.env.VUE_APP_CURRENT_SHOP,
           access_token: this.currentUser.access_token,
           type: this.type,
           keyword: this.keyword,
@@ -119,6 +113,9 @@
           search.push(`${key}=${data[key]}`)
         }
         return process.env.VUE_APP_API + EXCEL_URL + '?' + search.join('&')
+      },
+      dateInfo() {
+        return this.date[0] && this.date[1] ? [this.date[0], this.date[1]] : []
       }
     },
     created() {
@@ -128,14 +125,20 @@
     methods: {
       ...tradeMethods,
       async _getTradeOrderType() {
-        let res = await API.Trade.getTradeOrderType()
+        let res = await API.Trade.getTradeOrderType({
+          keyword: this.keyword,
+          date: this.date[0] && this.date[1] ? this.date.join(',') : ''
+        })
         if (res.error !== this.$ERR_OK) {
           console.warn('获取交易状态类型失败')
           return
         }
         let selectData = res.data
-        selectData.unshift({name: '全部类型', id: ''})
-        this.tradeSelect.data = selectData
+        this.dispatchSelect = selectData.map((item) => {
+          item.num = item.statistic
+          item.name = item.status_str
+          return item
+        })
       },
       async _getTradeDetail() {
         let res = await API.Trade.getTradeDetail()
@@ -147,14 +150,17 @@
       },
       changeTradeType(select) {
         this.setTradeType(select)
+        this._getTradeOrderType()
         this.$refs.pagination.beginPage()
       },
       changeDate(date) {
         this.setDate(date)
+        this._getTradeOrderType()
         this.$refs.pagination.beginPage()
       },
       changeKeyword(keyword) {
         this.setKeyword(keyword)
+        this._getTradeOrderType()
         this.$refs.pagination.beginPage()
       },
       exportExcel() {
@@ -183,6 +189,8 @@
     .list-item
       &:nth-child(3)
         flex: 1.5
+      &:nth-child(4)
+        flex: 0.7
       &:last-child
         max-width: 80px
         flex: 0.8

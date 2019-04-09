@@ -3,7 +3,7 @@
     <div class="down-content">
       <span class="down-tip">搜索</span>
       <div class="down-item">
-        <base-search placeHolder="加盟商名称或账号"></base-search>
+        <base-search :infoText="franListKeyword" placeHolder="加盟商名称或账号" @search="changeKeyword"></base-search>
       </div>
     </div>
     <div class="table-content">
@@ -23,19 +23,17 @@
           <div v-for="(item,index) in listTitle" :key="index" class="list-item">{{item}}</div>
         </div>
         <div class="list">
-          <div class="list-content list-box">
+          <div v-for="(item, index) in franchiseList" :key="index" class="list-content list-box">
+            <div class="list-item">{{item.name}}</div>
+            <div class="list-item">{{item.mobile}}</div>
+            <div class="list-item">{{item.user_name}}</div>
+            <div class="list-item">{{item.withdrawal_card}}</div>
+            <div class="list-item">{{item.province}} {{item.city}} {{item.district}}</div>
+            <div class="list-item">{{item.service_tariffing}}</div>
+            <div class="list-item">{{item.account_count}}</div>
+            <div class="list-item">{{item.created_at}}</div>
             <div class="list-item">
-              sfcsfsdf
-            </div>
-            <div class="list-item">dgdfg</div>
-            <div class="list-item">dfs}</div>
-            <div class="list-item">dfd</div>
-            <div class="list-item">dfs</div>
-            <div class="list-item">dfs</div>
-            <div class="list-item">dfs</div>
-            <div class="list-item">5646</div>
-            <div class="list-item">
-              <router-link to="edit-franchise" append class="list-operation">编辑</router-link>
+              <router-link :to="`edit-franchise?id=${item.id}`" append class="list-operation">编辑</router-link>
             </div>
           </div>
         </div>
@@ -43,10 +41,12 @@
       <div class="pagination-box">
         <base-pagination
           ref="pagination"
+          :pageDetail="franListPageTotal"
+          @addPage="setfranListPage"
         >
-          <!--:pageDetail="pageDetail"-->
+          <!---->
           <!--:pagination="page"-->
-          <!--@addPage="setPage"-->
+          <!---->
         </base-pagination>
       </div>
     </div>
@@ -55,6 +55,8 @@
 </template>
 
 <script type="text/ecmascript-6">
+  import {franchiseComputed, franchiseMethods} from '@state/helpers'
+
   const PAGE_NAME = 'FRANCHISE_LIST'
   const TITLE = '加盟商'
   const LIST_TITLE = ['加盟商名称', '加盟商账号', '收款人', '银行账号', '地区', '平台服务费率', '社区数量', '创建时间', '操作']
@@ -68,6 +70,16 @@
       return {
         listTitle: LIST_TITLE
       }
+    },
+    computed: {
+      ...franchiseComputed
+    },
+    methods: {
+      ...franchiseMethods,
+      changeKeyword(keyword) {
+        this.setfranListKeyword(keyword)
+        this.$refs.pagination.beginPage()
+      }
     }
   }
 </script>
@@ -77,7 +89,7 @@
 
   .list-box
     .list-item
-      &:nth-child(1), &:nth-child(2), &:nth-child(5)
+      &:nth-child(1), &:nth-child(2), &:nth-child(5), &:nth-child(8)
         flex: 1.5
       &:nth-child(4)
         flex: 1.5

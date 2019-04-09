@@ -1,5 +1,4 @@
 const appConfig = require('./src/app.config')
-
 module.exports = {
   configureWebpack: {
     name: appConfig.title,

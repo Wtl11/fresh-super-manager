@@ -28,15 +28,6 @@ export const state = {
 }
 
 export const getters = {
-  deliveryDetail(state) {
-    return state.deliveryDetail
-  },
-  settlementList(state) {
-    return state.settlementList
-  },
-  settlementDetail(state) {
-    return state.settlementDetail
-  },
   withdrawalList(state) {
     return state.withdrawalList
   },
@@ -75,6 +66,12 @@ export const getters = {
   },
   billPage(state) {
     return state.billPage
+  },
+  startAt(state) {
+    return state.startAt
+  },
+  endAt(state) {
+    return state.endAt
   }
 }
 

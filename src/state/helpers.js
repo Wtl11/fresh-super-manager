@@ -56,3 +56,30 @@ export const leaderMethods = mapActions('leader', [
   'setBillType',
   'setWidthTime'
 ])
+
+// 加盟商
+export const franchiseComputed = {
+  ...mapGetters('franchise', [
+    'franchiseSettlement',
+    'settlementStart',
+    'settlementEnd',
+    'settlementKeyword',
+    'settlementStatus',
+    'pageTotal',
+    'settlementPage',
+    'franchiseList',
+    'franListKeyword',
+    'franListPageTotal',
+    'franListPage',
+  ])
+}
+
+export const franchiseMethods = mapActions('franchise', [
+  'getFranchiseSettlement',
+  'setfranPage',
+  'setfranStatus',
+  'setfranKeyword',
+  'setfranTime',
+  'setfranListKeyword',
+  'setfranListPage'
+])

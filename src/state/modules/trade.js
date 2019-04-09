@@ -62,7 +62,7 @@ export const actions = {
   getTradeList({commit, state}) {
     const {type, keyword, page, startDate, endDate} = state
     let data = {
-      type,
+      status: type,
       keyword,
       page,
       date: startDate && endDate ? `${startDate},${endDate}` : ''
@@ -91,7 +91,7 @@ export const actions = {
       })
   },
   setTradeType({commit, dispatch}, select) {
-    commit('SET_TYPE', select.id)
+    commit('SET_TYPE', select.status)
     commit('SET_PAGE', 1)
     dispatch('getTradeList')
   },

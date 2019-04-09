@@ -6,7 +6,8 @@
         <base-drop-down :select="statusSelect" @setValue="changeWithdrawalStatus"></base-drop-down>
       </div>
       <div class="down-item">
-        <base-date-select @getTime="_setTime"></base-date-select>
+        <!---->
+        <base-date-select :dateInfo="infoTime" @getTime="_setTime"></base-date-select>
       </div>
       <span class="down-tip">搜索</span>
       <div class="down-item">
@@ -25,7 +26,10 @@
           <p class="identification-name">团长提现列表</p>
         </div>
         <div class="function-btn">
-          <div class="btn-main btn-main-end" @click="exportExcel">导出Excel</div>
+          <div class="btn-main btn-main-end" @click="exportExcel">
+            <span class="export-icon"></span>
+            导出
+          </div>
         </div>
       </div>
       <div class="big-list">
@@ -98,7 +102,7 @@
     type: 'default',
     data: []
   }
-  const EXCEL_URL = '/social-shopping/api/backend/backend-shop-manager/withdrawal-excel'
+  const EXCEL_URL = '/social-shopping/api/platform/withdrawal-excel'
 
   export default {
     name: PAGE_NAME,
@@ -126,23 +130,28 @@
         let currentId = this.getCurrentId()
         let data = {
           current_corp: currentId,
-          current_shop: process.env.VUE_APP_CURRENT_SHOP,
           access_token: this.currentUser.access_token,
           withdraw_sn: this.withdrawalSn,
           type: this.withdrawalType,
           keyword: this.withdrawalKeyword,
           status: this.withdrawalStatus,
-          start_at: this.start || '',
-          end_at: this.end || ''
+          start_at: this.startAt || '',
+          end_at: this.endAt || ''
         }
         let search = []
         for (let key in data) {
           search.push(`${key}=${data[key]}`)
         }
         return process.env.VUE_APP_API + EXCEL_URL + '?' + search.join('&')
+      },
+      infoTime() {
+        let time = this.startAt && this.endAt ? [this.startAt, this.endAt] : []
+        return time
       }
     },
     created() {
+      this.orderSn = this.withdrawalSn
+      this.keyword = this.withdrawalKeyword
       this._getWithdrawalStatus()
     },
     methods: {
@@ -177,8 +186,6 @@
       },
       _setTime(time) {
         this.setWidthTime(time)
-        this.start = time[0]
-        this.end = time[1]
         this.$refs.pagination.beginPage()
       }
     }
@@ -210,6 +217,10 @@
         flex: 1.3
       &:nth-child(5)
         flex: 1.7
+      &:nth-child(9)
+        flex: 1.2
+        min-width: 123px
+        padding: 0
       &:last-child
         max-width: 60px
         min-width: 60px
@@ -218,7 +229,10 @@
       overflow: visible !important
       display: flex
       align-items: center
+      line-height: 1
       .help-box
+        display: block
+        transform translateY(1px)
         margin-left: 5px
         position: relative
         &:hover .help-tip
@@ -333,4 +347,13 @@
     color: $color-white
     &:hover
       opacity: 0.8
+
+  .export-icon
+    transition: all 0.2s
+    icon-image('icon-derived')
+
+  .btn-main
+    &:hover
+      .export-icon
+        icon-image('icon-derived_white')
 </style>

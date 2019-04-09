@@ -10,7 +10,7 @@ export default [
       beforeResolve(routeTo, routeFrom, next) {
         // 判断用户是否已经登录
         if (store.getters['auth/loggedIn']) {
-          next({name: 'product-list'})
+          next({name: 'franchise-list'})
         } else {
           next()
         }
@@ -36,7 +36,20 @@ export default [
         name: 'franchise-list',
         component: () => lazyLoadView(import('@pages/franchise-list/franchise-list')),
         meta: {
-          titles: ['客户', '加盟商']
+          titles: ['客户', '加盟商'],
+          beforeResolve(routeTo, routeFrom, next) {
+            store
+              .dispatch('franchise/getFranchiseList', routeTo.params.id)
+              .then((res) => {
+                if (!res) {
+                  return next({name: '404'})
+                }
+                return next()
+              })
+              .catch(() => {
+                return next({name: '404'})
+              })
+          }
         }
       },
       // 新建加盟商
@@ -45,9 +58,28 @@ export default [
         name: 'edit-franchise',
         component: () => lazyLoadView(import('@pages/edit-franchise/edit-franchise')),
         meta: {
-          titles: ['客户', '加盟商', '新建加盟商']
-        }
+          titles: ['客户', '加盟商', '新建加盟商'],
+          beforeResolve(routeTo, routeFrom, next) {
+            if (!routeTo.query.id) {
+              return next()
+            }
+            store
+              .dispatch('franchise/getFranchiseDetail', routeTo.query.id)
+              .then((res) => {
+                if (!res) {
+                  return next({name: '404'})
+                }
+                routeTo.params.detail = res
+                next()
+              })
+              .catch(() => {
+                next({name: '404'})
+              })
+          }
+        },
+        props: (route) => ({detail: route.params.detail})
       },
+
       /**
        * 客户
        *
@@ -61,7 +93,21 @@ export default [
         name: 'franchise-settlement',
         component: () => lazyLoadView(import('@pages/franchise-settlement/franchise-settlement')),
         meta: {
-          titles: ['财务', '结算', '加盟商结算']
+          titles: ['财务', '结算', '加盟商结算'],
+          beforeResolve(routeTo, routeFrom, next) {
+            //  订单列表
+            store
+              .dispatch('franchise/getFranchiseSettlement')
+              .then((res) => {
+                if (!res) {
+                  return next({name: '404'})
+                }
+                return next()
+              })
+              .catch(() => {
+                return next({name: '404'})
+              })
+          }
         }
       },
       // 团长提现
@@ -93,7 +139,7 @@ export default [
         name: 'budget-detail',
         component: () => lazyLoadView(import('@pages/budget-detail/budget-detail')),
         meta: {
-          titles: ['商城', '团长', '团长提现', '收支明细', ''],
+          titles: ['财务', '结算', '团长提现', '收支明细', ''],
           beforeResolve(routeTo, routeFrom, next) {
             store
               .dispatch('leader/getBillList', routeTo.params.id)
@@ -115,7 +161,20 @@ export default [
         name: 'transaction-record',
         component: () => lazyLoadView(import('@pages/transaction-record/transaction-record')),
         meta: {
-          titles: ['财务', '结算', '交易记录']
+          titles: ['财务', '结算', '交易记录'],
+          beforeResolve(routeTo, routeFrom, next) {
+            store
+              .dispatch('trade/getTradeList')
+              .then((res) => {
+                if (!res) {
+                  return next({name: '404'})
+                }
+                return next()
+              })
+              .catch(() => {
+                return next({name: '404'})
+              })
+          }
         }
       }
       /**

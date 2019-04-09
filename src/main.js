@@ -25,3 +25,4 @@ const app = new Vue({
 export default app
 
 window.__app__ = app
+console.log(process.env)

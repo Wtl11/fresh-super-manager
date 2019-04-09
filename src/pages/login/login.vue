@@ -55,7 +55,7 @@
             if (!user) {
               return
             }
-            this.$router.push(this.$route.query.redirectFrom || '/home/product-list')
+            this.$router.push(this.$route.query.redirectFrom || '/home/franchise-list')
           })
           .catch((error) => {
             this.$toast.show(error)
@@ -75,7 +75,7 @@
     position: absolute
     width: 100%
     height: 100%
-    background: url("./pic-login_background.jpg") no-repeat
+    background: url("./pic-login_background@1x.png") no-repeat
     background-size: cover
     background-position: center center
 
@@ -104,7 +104,8 @@
         height: 44px
         box-sizing: border-box
         margin-bottom: 24px
-        border-radius: 2px
+        border-radius: 4px
+        overflow :hidden
         background: $color-white
 
         input
@@ -117,9 +118,9 @@
         width: 360px
         height: 43px
         margin-top: 16px
-        border-radius: 2px
+        border-radius: 4px
         line-height: 43px
         font-size: $font-size-14
         color: $color-white
-        background: $color-positive
+        background: $color-main
 </style>

@@ -72,7 +72,7 @@
     .status-tab-item
       user-select: none
       border-radius: 100px
-      width: 96px
+      width: 106px
       color: $color-text-main
       line-height: 30px
       text-align: center

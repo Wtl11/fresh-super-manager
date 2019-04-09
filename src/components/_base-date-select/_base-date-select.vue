@@ -73,11 +73,11 @@
       },
       time(value) {
         // 选择单天的时间选择器
-        this.$emit('getDateTime', value)
+        this.$emit('getDateTime', value || '')
       },
       moreTime(value) {
         // 选择初始时间加结束时间的时间选择器
-        this.$emit('getTime', value)
+        this.$emit('getTime', value || ['', ''])
       }
     }
   }
