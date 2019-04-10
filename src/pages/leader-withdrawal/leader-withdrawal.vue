@@ -42,7 +42,7 @@
               <p class="item-dark">{{item.withdraw_sn}}</p>
               <p class="item-sub">{{item.created_at}}</p>
             </div>
-            <div class="list-item">加盟商(未加数据)</div>
+            <div class="list-item">{{item.store_name}}</div>
             <div class="list-item">{{item.mobile}}</div>
             <div class="list-item">{{item.name}}</div>
             <div class="list-item">{{item.social_name}}</div>

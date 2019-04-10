@@ -2,13 +2,13 @@
   <div class="transaction-record table">
     <div class="down-content detail-down">
       <div class="down-item-text">
-        <span class="header-text">支付总额：￥27383.00</span>
+        <span class="header-text">支付总额：{{tradeDetail.total && `￥${tradeDetail.total}`}}</span>
       </div>
       <div class="down-item-text">
-        <span class="header-text">退款总额：￥27383.00</span>
+        <span class="header-text">退款总额：{{tradeDetail.refund && `￥${tradeDetail.refund}`}}</span>
       </div>
       <div class="down-item-text">
-        <span class="header-text">实收总额：￥27383.00</span>
+        <span class="header-text">实收总额：{{tradeDetail.amount && `￥${tradeDetail.amount}`}}</span>
       </div>
     </div>
     <div class="down-content">
