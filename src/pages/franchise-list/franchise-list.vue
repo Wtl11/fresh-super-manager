@@ -42,11 +42,9 @@
         <base-pagination
           ref="pagination"
           :pageDetail="franListPageTotal"
+          :pagination="franListPage"
           @addPage="setfranListPage"
         >
-          <!---->
-          <!--:pagination="page"-->
-          <!---->
         </base-pagination>
       </div>
     </div>

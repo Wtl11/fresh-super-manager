@@ -57,6 +57,7 @@
         <base-pagination
           ref="pagination"
           :pageDetail="pageTotal"
+          :pagination="franListPage"
           @addPage="setfranPage"
         >
         </base-pagination>
@@ -202,6 +203,9 @@
         this.$refs.franchise.hideModal()
       },
       cancelImg() {
+        setTimeout(() => {
+          this.franImg = ''
+        }, 300)
         this.$refs.franchiseImg.hideModal()
       },
       async settlement(id, item) {

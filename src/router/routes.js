@@ -141,6 +141,8 @@ export default [
         meta: {
           titles: ['财务', '结算', '团长提现', '收支明细', ''],
           beforeResolve(routeTo, routeFrom, next) {
+            //    commit('SET_BILL_PAGE', page)
+            store.dispatch('leader/setInfoPage')
             store
               .dispatch('leader/getBillList', routeTo.params.id)
               .then((res) => {

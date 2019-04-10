@@ -229,6 +229,9 @@ export const actions = {
     commit('SET_BILL_PAGE', page)
     dispatch('getBillList')
   },
+  setInfoPage({commit, dispatch}) {
+    commit('SET_BILL_PAGE', 1)
+  },
   setBillType({commit, dispatch}, select) {
     commit('SET_BILL_TYPE', select.id)
     commit('SET_BILL_PAGE', 1)

@@ -69,7 +69,7 @@
         <base-pagination
           ref="pagination"
           :pageDetail="withdrawalPageDetail"
-          :pagination="page"
+          :pagination="withdrawalPage"
           @addPage="setWithdrawalPage"
         ></base-pagination>
       </div>
