@@ -30,7 +30,7 @@
             <div class="list-item">{{item.money}}</div>
             <div class="list-item">{{item.user_name}}</div>
             <div class="list-item">{{item.withdrawal_card}}</div>
-            <div class="list-item">{{`${item.start_time} - ${item.end_time}`}}</div>
+            <!--<div class="list-item">{{`${item.start_time} - ${item.end_time}`}}</div>-->
             <div class="list-item">{{item.status_str}}</div>
             <div class="list-item">
               <img
@@ -119,7 +119,7 @@
 
   const PAGE_NAME = 'FRANCHISE_SETTLEMENT'
   const TITLE = '加盟商结算'
-  const LIST_TITLE = ['结算时间', '加盟商', '结算金额', '收款人', '银行账号', '结算周期', '状态', '打款凭证', '操作']
+  const LIST_TITLE = ['结算时间', '加盟商', '结算金额', '收款人', '银行账号', '状态', '打款凭证', '操作']
   export default {
     name: PAGE_NAME,
     page: {
@@ -253,8 +253,6 @@
     .list-item
       &:nth-child(1), &:nth-child(5)
         flex: 1.5
-      &:nth-child(6)
-        flex: 3.2
       &:last-child
         padding: 0
         max-width: 50px
