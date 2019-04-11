@@ -59,7 +59,7 @@ export default [
         component: () => lazyLoadView(import('@pages/edit-franchise/edit-franchise')),
         meta: {
           titles: ['客户', '加盟商', '加盟商'],
-          variableIndex: 3,
+          variableIndex: 2,
           beforeResolve(routeTo, routeFrom, next) {
             if (!routeTo.query.id) {
               return next()
