@@ -18,7 +18,8 @@
           加盟商账号
         </div>
         <div class="edit-input-box">
-          <div v-if="id" class="edit-change">{{stores.mobile}}</div>
+          <!--onpaste="return false"-->
+          <div v-if="id" class="Kit-change">{{stores.mobile}}</div>
           <input v-else v-model="stores.mobile" type="number" class="edit-input" maxlength="11"
                  placeholder="请填写加盟商账号"
           >
