@@ -256,11 +256,11 @@
       &:last-child
         padding: 0
         max-width: 50px
-      &:nth-child(8)
+      &:nth-child(7)
         padding: 0
         max-width: 56px
         text-align: right
-        margin-right: 5%
+        margin-right: 3%
         display: flex
         justify-content: flex-end
       .list-img
