@@ -238,15 +238,14 @@
         position: relative
         z-index: 150
         &:hover .help-tip
-          opacity: .8
+          background: rgba(50, 50, 58, .9)
           z-index: 111
           visibility: initial
       .help
         width: 14px
         height: 14px
       .help-tip
-        background: #32323A
-        opacity: 0
+        background: rgb(50, 50, 58)
         color: $color-white
         padding: 8px 18px
         border-radius: 2px
@@ -258,7 +257,7 @@
         position: absolute
         left: -75px
         top: 24.5px
-        transition: opacity .3s
+        transition: background .3s
         visibility: hidden
 
   .btn-main
