@@ -57,7 +57,7 @@
         <base-pagination
           ref="pagination"
           :pageDetail="pageTotal"
-          :pagination="franListPage"
+          :pagination="settlementPage"
           @addPage="setfranPage"
         >
         </base-pagination>
