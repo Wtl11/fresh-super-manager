@@ -200,6 +200,7 @@
       cancel() {
         this.payoffLogId = ''
         this.settlementImg = ''
+        this.imgObj = {}
         this.$refs.franchise.hideModal()
       },
       cancelImg() {
