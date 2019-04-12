@@ -263,7 +263,7 @@
       &:nth-child(7)
         padding: 0
         max-width: 56px
-        text-align: right
+        text-align: center
         margin-right: 3%
         display: flex
         justify-content: flex-end
@@ -271,6 +271,7 @@
         width: 18.7px
         height: 14.5px
         display: block
+        margin-right: 18px
         border-radius: 0
 
   .export-icon
