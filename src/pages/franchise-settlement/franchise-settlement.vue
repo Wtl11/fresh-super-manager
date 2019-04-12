@@ -140,7 +140,8 @@
         payoffLogId: '',
         imgObj: {},
         settlementItem: {},
-        franImg: ''
+        franImg: '',
+        isSendImg: true
       }
     },
     computed: {
@@ -202,6 +203,9 @@
         this.settlementImg = ''
         this.imgObj = {}
         this.$refs.franchise.hideModal()
+        setTimeout(() => {
+          this.isSendImg = true
+        }, 600)
       },
       cancelImg() {
         setTimeout(() => {
@@ -216,13 +220,18 @@
       },
       // 确认结算
       async confirm() {
+        if(!this.isSendImg) {
+          return
+        }
         if (!this.imgObj.id) {
           this.$toast.show('请上传凭证!')
           return
         }
+        this.isSendImg = false
         let res = await API.Franchise.payoffsComfirm(this.payoffLogId, {image_id: this.imgObj.id})
         this.$toast.show(res.message)
         if (res.error !== this.$ERR_OK) {
+          this.isSendImg = true
           return
         }
         this.getFranchiseSettlement()
