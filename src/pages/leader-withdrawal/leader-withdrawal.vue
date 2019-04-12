@@ -238,14 +238,13 @@
         position: relative
         z-index: 150
         &:hover .help-tip
-          background: rgba(50, 50, 58, .9)
           z-index: 111
           visibility: initial
       .help
         width: 14px
         height: 14px
       .help-tip
-        background: rgb(50, 50, 58)
+        background: rgb(50, 50, 58, 0.9)
         color: $color-white
         padding: 8px 18px
         border-radius: 2px
