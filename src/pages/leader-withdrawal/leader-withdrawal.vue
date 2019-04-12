@@ -244,7 +244,7 @@
         width: 14px
         height: 14px
       .help-tip
-        background: rgb(50, 50, 58, 0.9)
+        background: rgba(50, 50, 58, 0.85)
         color: $color-white
         padding: 8px 18px
         border-radius: 2px
