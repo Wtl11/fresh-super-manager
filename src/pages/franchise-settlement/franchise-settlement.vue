@@ -1,7 +1,7 @@
 <template>
   <div class="franchise-settlement table">
     <div class="down-content">
-      <span class="down-tip">支付时间</span>
+      <span class="down-tip">结算时间</span>
       <div class="down-item">
         <base-date-select placeHolder="选择支付日期" :dateInfo="dateInfo" @getTime="changeDate"></base-date-select>
       </div>
