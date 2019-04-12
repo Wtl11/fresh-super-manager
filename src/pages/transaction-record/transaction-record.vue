@@ -104,7 +104,7 @@
         let data = {
           current_corp: currentId,
           access_token: this.currentUser.access_token,
-          type: this.type,
+          status: this.type,
           keyword: this.keyword,
           date: this.date[0] && this.date[1] ? `${this.date[0]},${this.date[1]}` : ''
         }
