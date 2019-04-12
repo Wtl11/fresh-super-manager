@@ -53,7 +53,8 @@
               {{item.status_str}}
               <div v-if="item.status === 2 || item.status === 4" class="help-box">
                 <img src="./icon-help@2x.png" class="help hand">
-                <div v-if="item.note" class="help-tip">{{item.note}}</div>
+                <!--v-if="item.note"-->
+                <div class="help-tip">{{item.note}}</div>
               </div>
             </div>
             <div class="list-item list-operation-box">
