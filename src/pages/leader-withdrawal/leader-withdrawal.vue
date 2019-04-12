@@ -235,6 +235,7 @@
         transform translateY(1px)
         margin-left: 5px
         position: relative
+        z-index: 150
         &:hover .help-tip
           opacity: .8
           z-index: 111
