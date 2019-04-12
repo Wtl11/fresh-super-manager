@@ -233,7 +233,6 @@
       flex-direction: column
       align-items: center
       box-sizing: border-box
-      transition: all 0.3s
       color: $color-text-main
       .nav-item-icon
         width: 20px
