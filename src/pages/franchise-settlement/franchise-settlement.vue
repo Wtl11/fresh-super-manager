@@ -150,6 +150,13 @@
         return this.settlementStart && this.settlementEnd ? [this.settlementStart, this.settlementEnd] : []
       }
     },
+    watch: {
+      settlementImg(value) {
+        if (value === '') {
+          this.imgObj = {}
+        }
+      }
+    },
     async created() {
       await this._getPayoffStatus()
     },
@@ -220,7 +227,7 @@
       },
       // 确认结算
       async confirm() {
-        if(!this.isSendImg) {
+        if (!this.isSendImg) {
           return
         }
         if (!this.imgObj.id) {
