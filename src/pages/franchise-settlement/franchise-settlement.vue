@@ -215,6 +215,10 @@
       },
       // 确认结算
       async confirm() {
+        if (!this.imgObj.id) {
+          this.$toast.show('请上传凭证!')
+          return
+        }
         let res = await API.Franchise.payoffsComfirm(this.payoffLogId, {image_id: this.imgObj.id})
         this.$toast.show(res.message)
         if (res.error !== this.$ERR_OK) {
