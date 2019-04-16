@@ -256,7 +256,7 @@
         box-shadow: 0 0 5px 0 rgba(12, 6, 14, 0.20)
         margin-top: 10px
         overflow-y: auto
-        max-height: 300px
+        max-height: 200px
         &.fade-enter, &.fade-leave-to
           opacity: 0
         &.fade-enter-to, &.fade-leave-to
