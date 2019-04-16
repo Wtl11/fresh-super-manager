@@ -19,7 +19,7 @@
         </div>
         <div class="edit-input-box">
           <!--onpaste="return false"-->
-          <div v-if="id" class="Kit-change">{{stores.mobile}}</div>
+          <div v-if="id" class="edit-change">{{stores.mobile}}</div>
           <input v-else v-model="stores.mobile" type="number" class="edit-input" maxlength="11"
                  placeholder="请填写加盟商账号"
           >
@@ -48,20 +48,33 @@
       </div>
       <div class="edit-item">
         <div class="edit-title">
-          <span class="start">*</span>
           收款人
         </div>
         <div class="edit-input-box">
-          <input v-model="stores.user_name" type="text" class="edit-input" maxlength="11" placeholder="请填写加盟商收款人真实姓名">
+          <div v-if="stores.user_name && id" class="edit-change">{{stores.user_name}}</div>
+          <input v-else v-model="stores.user_names" type="text" class="edit-input"
+                 placeholder="请填写加盟商收款人真实姓名"
+          >
         </div>
       </div>
       <div class="edit-item">
         <div class="edit-title">
-          <span class="start">*</span>
+          开户行
+        </div>
+        <div class="edit-input-box">
+          <div v-if="stores.bank && id" class="edit-change">{{stores.bank}}</div>
+          <input v-else v-model="stores.banks" type="text" class="edit-input"
+                 placeholder="请填写加盟商收款开户行"
+          >
+        </div>
+      </div>
+      <div class="edit-item">
+        <div class="edit-title">
           银行账户
         </div>
         <div class="edit-input-box">
-          <input v-model="stores.withdrawal_card" type="number" class="edit-input" maxlength="11"
+          <div v-if="stores.withdrawal_card && id" class="edit-change">{{stores.withdrawal_card}}</div>
+          <input v-else v-model="stores.withdrawal_cards" type="number" class="edit-input"
                  placeholder="请填写加盟商收款银行账户"
           >
         </div>
@@ -92,7 +105,7 @@
           平台服务费率(%)
         </div>
         <div class="edit-input-box">
-          <input v-model="stores.service_tariffing" type="number" class="edit-input" maxlength="11">
+          <input v-model="stores.service_tariffing" type="number" class="edit-input">
         </div>
       </div>
     </div>
@@ -137,20 +150,25 @@
           name: '',
           password: '',
           user_name: '',
+          user_names: '',
           withdrawal_card: '',
+          withdrawal_cards: '',
           province: '',
           city: '',
           account_count: '',
           district: '',
-          service_tariffing: 0.8
+          service_tariffing: 0.8,
+          banks: '',
+          bank: ''
         },
         isSubmit: true
       }
     },
     mounted() {
       this._setData()
-      this.stores = JSON.parse(JSON.stringify(this.detail))
-      console.log(this.stores)
+      if (this.id) {
+        this.stores = JSON.parse(JSON.stringify(this.detail))
+      }
     },
     methods: {
       /**
@@ -162,6 +180,7 @@
           this.$refs.city.infoCity([this.detail.province, this.detail.city, this.detail.district])
           this.stores = JSON.parse(JSON.stringify(this.detail))
         }
+
       },
       changeType() {
         this.isChangePassword = true
@@ -190,12 +209,6 @@
         } else if (this.isChangePassword && !this.stores.password) {
           this.$toast.show('请填写加盟商登录秘密')
           return
-        } else if (!this.stores.user_name) {
-          this.$toast.show('请填写加盟商收款人真实姓名')
-          return
-        } else if (!this.stores.withdrawal_card) {
-          this.$toast.show('请填写加盟商收款银行账户')
-          return
         } else if (!this.stores.account_count) {
           this.$toast.show('请填写社区数量')
           return
@@ -214,13 +227,18 @@
         }
         this.isSubmit = false
         let res = null
+        let data = Object.assign({}, this.stores, {
+          user_name: this.stores.user_names,
+          bank: this.stores.banks,
+          withdrawal_card: this.stores.withdrawal_cards
+        })
         if (this.id) {
           if (!this.isChangePassword) {
             delete this.stores.password
           }
-          res = await API.Franchise.updateFranchise(this.id, this.stores)
+          res = await API.Franchise.updateFranchise(this.id, data)
         } else {
-          res = await API.Franchise.storeFranchise(this.stores)
+          res = await API.Franchise.storeFranchise(data)
         }
         this.$loading.hide()
         this.$toast.show(res.message, 600)
