@@ -42,7 +42,7 @@
         <div class="edit-input-box">
           <div v-if="!isChangePassword" class="list-operation edit-change" @click="changeType">修改密码</div>
           <input v-else v-model="stores.password" type="text" class="edit-input" maxlength="11"
-                 placeholder="请填写加盟商登录秘密"
+                 placeholder="请填写加盟商登录密码"
           >
         </div>
       </div>
