@@ -207,7 +207,7 @@
           this.$toast.show('请填写加盟商名称')
           return
         } else if (this.isChangePassword && !this.stores.password) {
-          this.$toast.show('请填写加盟商登录秘密')
+          this.$toast.show('请填写加盟商登录密码')
           return
         } else if (!this.stores.account_count) {
           this.$toast.show('请填写社区数量')
