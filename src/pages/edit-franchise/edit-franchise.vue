@@ -177,7 +177,7 @@
        */
       _setData() {
         if (!_.isEmpty(this.detail)) {
-          this.$refs.city.infoCity([this.detail.province, this.detail.city, this.detail.district])
+          this.$refs.city.infoCity([this.detail.province || ' ', this.detail.city || ' ', this.detail.district || ' '])
           this.stores = JSON.parse(JSON.stringify(this.detail))
         }
 
@@ -200,7 +200,7 @@
         if (!this.id && !this.stores.mobile) {
           this.$toast.show('请填写加盟商账号')
           return
-        } else if (!TELREG.test(this.stores.mobile)) {
+        } else if (!TELREG.test(+this.stores.mobile)) {
           this.$toast.show('请填写正确加盟商账号')
           return
         } else if (!this.stores.name) {
