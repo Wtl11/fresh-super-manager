@@ -9,7 +9,7 @@
           {{items.content}}
           <img src="./icon-drop_down@2x.png" class="city-tap-top" :class="{'city-tap-top-active': item.select}">
           <transition name="fade">
-            <ul v-show="item.select" class="select-child" @mouseleave="leaveHide(index)" @mouseenter="endShow">
+            <ul v-show="item.select" class="select-child" :style="{top: height + 'px'}" @mouseleave="leaveHide(index)" @mouseenter="endShow">
               <li v-for="(child, chIdx) in items.data" :key="chIdx" class="select-child-item" @click.stop="setValue(child,index,idx)">
                 {{child.name}}
               </li>
