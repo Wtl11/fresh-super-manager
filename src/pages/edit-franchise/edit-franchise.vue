@@ -200,7 +200,7 @@
         if (!this.id && !this.stores.mobile) {
           this.$toast.show('请填写加盟商账号')
           return
-        } else if (!TELREG.test(+this.stores.mobile)) {
+        } else if (!this.id && !TELREG.test(this.stores.mobile)) {
           this.$toast.show('请填写正确加盟商账号')
           return
         } else if (!this.stores.name) {
