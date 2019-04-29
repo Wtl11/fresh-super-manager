@@ -31,13 +31,13 @@
             <div class="list-item">{{item.name}}</div>
             <div class="list-item">{{item.mobile}}</div>
             <div v-if="item.social_name" class="list-item width20">{{item.social_name}}</div>
-            <div class="list-item">{{item.state}} {{item.city}} {{item.district}}</div>
-            <div v-if="item.goods_category" class="list-item width20">{{item.goods_category}}</div>
-            <div v-if="item.address" class="list-item width20">{{item.address}}</div>
-            <div class="list-item width20">{{item.status_str}}</div>
+            <div class="list-item width20 text-wrap2">{{item.state}} {{item.city}} {{item.district}}</div>
+            <div v-if="item.goods_category" class="list-item width20 text-wrap2">{{item.goods_category}}</div>
+            <div v-if="item.address" class="list-item width20 text-wrap2">{{item.address}}</div>
+            <div class="list-item">{{item.status_str}}</div>
             <div class="list-item width20">{{item.created_at}}</div>
             <div class="list-item width20">{{item.handle_at}}</div>
-            <div class="list-item width20 text2">{{item.handle_tag}} {{item.remark}}</div>
+            <div class="list-item width20 text-wrap2">{{item.handle_tag}} {{item.remark}}</div>
             <div class="list-item">
               <span class="list-operation" @click="_handleIntent(item)">处理</span>
             </div>
@@ -260,16 +260,16 @@
 
   .list-box
     .list-item
-      flex: 1
+      /*flex: 1*/
       &.width15
         flex: 1.5
-      &:width20
+      &.width20
         flex: 2
         min-width: 150px
       &:last-child
         padding: 0
         max-width: 50px
-      &.text2
+      &.text-wrap2
         display: -webkit-box;
         overflow: hidden;
         -webkit-line-clamp: 2;  /*这里的数字代表行数*/
