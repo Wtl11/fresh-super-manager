@@ -126,5 +126,12 @@ export const actions = {
   setPage({commit, dispatch}, page) {
     commit('SET_PAGE', page)
     dispatch('getIntentList')
-  }
+  },
+  initType({commit, dispatch}) {
+    commit('SET_TYPE', 3)
+    commit('SET_STATUS', '')
+    commit('SET_PAGE', 1)
+    commit('SET_SEARCH_NUM', '')
+    commit('SET_PAGE_NAME', '加盟商')
+  },
 }

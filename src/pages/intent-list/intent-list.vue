@@ -178,10 +178,12 @@
     created() {
       this._getListStatus()
     },
+    beforeDestroy() {
+      this.initType()
+    },
     methods: {
       ...intentMethods,
       changeTabStatus(tabStatus) {
-        // this.tableTitle = tabStatus.type === 1 ? this.regimentalListTitle : this.listTitle
         this.listTitle = LIST_TITLE[tabStatus.type]
         this.initData()
         this.setIntentType(tabStatus)

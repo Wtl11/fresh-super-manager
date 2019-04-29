@@ -91,5 +91,5 @@ export const intentComputed = {
 }
 
 export const intentMethods = {
-  ...mapActions('intent', ['getIntentList', 'setSearchNum', 'setIntentStatus', 'setIntentType', 'setPage','initData'])
+  ...mapActions('intent', ['getIntentList', 'setSearchNum', 'setIntentStatus', 'setIntentType', 'setPage','initData','initType'])
 }
