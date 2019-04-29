@@ -34,6 +34,11 @@
           title: '加盟商',
           url: '/home/franchise-list',
           isLight: false
+        },
+        {
+          title: '意向单',
+          url: '/home/intent-list',
+          isLight: false
         }
       ]
     }

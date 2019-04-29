@@ -1,0 +1,340 @@
+<template>
+  <div class="intent-list table">
+    <base-tab-select :infoTabIndex="infoTabIndex" :tabStatus="tabStatus" @getStatusTab="changeTabStatus" :lineWidth="56"></base-tab-select>
+    <div class="down-content">
+      <span class="down-tip">意向单编号</span>
+      <div class="down-item">
+        <base-search  ref="searchInput" :infoText="searchNum" placeHolder="请输入编号" @search="changeKeyword"></base-search>
+      </div>
+    </div>
+    <div class="table-content">
+      <div class="identification">
+        <div class="identification-page">
+          <img src="./icon-franchisees@2x.png" class="identification-icon">
+          <p class="identification-name">{{pageName}}列表</p>
+          <base-status-tab :statusList="typeSelect" @setStatus="changeIntentStatus"></base-status-tab>
+        </div>
+        <div class="function-btn">
+          <div class="btn-main btn-main-end" @click="exportExcel">
+            <span class="export-icon"></span>
+            导出
+          </div>
+        </div>
+      </div>
+      <div class="big-list">
+        <div class="list-header list-box">
+          <div v-for="(item,index) in listTitle" :key="index" class="list-item">{{item}}</div>
+        </div>
+        <div class="list">
+          <div v-for="(item, index) in list" :key="index" class="list-content list-box">
+            <div class="list-item">{{item.recruit_sn}}</div>
+            <div class="list-item">{{item.name}}</div>
+            <div class="list-item">{{item.mobile}}</div>
+            <div class="list-item">{{item.state}} {{item.city}} {{item.district}}</div>
+            <div class="list-item">{{item.status_str}}</div>
+            <div class="list-item">{{item.created_at}}</div>
+            <div class="list-item">{{item.handle_at}}</div>
+            <div class="list-item">{{item.remark}}</div>
+            <div class="list-item">
+              <span class="list-operation" @click="_handleIntent(item)">处理</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="pagination-box">
+        <base-pagination
+          ref="pagination"
+          :pageDetail="pageDetail"
+          :pagination="page"
+          @addPage="setPage"
+        >
+        </base-pagination>
+      </div>
+    </div>
+
+    <default-modal ref="handleConfirm">
+      <div slot="content" class="intent-window">
+        <div class="title-box">
+          <div class="title">
+            结算确认
+          </div>
+          <span class="close hand" @click="handleClose"></span>
+        </div>
+        <div class="content">
+          <div class="main-model-box">
+            <div class="text"><span class="start">*</span>处理标签</div>
+            <div class="tag-box-con" v-for="(tag, index) in handleTagList" :key="index">
+              <div class="tag-box" :class="tag === handleTag  ? 'active' : ''" @click="changeHandleTag(tag)">{{tag}}</div>
+            </div>
+          </div>
+          <div class="main-model-box textarea-box">
+            <div class="text"><span class="start">*</span>处理说明</div>
+            <textarea class="main-textarea-box" v-model="handleRemark"></textarea>
+          </div>
+        </div>
+        <div class="btn-group">
+          <div class="btn" @click="handleClose">取消</div>
+          <div class="btn confirm" @click="handleConfirm">确定</div>
+        </div>
+      </div>
+    </default-modal>
+  </div>
+</template>
+
+<script type="text/ecmascript-6">
+  import API from '@api'
+  import DefaultModal from '@components/default-modal/default-modal'
+  import {authComputed, intentComputed, intentMethods} from '@state/helpers'
+
+  const PAGE_NAME = 'INTENT_LIST'
+  const TITLE = '加盟商'
+  const LIST_TITLE = ['意向单编号', '姓名', '手机号', '所属地区', '状态', '提交时间', '处理时间', '处理说明', '操作']
+  const TYPE_STATUS = [{text: '加盟商', type: 3}, {text: '团长', type: 1}, {text: '供应商', type: 2}]
+  const TYPE_SELECT = [{name: '全部', status: '', num: 0}, {name: '待处理', status: 0, num: 0}, {name: '已处理', status: 1, num: 0}]
+  const HANDLETAG = ['已电联客户','已添加微信','无法联系']
+  const EXCEL_URL = '/social-shopping/v2/api/platform/recruit-excel'
+
+  export default {
+    name: PAGE_NAME,
+    page: {
+      title: TITLE
+    },
+    components: {
+      DefaultModal
+    },
+    data() {
+      return {
+        tabStatus: TYPE_STATUS,
+        listTitle: LIST_TITLE,
+        typeSelect: TYPE_SELECT,
+        handleTagList: HANDLETAG,
+        handleTag: '',
+        handleRemark: '',
+        handleItem: '',
+      }
+    },
+    computed: {
+      ...authComputed,
+      ...intentComputed,
+      infoTabIndex() {
+        return this.tabStatus.findIndex((item) => item.type === this.type)
+      },
+      IntentExportUrl() {
+        let currentId = this.getCurrentId()
+        let data = {
+          current_corp: currentId,
+          access_token: this.currentUser.access_token,
+          type: this.type,
+          status: this.status,
+          recruit_sn: this.searchNum
+        }
+        let search = []
+        for (let key in data) {
+          search.push(`${key}=${data[key]}`)
+        }
+        return process.env.VUE_APP_API + EXCEL_URL + '?' + search.join('&')
+      },
+    },
+    created() {
+      this._getListStatus()
+    },
+    methods: {
+      ...intentMethods,
+      changeTabStatus(tabStatus) {
+        this.initData()
+        this.setIntentType(tabStatus)
+        this._getListStatus()
+        this.$refs.pagination.beginPage()
+        this.$refs.searchInput.infoTextMethods()
+      },
+      changeKeyword(keyword) {
+        this.setSearchNum(keyword)
+        this.$refs.pagination.beginPage()
+      },
+      changeIntentStatus(select) {
+        this.setIntentStatus(select)
+        this.$refs.pagination.beginPage()
+      },
+      async _getListStatus() {
+        let res = await API.Intent.getIntentListStatus({
+          type: this.type
+        })
+        if (res.error !== this.$ERR_OK) {
+          console.warn('获取列表状态类型失败')
+          return
+        }
+        let selectData = res.data
+        this.typeSelect = selectData.map((item) => {
+          item.num = item.statistic
+          item.name = item.status_str
+          return item
+        })
+      },
+      exportExcel() {
+        window.open(this.IntentExportUrl, '_blank')
+      },
+      _handleIntent(item) {
+        this.handleItem = item
+        this.$refs.handleConfirm.showModal()
+      },
+      handleClose() {
+        this.$refs.handleConfirm.hideModal()
+      },
+      changeHandleTag(tag) {
+        this.handleTag = tag
+      },
+      async handleConfirm() {
+        if(!this.handleTag){
+          this.$toast.show('请选择处理标签')
+          return
+        }
+        if(!this.handleRemark){
+          this.$toast.show('处理说明不能为空')
+          return
+        }
+        let res = await API.Intent.handleIntent({
+          handle_tag: this.handleTag,
+          remark: this.handleRemark
+        },false,this.handleItem.id)
+        if (res.error !== this.$ERR_OK) {
+          console.warn('处理意向单失败！')
+          return
+        }
+        this.handleAfter()
+      },
+      handleAfter() {
+        this.handleTag = ''
+        this.handleRemark = ''
+        this.handleItem = ''
+        this.getIntentList()
+        this._getListStatus()
+        this.handleClose()
+        this.$toast.show('操作成功!')
+      }
+    }
+  }
+</script>
+
+<style scoped lang="stylus" rel="stylesheet/stylus">
+  @import "~@design"
+
+  .list-box
+    .list-item
+      &:nth-child(1), &:nth-child(2), &:nth-child(5), &:nth-child(8)
+        flex: 1.5
+      &:nth-child(4)
+        flex: 1.5
+        min-width: 150px
+      &:last-child
+        padding: 0
+        max-width: 50px
+
+  .export-icon
+    transition: all 0.2s
+    icon-image('icon-derived')
+
+  .btn-main
+    &:hover
+      .export-icon
+        icon-image('icon-derived_white')
+
+
+  .intent-window
+    background: $color-white
+    box-shadow: 0 0 5px 0 rgba(12, 6, 14, 0.60)
+    border-radius: 3px
+    box-sizing: border-box
+    height: 318px
+    width: 534px
+    padding: 0 20px
+
+    .title-box
+      display: flex
+      box-sizing: border-box
+      padding: 22px 0
+      align-items: center
+      justify-content: space-between
+      .title
+        font-size: $font-size-16
+        font-family: $font-family-medium
+        line-height: 1
+        color: $color-text-main
+      .close
+        width: 12px
+        height: @width
+        icon-image('icon-close')
+
+    .content
+      margin-top: 8px
+
+      .main-model-box
+        layout(row)
+        align-items: center
+        margin-bottom: 24px
+
+        &.textarea-box
+          align-items: flex-start
+
+        .text
+          color: #151515
+          font-size: $font-size-14
+          font-family: $font-family-regular
+          width: 80px
+          margin-right: 36px
+          .start
+            font-size: 14px
+            color: #F52424
+
+        .tag-box-con
+          display: flex
+          layout(row)
+
+          .tag-box
+            position: relative
+            box-sizing: border-box
+            width: auto
+            height: 28px
+            line-height: 28px
+            padding: 0 10px
+            margin-right: 10px
+            border: 1px solid $color-line
+            color: $color-text-main
+            text-align: center
+            border-radius: 2px
+            &.active
+              color: $color-main
+              border: 1px solid $color-main
+              background: url("./pic-selection@3x.png") no-repeat
+              background-size: 14px 14px
+              background-position: bottom right
+              border-radius: 3px
+            &:hover
+              color: $color-main
+              border: 1px solid $color-main
+
+        .main-textarea-box
+          flex: 1
+          height: 107px
+          border: 1px solid $color-line
+          border-radius: 2px
+          font-family: $font-family-regular
+          color: $color-text-main
+          font-size: $font-size-14
+          padding: 10px
+          transition: all 0.3s
+          resize:none
+
+          &::-webkit-inner-spin-button
+            appearance: none
+
+          &:hover
+            border: 1px solid #ACACAC
+
+          &::placeholder
+            font-family: $font-family-regular
+            color: $color-text-assist
+
+          &:focus
+            border-color: $color-main !important
+
+</style>

@@ -83,3 +83,13 @@ export const franchiseMethods = mapActions('franchise', [
   'setfranListKeyword',
   'setfranListPage'
 ])
+
+
+// 意向单
+export const intentComputed = {
+  ...mapGetters('intent', ['list', 'pageDetail', 'searchNum', 'status', 'page', 'startTime', 'endTime', 'type', 'limit', 'pageName'])
+}
+
+export const intentMethods = {
+  ...mapActions('intent', ['getIntentList', 'setSearchNum', 'setIntentStatus', 'setIntentType', 'setPage','initData'])
+}

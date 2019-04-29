@@ -52,6 +52,28 @@ export default [
           }
         }
       },
+      // 意向单
+      {
+        path: 'intent-list',
+        name: 'intent-list',
+        component: () => lazyLoadView(import('@pages/intent-list/intent-list')),
+        meta: {
+          titles: ['客户', '意向单','加盟商'],
+          beforeResolve(routeTo, routeFrom, next) {
+            store
+              .dispatch('intent/getIntentList', routeTo.params.id)
+              .then((res) => {
+                if (!res) {
+                  return next({name: '404'})
+                }
+                return next()
+              })
+              .catch(() => {
+                return next({name: '404'})
+              })
+          }
+        }
+      },
       // 新建加盟商
       {
         path: 'franchise-list/edit-franchise',

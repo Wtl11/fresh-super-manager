@@ -113,7 +113,7 @@
       font-family: $font-family-medium
     .line
       transition: all .3s
-      background: $color-positive
+      background: $color-main
       height: 2px
       width: 40px
       position: absolute
