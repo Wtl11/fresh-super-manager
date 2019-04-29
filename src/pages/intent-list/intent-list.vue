@@ -92,7 +92,7 @@
   const TYPE_STATUS = [{text: '加盟商', type: 3}, {text: '团长', type: 1}, {text: '供应商', type: 2}]
   const TYPE_SELECT = [{name: '全部', status: '', num: 0}, {name: '待处理', status: 0, num: 0}, {name: '已处理', status: 1, num: 0}]
   const HANDLETAG = ['已电联客户','已添加微信','无法联系']
-  const EXCEL_URL = '/social-shopping/v2/api/platform/recruit-excel'
+  const EXCEL_URL = '/social-shopping/api/platform/recruit-excel'
 
   export default {
     name: PAGE_NAME,
