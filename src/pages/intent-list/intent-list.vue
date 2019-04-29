@@ -1,10 +1,10 @@
 <template>
   <div class="intent-list table">
-    <base-tab-select :infoTabIndex="infoTabIndex" :tabStatus="tabStatus" @getStatusTab="changeTabStatus" :lineWidth="56"></base-tab-select>
+    <base-tab-select :infoTabIndex="infoTabIndex" :tabStatus="tabStatus" :lineWidth="56" @getStatusTab="changeTabStatus"></base-tab-select>
     <div class="down-content">
       <span class="down-tip">意向单编号</span>
       <div class="down-item">
-        <base-search  ref="searchInput" :infoText="searchNum" placeHolder="请输入编号" @search="changeKeyword"></base-search>
+        <base-search ref="searchInput" :infoText="searchNum" placeHolder="请输入编号" @search="changeKeyword"></base-search>
       </div>
     </div>
     <div class="table-content">
@@ -23,18 +23,21 @@
       </div>
       <div class="big-list">
         <div class="list-header list-box">
-          <div v-for="(item,index) in listTitle" :key="index" class="list-item">{{item}}</div>
+          <div v-for="(item,index) in listTitle" :key="index" :class="item.class" class="list-item">{{item.name}}</div>
         </div>
         <div class="list">
           <div v-for="(item, index) in list" :key="index" class="list-content list-box">
-            <div class="list-item">{{item.recruit_sn}}</div>
+            <div class="list-item width15">{{item.recruit_sn}}</div>
             <div class="list-item">{{item.name}}</div>
             <div class="list-item">{{item.mobile}}</div>
+            <div v-if="item.social_name" class="list-item width20">{{item.social_name}}</div>
             <div class="list-item">{{item.state}} {{item.city}} {{item.district}}</div>
-            <div class="list-item">{{item.status_str}}</div>
-            <div class="list-item">{{item.created_at}}</div>
-            <div class="list-item">{{item.handle_at}}</div>
-            <div class="list-item">{{item.remark}}</div>
+            <div v-if="item.goods_category" class="list-item width20">{{item.goods_category}}</div>
+            <div v-if="item.address" class="list-item width20">{{item.address}}</div>
+            <div class="list-item width20">{{item.status_str}}</div>
+            <div class="list-item width20">{{item.created_at}}</div>
+            <div class="list-item width20">{{item.handle_at}}</div>
+            <div class="list-item width20 text2">{{item.handle_tag}} {{item.remark}}</div>
             <div class="list-item">
               <span class="list-operation" @click="_handleIntent(item)">处理</span>
             </div>
@@ -63,13 +66,13 @@
         <div class="content">
           <div class="main-model-box">
             <div class="text"><span class="start">*</span>处理标签</div>
-            <div class="tag-box-con" v-for="(tag, index) in handleTagList" :key="index">
-              <div class="tag-box" :class="tag === handleTag  ? 'active' : ''" @click="changeHandleTag(tag)">{{tag}}</div>
+            <div v-for="(tag, index) in handleTagList" :key="index" class="tag-box-con">
+              <div class="tag-box" :class="tag === handleTag ? 'active' : ''" @click="changeHandleTag(tag)">{{tag}}</div>
             </div>
           </div>
           <div class="main-model-box textarea-box">
-            <div class="text"><span class="start">*</span>处理说明</div>
-            <textarea class="main-textarea-box" v-model="handleRemark"></textarea>
+            <div class="text">处理说明</div>
+            <textarea v-model="handleRemark" class="main-textarea-box"></textarea>
           </div>
         </div>
         <div class="btn-group">
@@ -88,7 +91,44 @@
 
   const PAGE_NAME = 'INTENT_LIST'
   const TITLE = '加盟商'
-  const LIST_TITLE = ['意向单编号', '姓名', '手机号', '所属地区', '状态', '提交时间', '处理时间', '处理说明', '操作']
+  const LIST_TITLE = {
+    '3' : [
+      {name: '意向单编号', flex: 1.5, class: 'width15'},
+      {name: '姓名', flex: 1},
+      {name: '手机号', flex: 1.5},
+      {name: '所属地区', flex: 2, class: 'width20'},
+      {name: '状态', flex: 1},
+      {name: '提交时间', flex: 2, class: 'width20'},
+      {name: '处理时间', flex: 2, class: 'width20'},
+      {name: '处理说明', flex: 2, class: 'width20'},
+      {name: '操作', flex: 1},
+    ],
+    '1' : [
+      {name: '意向单编号', flex: 1.5, class: 'width15'},
+      {name: '姓名', flex: 1},
+      {name: '手机号', flex: 1.5},
+      {name: '小区名称', flex: 2, class: 'width20'},
+      {name: '所属地区', flex: 2, class: 'width20'},
+      {name: '详细地址', flex: 2, class: 'width20'},
+      {name: '状态', flex: 1},
+      {name: '提交时间', flex: 2, class: 'width20'},
+      {name: '处理时间', flex: 2, class: 'width20'},
+      {name: '处理说明', flex: 2, class: 'width20'},
+      {name: '操作', flex: 1},
+    ],
+    '2' : [
+      {name: '意向单编号', flex: 1.5, class: 'width15'},
+      {name: '姓名', flex: 1},
+      {name: '手机号', flex: 1.5},
+      {name: '所属地区', flex: 2, class: 'width20'},
+      {name: '供应商品类目', flex: 2, class: 'width20'},
+      {name: '状态', flex: 1},
+      {name: '提交时间', flex: 2, class: 'width20'},
+      {name: '处理时间', flex: 2, class: 'width20'},
+      {name: '处理说明', flex: 2, class: 'width20'},
+      {name: '操作', flex: 1},
+    ],
+  }
   const TYPE_STATUS = [{text: '加盟商', type: 3}, {text: '团长', type: 1}, {text: '供应商', type: 2}]
   const TYPE_SELECT = [{name: '全部', status: '', num: 0}, {name: '待处理', status: 0, num: 0}, {name: '已处理', status: 1, num: 0}]
   const HANDLETAG = ['已电联客户','已添加微信','无法联系']
@@ -105,7 +145,7 @@
     data() {
       return {
         tabStatus: TYPE_STATUS,
-        listTitle: LIST_TITLE,
+        listTitle: LIST_TITLE[3],
         typeSelect: TYPE_SELECT,
         handleTagList: HANDLETAG,
         handleTag: '',
@@ -141,6 +181,8 @@
     methods: {
       ...intentMethods,
       changeTabStatus(tabStatus) {
+        // this.tableTitle = tabStatus.type === 1 ? this.regimentalListTitle : this.listTitle
+        this.listTitle = LIST_TITLE[tabStatus.type]
         this.initData()
         this.setIntentType(tabStatus)
         this._getListStatus()
@@ -175,6 +217,8 @@
       },
       _handleIntent(item) {
         this.handleItem = item
+        this.handleTag = item.handle_tag
+        this.handleRemark = item.remark
         this.$refs.handleConfirm.showModal()
       },
       handleClose() {
@@ -186,10 +230,6 @@
       async handleConfirm() {
         if(!this.handleTag){
           this.$toast.show('请选择处理标签!')
-          return
-        }
-        if(!this.handleRemark){
-          this.$toast.show('处理说明不能为空!')
           return
         }
         let res = await API.Intent.handleIntent({
@@ -220,14 +260,21 @@
 
   .list-box
     .list-item
-      &:nth-child(1), &:nth-child(3), &:nth-child(8)
+      flex: 1
+      &.width15
         flex: 1.5
-      &:nth-child(4), &:nth-child(6), &:nth-child(7)
+      &:width20
         flex: 2
         min-width: 150px
       &:last-child
         padding: 0
         max-width: 50px
+      &.text2
+        display: -webkit-box;
+        overflow: hidden;
+        -webkit-line-clamp: 2;  /*这里的数字代表行数*/
+        -webkit-box-orient: vertical;
+        white-space: pre-wrap
 
   .export-icon
     transition: all 0.2s
