@@ -29,7 +29,7 @@
           <div v-for="(item, index) in list" :key="index" class="list-content list-box">
             <div class="list-item width15">{{item.recruit_sn}}</div>
             <div class="list-item">{{item.name}}</div>
-            <div class="list-item">{{item.mobile}}</div>
+            <div class="list-item width15">{{item.mobile}}</div>
             <div v-if="item.social_name" class="list-item width20">{{item.social_name}}</div>
             <div class="list-item width20 text-wrap2">{{item.state}} {{item.city}} {{item.district}}</div>
             <div v-if="item.goods_category" class="list-item width20 text-wrap2">{{item.goods_category}}</div>
@@ -95,7 +95,7 @@
     '3' : [
       {name: '意向单编号', flex: 1.5, class: 'width15'},
       {name: '姓名', flex: 1},
-      {name: '手机号', flex: 1.5},
+      {name: '手机号', flex: 1.5, class: 'width15'},
       {name: '所属地区', flex: 2, class: 'width20'},
       {name: '状态', flex: 1},
       {name: '提交时间', flex: 2, class: 'width20'},
@@ -106,7 +106,7 @@
     '1' : [
       {name: '意向单编号', flex: 1.5, class: 'width15'},
       {name: '姓名', flex: 1},
-      {name: '手机号', flex: 1.5},
+      {name: '手机号', flex: 1.5, class: 'width15'},
       {name: '小区名称', flex: 2, class: 'width20'},
       {name: '所属地区', flex: 2, class: 'width20'},
       {name: '详细地址', flex: 2, class: 'width20'},
@@ -119,7 +119,7 @@
     '2' : [
       {name: '意向单编号', flex: 1.5, class: 'width15'},
       {name: '姓名', flex: 1},
-      {name: '手机号', flex: 1.5},
+      {name: '手机号', flex: 1.5, class: 'width15'},
       {name: '所属地区', flex: 2, class: 'width20'},
       {name: '供应商品类目', flex: 2, class: 'width20'},
       {name: '状态', flex: 1},
@@ -201,7 +201,8 @@
       },
       async _getListStatus() {
         let res = await API.Intent.getIntentListStatus({
-          type: this.type
+          type: this.type,
+          recruit_sn: this.searchNum
         })
         if (res.error !== this.$ERR_OK) {
           console.warn('获取列表状态类型失败')
