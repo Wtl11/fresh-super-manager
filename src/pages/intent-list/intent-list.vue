@@ -191,10 +191,12 @@
       },
       changeKeyword(keyword) {
         this.setSearchNum(keyword)
+        this._getListStatus()
         this.$refs.pagination.beginPage()
       },
       changeIntentStatus(select) {
         this.setIntentStatus(select)
+        this._getListStatus()
         this.$refs.pagination.beginPage()
       },
       async _getListStatus() {
