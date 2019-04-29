@@ -220,10 +220,10 @@
 
   .list-box
     .list-item
-      &:nth-child(1), &:nth-child(2), &:nth-child(5), &:nth-child(8)
+      &:nth-child(1), &:nth-child(3), &:nth-child(8)
         flex: 1.5
-      &:nth-child(4)
-        flex: 1.5
+      &:nth-child(4), &:nth-child(6), &:nth-child(7)
+        flex: 2
         min-width: 150px
       &:last-child
         padding: 0
@@ -279,8 +279,7 @@
           color: #151515
           font-size: $font-size-14
           font-family: $font-family-regular
-          width: 80px
-          margin-right: 36px
+          width: 94px
           .start
             font-size: 14px
             color: #F52424
@@ -301,6 +300,7 @@
             color: $color-text-main
             text-align: center
             border-radius: 2px
+            cursor: pointer;
             &.active
               color: $color-main
               border: 1px solid $color-main
