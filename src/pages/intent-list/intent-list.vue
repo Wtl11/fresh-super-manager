@@ -69,9 +69,6 @@
             <div v-for="(tag, index) in handleTagList" :key="index" class="tag-box-con">
               <div class="tag-box" :class="tag === handleTag ? 'active' : ''" @click="changeHandleTag(tag)">{{tag}}</div>
             </div>
-            <div v-if="handleItem && handleItem.status" class="tag-box-con">
-              <div class="tag-box active">{{handleItem.status_str}}</div>
-            </div>
           </div>
           <div class="main-model-box textarea-box">
             <div class="text">处理说明</div>
@@ -134,7 +131,7 @@
   }
   const TYPE_STATUS = [{text: '加盟商', type: 3}, {text: '团长', type: 1}, {text: '供应商', type: 2}]
   const TYPE_SELECT = [{name: '全部', status: '', num: 0}, {name: '待处理', status: 0, num: 0}, {name: '已处理', status: 1, num: 0}]
-  const HANDLETAG = ['已电联客户','已添加微信','无法联系']
+  const HANDLETAG = ['已电联客户','已添加微信','无法联系','已处理']
   const EXCEL_URL = '/social-shopping/api/platform/recruit-excel'
 
   export default {
