@@ -59,7 +59,7 @@
       <div slot="content" class="intent-window">
         <div class="title-box">
           <div class="title">
-            结算确认
+            处理操作
           </div>
           <span class="close hand" @click="handleClose"></span>
         </div>
