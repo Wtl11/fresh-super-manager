@@ -69,6 +69,9 @@
             <div v-for="(tag, index) in handleTagList" :key="index" class="tag-box-con">
               <div class="tag-box" :class="tag === handleTag ? 'active' : ''" @click="changeHandleTag(tag)">{{tag}}</div>
             </div>
+            <div v-if="handleItem && handleItem.status" class="tag-box-con">
+              <div class="tag-box active">{{handleItem.status_str}}</div>
+            </div>
           </div>
           <div class="main-model-box textarea-box">
             <div class="text">处理说明</div>
