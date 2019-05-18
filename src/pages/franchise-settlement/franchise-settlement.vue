@@ -89,7 +89,7 @@
           </div>
           <div v-else class="franchise-upload-img-box">
             <span class="clear-img hand" @click="clearSettlement"></span>
-            <img :src="settlementImg" class="franchise-upload-img">
+            <img :src="settlementImg" class="franchise-upload-img hand" @click="showImg(settlementImg)">
           </div>
           <span class="franchise-upload-tip">(支持3M以下，jpg、png、jpeg格式文件)</span>
         </div>
