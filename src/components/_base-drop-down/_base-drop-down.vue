@@ -2,7 +2,7 @@
   <div class="admin-select">
     <div class="select-item" @click.stop="selectType">
       <div class="admin-big-box" @mouseleave="showHover = false" @mouseenter="showHover = true">
-        <div class="admin-select-box input-height-item" :class="{'admin-select-box-active': select.check, 'admin-big-box-hover': showHover}" :style="{'min-width': width + 'px',height: height + 'px', lineHeight: height + 'px'}">
+        <div class="admin-select-box input-height-item" :class="{'admin-select-box-active': select.check, 'admin-big-box-hover': showHover}" :style="{'min-width': width + 'px',height: height + 'px', lineHeight: height + 'px', 'border-radius': radius + 'px'}">
           {{select.content}}
           <img v-if="isUse" src="./icon-pull_down@2x.png" class="city-tap-top" :class="{'city-tap-top-active': select.check}">
           <transition name="fade">
@@ -50,6 +50,10 @@
       height: {
         type: Number,
         default: 28
+      },
+      radius: {
+        type: Number,
+        default: 14
       }
     },
     data() {

@@ -26,6 +26,23 @@
   const COMPONENT_NAME = 'NAVIGATION_BAR'
   const INFO_INDEX = 0
   // const HEIGHT = 40
+  const GOODS = [
+    {
+      title: '商品',
+      children: [
+        {
+          title: '商品素材',
+          url: '/home/product-list',
+          isLight: false
+        },
+        {
+          title: '商品类目',
+          url: '/home/product-categories',
+          isLight: false
+        }
+      ]
+    }
+  ]
   const CUSTOMER = [
     {
       title: '客户',
@@ -72,17 +89,25 @@
   ]
   const FIRST_MENU = [
     {
+      name: '商品',
+      icon: require('./icon-goods_white@2x.png'),
+      activeIcon: require('./icon-goods@2x.png'),
+      isLight: true,
+      second: GOODS,
+      url: '/home/product-list'
+    },
+    {
       name: '客户',
-      icon: require('./icon-dashboard@2x.png'),
-      activeIcon: require('./icon-dashboard_white@2x.png'),
+      icon: require('./icon-dashboard_white@2x.png'),
+      activeIcon: require('./icon-dashboard@2x.png'),
       isLight: true,
       second: CUSTOMER,
       url: '/home/franchise-list'
     },
     {
       name: '财务',
-      icon: require('./icon-money@2x.png'),
-      activeIcon: require('./icon-money_white@2x.png'),
+      icon: require('./icon-money_white@2x.png'),
+      activeIcon: require('./icon-money@2x.png'),
       isLight: false,
       second: FINANCE,
       url: '/home/transaction-record'
@@ -225,7 +250,7 @@
       min-height: 100vh
       width: $menu-width
       position: relative
-      background: $color-white
+      background: #352969
 
     .menu
       position: relative
@@ -247,9 +272,12 @@
         line-height: 1
         font-family: $font-family-regular
         font-size: $font-size-14
+        color: $color-white
     .nav-item-active
-      color: $color-white
-      background: $color-menu-tag
+      color: #352969
+      background: $color-white
+      .nav-item-name
+        color: #352969
 
   .logo
     position: relative
@@ -267,7 +295,7 @@
     box-sizing: border-box
     height: 100vh
     width: 110px
-    background: $color-menu-tag
+    background: $color-white
     overflow: auto
     white-space: nowrap
     transition: all 0.2s
@@ -293,7 +321,7 @@
     .second-title
       transition: all 0.2s
       margin: 30px 0 10px
-      color: rgba(255, 255, 255, .5)
+      color: #666
       font-size: $font-size-14
       line-height: 1
 
@@ -307,9 +335,6 @@
       &:hover
         color: $color-sub
 
-    .second-link-active
-      color: $color-white
-      background: rgba(255, 255, 255, .2)
 
     .second-link-content
       display: inline-block
@@ -317,5 +342,9 @@
       border-radius: $radius-main
       line-height: 28px
       height: 28px
+      color: #333
       padding: 0 8px
+    .second-link-active
+      color: #922C88
+      background: rgba(146,44,136,.15)
 </style>

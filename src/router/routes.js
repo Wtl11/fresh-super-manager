@@ -201,11 +201,47 @@ export default [
               })
           }
         }
-      }
+      },
       /**
-       * 客户
+       * 商品
        *
        */
+      // 商品类目
+      {
+        path: 'product-categories',
+        name: 'product-categories',
+        component: () => lazyLoadView(import('@pages/product-categories/product-categories')),
+        meta: {
+          titles: ['商品', '商品类目']
+        }
+      },
+      // 商品素材
+      {
+        path: 'product-list',
+        name: 'product-list',
+        component: () => lazyLoadView(import('@pages/product-list/product-list')),
+        meta: {
+          titles: ['商品', '商品素材']
+        }
+      },
+      // 导入商品
+      {
+        path: 'product-list/lead-goods',
+        name: 'lead-goods',
+        component: () => lazyLoadView(import('@pages/lead-goods/lead-goods')),
+        meta: {
+          titles: ['商品', '商品素材', '商品导入']
+        }
+      },
+      // 新建商品
+      {
+        path: 'product-list/edit-goods',
+        name: 'edit-goods',
+        component: () => lazyLoadView(import('@pages/edit-goods/edit-goods')),
+        meta: {
+          titles: ['商品', '商品素材', '新建商品']
+        }
+      }
     ]
   },
   {

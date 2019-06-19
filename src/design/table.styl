@@ -10,7 +10,10 @@
     background: $color-white
     flex-direction: column
     flex: 1
-
+.normal-box
+  background: $color-white
+  padding: 0 20px
+  box-sizing: border-box
 .tab-header
   height: 80px
   display: flex
@@ -145,6 +148,49 @@
     width: 84px
     height: 28px
     opacity: 0
+.back
+  left: 210px
+  right: 0
+  bottom: 0
+  z-index: 10
+  background: #F9F9F9
+  height: 80px
+  border-radius: 0 0 6px 6px
+  display: flex
+  align-items: center
+  padding-left: 40px
+  box-sizing: border-box
+  justify-content: center
+  border-top-1px($color-line)
+  position: fixed
+  .back-btn
+    box-sizing: border-box
+    font-size: $font-size-16
+    margin-right: 20px
+    height: 40px
+    line-height: 40px
+    width: 96px
+    white-space: nowrap
+    transition: all 0.3s
+    text-align: center
+    border-radius: 20px
+  .back-submit
+    background: $color-main
+    color: $color-white
+    &:hover
+      opacity: 0.8
+  .back-cancel
+    box-sizing: border-box
+    color: $color-text-main
+    background: $color-white
+    border: 1px solid $color-line
+    &:hover
+      color: $color-text-sub
+      border-color: $color-text-sub
+  .btn-disable
+    cursor: not-allowed
+    background: $color-line
+    color: $color-text-assist
 
 .identification
   background: $color-white
