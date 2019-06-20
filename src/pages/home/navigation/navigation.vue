@@ -39,6 +39,11 @@
           title: '商品类目',
           url: '/home/product-categories',
           isLight: false
+        },
+        {
+          title: '辅助资料',
+          url: '/home/auxiliary-information',
+          isLight: false
         }
       ]
     }

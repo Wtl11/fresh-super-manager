@@ -10,7 +10,7 @@ export default [
       beforeResolve(routeTo, routeFrom, next) {
         // 判断用户是否已经登录
         if (store.getters['auth/loggedIn']) {
-          next({name: 'franchise-list'})
+          next({name: 'product-list'})
         } else {
           next()
         }
@@ -24,7 +24,7 @@ export default [
     meta: {
       authRequired: true
     },
-    redirect: 'home/franchise-list',
+    redirect: 'home/product-list',
     children: [
       /**
        * 客户
@@ -240,6 +240,15 @@ export default [
         component: () => lazyLoadView(import('@pages/edit-goods/edit-goods')),
         meta: {
           titles: ['商品', '商品素材', '新建商品']
+        }
+      },
+      // 辅助资料
+      {
+        path: 'auxiliary-information',
+        name: 'auxiliary-information',
+        component: () => lazyLoadView(import('@pages/auxiliary-information/auxiliary-information')),
+        meta: {
+          titles: ['商品', '辅助资料']
         }
       }
     ]
