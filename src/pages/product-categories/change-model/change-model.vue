@@ -11,7 +11,7 @@
         <div v-if="showCate" class="main-model-box">
           <div class="text">上级分类</div>
           <div class="categories-input-box">
-            <base-drop-down :select="dispatchSelect" @setValue="setValue"></base-drop-down>
+            <base-drop-down :select="dispatchSelect" :radius="2" @setValue="setValue"></base-drop-down>
           </div>
         </div>
         <div class="main-model-box">

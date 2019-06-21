@@ -16,6 +16,9 @@ const http = axios.create({
 http.interceptors.request.use(
   (config) => {
     // 请求数据前的拦截
+    let version = 'v1/'
+    config.url = config.url.split('api/').join(`${version}api/`)
+    console.log(config.url)
     return config
   },
   (error) => {

@@ -212,7 +212,20 @@ export default [
         name: 'product-categories',
         component: () => lazyLoadView(import('@pages/product-categories/product-categories')),
         meta: {
-          titles: ['商品', '商品类目']
+          titles: ['商品', '商品类目'],
+          beforeResolve(routeTo, routeFrom, next) {
+            store
+              .dispatch('product/getCategoryList')
+              .then((res) => {
+                if (!res) {
+                  return next({name: '404'})
+                }
+                return next()
+              })
+              .catch(() => {
+                return next({name: '404'})
+              })
+          }
         }
       },
       // 商品素材
@@ -248,7 +261,20 @@ export default [
         name: 'auxiliary-information',
         component: () => lazyLoadView(import('@pages/auxiliary-information/auxiliary-information')),
         meta: {
-          titles: ['商品', '辅助资料']
+          titles: ['商品', '辅助资料'],
+          beforeResolve(routeTo, routeFrom, next) {
+            store
+              .dispatch('product/getAuxiliaryList')
+              .then((res) => {
+                if (!res) {
+                  return next({name: '404'})
+                }
+                return next()
+              })
+              .catch(() => {
+                return next({name: '404'})
+              })
+          }
         }
       }
     ]

@@ -93,3 +93,12 @@ export const intentComputed = {
 export const intentMethods = {
   ...mapActions('intent', ['getIntentList', 'setSearchNum', 'setIntentStatus', 'setIntentType', 'setPage','initData','initType'])
 }
+
+// 商品
+export const productComputed = {
+  ...mapGetters('product', ['unitsList', 'reqCategoryList'])
+}
+
+export const productMethods = {
+  ...mapActions('product', ['getAuxiliaryList', 'getCategoryList'])
+}

@@ -22,6 +22,7 @@
 </template>
 
 <script type="text/ecmascript-6">
+  import {productComputed, productMethods} from '@state/helpers'
   import API from '@api'
   import DefaultConfirm from '@components/default-confirm/default-confirm'
   import DefaultInput from '@components/default-input/default-input'
@@ -43,11 +44,14 @@
         newUnits: '',
         unitsType: 0,
         curItem: null,
-        delIndex: null,
-        unitsList: [{name: '斤'}]
+        delIndex: null
       }
     },
+    computed: {
+      ...productComputed
+    },
     methods: {
+      ...productMethods,
       delItem(item, index) {
         this.curItem = item
         this.delIndex = index
@@ -57,7 +61,7 @@
         API.Product.delUnits(this.curItem.id).then((res) => {
           if (res.error === this.$ERR_OK) {
             this.$toast.show('删除成功')
-            this.getUnitsList({}, false)
+            this.getAuxiliaryList({}, false)
           } else {
             this.$toast.show(res.message)
           }
@@ -86,7 +90,7 @@
             if (res.error === this.$ERR_OK) {
               this.$toast.show('新增成功')
               this.newUnits = ''
-              this.getUnitsList({}, false)
+              this.getAuxiliaryList({}, false)
               this.$refs.modalBox.hide()
             } else {
               this.$toast.show(res.message)
@@ -97,24 +101,13 @@
           API.Product.editUnits(this.curItem.id, {name: text}, false).then((res) => {
             if (res.error === this.$ERR_OK) {
               this.$toast.show('修改成功')
-              this.getUnitsList({}, false)
+              this.getAuxiliaryList({}, false)
               this.$refs.modalBox.hide()
             } else {
               this.$toast.show(res.message)
             }
           })
         }
-      },
-      getUnitsList(data, loading) {
-        let that = this
-        API.Product.getUnitsList(data, loading).then((res) => {
-          if (res.error === this.$ERR_OK) {
-            that.setAuxiliary(res.data)
-          } else {
-            this.$toast.show(res.message)
-          }
-          this.$loading.hide()
-        })
       }
     }
   }
