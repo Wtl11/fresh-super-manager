@@ -24,7 +24,7 @@
           <base-status-tab :statusList="dispatchSelect" @setStatus="changeTradeType"></base-status-tab>
         </div>
         <div class="function-btn">
-          <router-link to="edit-franchise" append class="btn-main btn-main-end">
+          <router-link to="edit-goods" append class="btn-main btn-main-end">
             新建商品<span class="add-icon"></span>
           </router-link>
           <div class="show-more-box g-btn-item" :class="{'show-more-active': showIndex}" @mouseenter="_showTip" @mouseleave="_hideTip">

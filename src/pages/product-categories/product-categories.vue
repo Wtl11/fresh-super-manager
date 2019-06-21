@@ -34,7 +34,7 @@
           <div v-for="(twoitem, twoindex) in item.list" :key="twoindex" class="">
             <div class="open-item">
               <div class="open-item-line"></div>
-              <div class="big-main-left hand" @click="openList(index)">
+              <div class="big-main-left hand" @click="openTwoList(index, twoindex)">
                 <div class="icon-hand mr-10" :class="twoitem.select ? 'open' : ''"></div>
                 <div class="text">{{twoitem.name}} <span class="tip">({{twoitem.list && twoitem.list.length}}个子类)</span></div>
               </div>
@@ -90,6 +90,14 @@
       }
     },
     methods: {
+      openList(index) {
+        this.categoryList[index].select = !this.categoryList[index].select
+        this.$forceUpdate()
+      },
+      openTwoList(index, twoIndex) {
+        this.categoryList[index].list[twoIndex].select = !this.categoryList[index].list[twoIndex].select
+        this.$forceUpdate()
+      },
       addChilrenCate(item, index) {
         this.$refs.bigModel.show('新建商品子分类', {
           type: false
