@@ -234,7 +234,20 @@ export default [
         name: 'product-list',
         component: () => lazyLoadView(import('@pages/product-list/product-list')),
         meta: {
-          titles: ['商品', '商品素材']
+          titles: ['商品', '商品素材'],
+          beforeResolve(routeTo, routeFrom, next) {
+            store
+              .dispatch('product/getProductList', {})
+              .then((res) => {
+                if (!res) {
+                  return next({name: '404'})
+                }
+                return next()
+              })
+              .catch(() => {
+                return next({name: '404'})
+              })
+          }
         }
       },
       // 导入商品
@@ -252,8 +265,29 @@ export default [
         name: 'edit-goods',
         component: () => lazyLoadView(import('@pages/edit-goods/edit-goods')),
         meta: {
-          titles: ['商品', '商品素材', '新建商品']
-        }
+          titles: ['商品', '商品素材', '商品'],
+          variableIndex: 2,
+          marginBottom: 80,
+          beforeResolve(routeTo, routeFrom, next) {
+            if (!routeTo.query.id) {
+              return next()
+            }
+            store
+              .dispatch('product/getGoodsDetailData', routeTo.query.id)
+              .then((response) => {
+                if (!response) {
+                  return next({name: '404'})
+                }
+                console.log(response)
+                routeTo.params.detail = response
+                next()
+              })
+              .catch(() => {
+                next({name: '404'})
+              })
+          }
+        },
+        props: (route) => ({detail: route.params.detail})
       },
       // 辅助资料
       {

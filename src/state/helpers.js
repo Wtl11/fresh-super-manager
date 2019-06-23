@@ -96,9 +96,9 @@ export const intentMethods = {
 
 // 商品
 export const productComputed = {
-  ...mapGetters('product', ['unitsList', 'reqCategoryList'])
+  ...mapGetters('product', ['unitsList', 'reqCategoryList', 'productList', 'statePageTotal'])
 }
 
 export const productMethods = {
-  ...mapActions('product', ['getAuxiliaryList', 'getCategoryList'])
+  ...mapActions('product', ['getAuxiliaryList', 'getCategoryList', 'getProductList', 'getGoodsDetailData'])
 }

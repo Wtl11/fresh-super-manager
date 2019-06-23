@@ -28,12 +28,12 @@
         </div>
         <div class="edit-input-box mini-edit-input-box">
           <div class="mini-mr20">
-            <base-drop-down :height="40" :width="190" radius="2" :select="stairSelect" @setValue="setStairValue"></base-drop-down>
+            <base-drop-down :height="40" :width="190" :radius="2" :select="stairSelect" @setValue="setStairValue"></base-drop-down>
           </div>
           <div class="mini-mr20">
-            <base-drop-down :height="40" :width="190" radius="2" :select="stairSelect" @setValue="setStairValue"></base-drop-down>
+            <base-drop-down :height="40" :width="190" :radius="2" :select="secondSelect" @setValue="setSecondValue"></base-drop-down>
           </div>
-          <base-drop-down :height="40" :width="190" radius="2" :select="secondSelect" @setValue="setSecondValue"></base-drop-down>
+          <base-drop-down :height="40" :width="190" :radius="2" :select="thirdlySelect" @setValue="setThirdlyValue"></base-drop-down>
         </div>
       </div>
       <div class="edit-item  edit-image-box">
@@ -43,14 +43,14 @@
         </div>
         <div class="image-box">
           <div class="edit-image">
-            <draggable v-model="msg.goods_banner_images" class="draggable" @update="_setSort()">
-              <div v-for="(item, index) in msg.goods_banner_images" :key="index" class="show-image hand">
+            <draggable v-model="msg.goods_main_images" class="draggable" @update="_setSort()">
+              <div v-for="(item, index) in msg.goods_main_images" :key="index" class="show-image hand">
                 <img class="img" :src="item.image_url" alt="">
                 <span class="close" @click="delPic(index)"></span>
               </div>
             </draggable>
-            <div class="add-image hand">
-              <input type="file" class="sendImage hand" multiple="multiple" accept="image/*" @change="_addPic('goods_banner_images', picNum, $event)">
+            <div v-if="msg.goods_main_images.length < picNum" class="add-image hand">
+              <input type="file" class="sendImage hand" multiple="multiple" accept="image/*" @change="_addPic('goods_main_images', picNum, $event)">
               <div v-if="showLoading && uploadImg === 'goods_banner_images'" class="loading-mask">
                 <img src="./loading.gif" class="loading">
               </div>
@@ -67,14 +67,14 @@
         </div>
         <div class="image-box">
           <div class="edit-image">
-            <draggable v-model="msg.goods_banner_images" class="draggable" @update="_setSort()">
-              <div v-for="(item, index) in msg.goods_banner_images" :key="index" class="show-image hand">
+            <draggable v-model="msg.goods_detail_images" class="draggable" @update="_setSort()">
+              <div v-for="(item, index) in msg.goods_detail_images" :key="index" class="show-image hand">
                 <img class="img" :src="item.image_url" alt="">
-                <span class="close" @click="delPic(index)"></span>
+                <span class="close" @click="delPic2(index)"></span>
               </div>
             </draggable>
-            <div class="add-image hand">
-              <input type="file" class="sendImage hand" multiple="multiple" accept="image/*" @change="_addPic('goods_banner_images', picNum, $event)">
+            <div v-if="msg.goods_detail_images.length < 15" class="add-image hand">
+              <input type="file" class="sendImage hand" multiple="multiple" accept="image/*" @change="_addPic('goods_detail_images', picNum, $event)">
               <div v-if="showLoading && uploadImg === 'goods_banner_images'" class="loading-mask">
                 <img src="./loading.gif" class="loading">
               </div>
@@ -95,7 +95,9 @@
           基本单位
         </div>
         <div class="edit-input-box">
-          <base-drop-down :height="40" :width="400" radius="2" :select="dispatchSelect" :isUse="!id" @setValue="setValue"></base-drop-down>
+          <base-drop-down :height="40" :width="400" :radius="2" :select="dispatchSelect"
+                          @setValue="setBaseValue"
+          ></base-drop-down>
         </div>
       </div>
       <div class="edit-item">
@@ -104,10 +106,10 @@
           销售规格
         </div>
         <div class="edit-input-box mini-edit-input-box">
-          <input type="number" class="edit-input mini-edit-input" maxlength="10" :disabled="id">
-          <div class="edit-input-unit"><span></span>/</div>
-          <base-drop-down :height="40" :width="133" radius="2" :select="saleSelect" :isUse="!id"
-                          @setValue="setValue"
+          <input v-model="goods_skus.base_sale_rate" type="number" class="edit-input mini-edit-input" maxlength="10">
+          <div class="edit-input-unit"><span>{{goods_skus.base_unit}}</span>/</div>
+          <base-drop-down :height="40" :width="133" :radius="2" :select="saleSelect"
+                          @setValue="setValueList"
           ></base-drop-down>
         </div>
         <div class="edit-pla">例如：基本单位是kg，销售单位是份，则销售规格可输入0.5，即0.5kg/份</div>
@@ -118,7 +120,7 @@
           商品编码
         </div>
         <div class="edit-input-box">
-          <input type="text" class="edit-input" maxlength="20">
+          <input v-model="goods_skus.goods_sku_code" type="text" class="edit-input" maxlength="20">
         </div>
       </div>
     </div>
@@ -132,8 +134,9 @@
           划线价
         </div>
         <div class="edit-input-box">
-          <input type="text" class="edit-input" maxlength="20">
+          <input v-model="goods_skus.original_price" type="text" class="edit-input" maxlength="20">
         </div>
+        <div v-if="goods_skus.sale_unit" class="edit-pla">元/{{goods_skus.sale_unit}}</div>
       </div>
       <div class="edit-item">
         <div class="edit-title">
@@ -141,8 +144,9 @@
           销售单价
         </div>
         <div class="edit-input-box">
-          <input type="text" class="edit-input" maxlength="20">
+          <input v-model="goods_skus.trade_price" type="text" class="edit-input" maxlength="20">
         </div>
+        <div v-if="goods_skus.sale_unit" class="edit-pla">元/{{goods_skus.sale_unit}}</div>
       </div>
     </div>
     <div class="back">
@@ -154,6 +158,8 @@
 
 <script type="text/ecmascript-6">
   import Draggable from 'vuedraggable'
+  import API from '@api'
+  import _ from 'lodash'
 
   const PAGE_NAME = 'EDIT_GOODS'
   const TITLE = '新建商品'
@@ -166,17 +172,261 @@
     components: {
       Draggable
     },
+    props: {
+      detail: {
+        type: Object,
+        default() {
+          return {}
+        }
+      }
+    },
     data() {
       return {
+        picNum: 5,
+        showLoading: false,
+        uploadImg: '',
         msg: {
-          picNum: 5,
-          goods_banner_images: [],
-          goods_skus: {
-            base_sale_rate: '',
-            base_unit: ''
-          },
-          id: ''
+          name: '',
+          goods_material_category_id: 0,
+          goods_main_images: [],
+          goods_detail_images: [],
+          goods_material_skus: []
+        },
+        goods_skus: {
+          base_sale_rate: '',
+          base_unit: '',
+          sale_unit: '',
+          goods_sku_code: '',
+          trade_price: '',
+          original_price: '',
+          goods_material_sku_id: 0
+        },
+        stairSelect: {
+          check: false,
+          show: false,
+          content: '一级类目',
+          type: 'default',
+          data: []
+        },
+        secondSelect: {
+          check: false,
+          show: false,
+          content: '二级类目',
+          type: 'default',
+          data: []
+        },
+        thirdlySelect: {
+          check: false,
+          show: false,
+          content: '三级类目',
+          type: 'default',
+          data: []
+        },
+        dispatchSelect: {
+          check: false,
+          show: false,
+          content: '基本单位',
+          type: 'default',
+          data: []
+        },
+        saleSelect: {
+          check: false,
+          show: false,
+          content: '销售单位',
+          type: 'default',
+          data: []
+        },
+        categoryId: '',
+        id: this.$route.query.id,
+        isSubmit: false
+      }
+    },
+    created() {
+      this._setData()
+      this.getCategoriesData()
+      this.getSelectData()
+    },
+    methods: {
+      /**
+       * 设置默认数据 -> 编辑状态
+       * @private
+       */
+      _setData() {
+        console.log(this.detail)
+        if (!_.isEmpty(this.detail)) {
+          this.msg = _.cloneDeep(this.detail)
+          console.log(this.msg)
+          this.goods_skus = this.msg.goods_material_skus[0]
+          this.dispatchSelect.content = this.goods_skus.base_unit
+          this.saleSelect.content = this.goods_skus.sale_unit
         }
+      },
+      getCategoriesData() {
+        API.Product.getCategoryList({parent_id: -1, goods_material_id: this.id}, false).then((res) => {
+          if (res.error === this.$ERR_OK) {
+            this.stairSelect.data = res.data
+            res.data.forEach((item) => {
+              if (item.is_selected) {
+                this.stairSelect.content = item.name
+                this.secondSelect.data = item.list
+                this.secondSelect.data.forEach((twomitem) => {
+                  if (twomitem.is_selected) {
+                    this.secondSelect.content = twomitem.name
+                    this.thirdlySelect.data = twomitem.list
+                    this.thirdlySelect.data.forEach((thritem) => {
+                      if(thritem.is_selected) {
+                        this.thirdlySelect.content = thritem.name
+                      }
+                    })
+                  }
+                })
+              }
+            })
+          } else {
+            this.$toast.show(res.message)
+          }
+        })
+      },
+      getSelectData() {
+        API.Product.getUnitsList({}, false).then((res) => {
+          if (res.error === this.$ERR_OK) {
+            this.dispatchSelect.data = res.data
+            this.saleSelect.data = res.data
+          } else {
+            this.$toast.show(res.message)
+          }
+        })
+      },
+      setStairValue(data) {
+        this.secondSelect.content = '二级类目'
+        this.secondSelect.data = data.list
+        this.thirdlySelect.content = '三级类目'
+        this.thirdlySelect.data = ''
+        this.msg.goods_material_category_id = data.id
+      },
+      setSecondValue(data) {
+        this.thirdlySelect.content = '三级类目'
+        this.thirdlySelect.data = data.list
+        this.msg.goods_material_category_id = data.id
+      },
+      setThirdlyValue(data) {
+        this.msg.goods_material_category_id = data.id
+      },
+      _addPic(type, length, e) {
+        this.uploadImg = type
+        let arr = Array.from(e.target.files)
+        if (arr.length < 1) return
+        if (this.msg[type].length) {
+          arr = arr.slice(0, length - this.msg[type].length)
+        } else {
+          arr = arr.slice(0, length)
+        }
+        this.showLoading = true
+        this.$cos.uploadFiles(this.$cosFileType.IMAGE_TYPE, arr).then((resArr) => {
+          this.showLoading = false
+          let imagesArr = []
+          resArr.forEach((item) => {
+            if (item.error !== this.$ERR_OK) {
+              return this.$toast.show(item.message)
+            }
+            let obj = {
+              id: 0,
+              image_id: item.data.id,
+              image_url: item.data.url
+            }
+            imagesArr.push(obj)
+          })
+          this.$set(this.msg, type, this.msg[type].concat(imagesArr))
+          console.log(this.msg[type])
+        })
+      },
+      _back() {
+        this.$router.back()
+      },
+      _submit() {
+        if (this.isSubmit) {
+          return
+        }
+        if (this.msg.name.length === 0 || this.msg.name.length >= 30) {
+          this.$toast.show('请选择输入商品名称且小于30字')
+          return
+        } else if (this.msg.goods_material_category_id <= 0) {
+          this.$toast.show('请选择商品类目')
+          return
+        } else if (this.msg.goods_main_images.length === 0) {
+          this.$toast.show('请上传商品图片')
+          return
+        } else if (this.msg.goods_detail_images.length === 0) {
+          this.$toast.show('请上传商品详情图')
+          return
+        } else if (this.goods_skus.base_unit === '') {
+          this.$toast.show('请选择基本单位')
+          return
+        } else if (this.goods_skus.base_sale_rate.length === 0) {
+          this.$toast.show('请输入销售规格')
+          return
+        } else if (this.goods_skus.base_sale_rate <= 0) {
+          this.$toast.show('请输入销售规格大于零')
+          return
+        } else if (this.goods_skus.sale_unit === '') {
+          this.$toast.show('请选择销售单位')
+          return
+        } else if (this.goods_skus.goods_sku_code.length === 0) {
+          this.$toast.show('请输入商品编码')
+          return
+        } else if (this.goods_skus.original_price.length === 0) {
+          this.$toast.show('请输入划线价')
+          return
+        } else if (this.goods_skus.trade_price.length === 0) {
+          this.$toast.show('请输入售价')
+          return
+        } else if (+this.goods_skus.original_price < +this.goods_skus.trade_price) {
+          this.$toast.show('请输入划线价大于售价')
+          return
+        }
+        this.msg.goods_material_skus[0] = this.goods_skus
+        console.log(this.msg)
+        console.log(this.goods_skus)
+        this.isSubmit = true
+        if (this.id) {
+          API.Product.editGoods(this.id, this.msg).then((res) => {
+            if (res.error === this.$ERR_OK) {
+              this.$toast.show('编辑成功')
+              setTimeout(() => {
+                this._back()
+              }, 1000)
+            } else {
+              this.isSubmit = false
+              this.$toast.show(res.message)
+            }
+            this.$loading.hide()
+          })
+          return
+        }
+        API.Product.createGoods(this.msg).then((res) => {
+          if (res.error === this.$ERR_OK) {
+            this.$toast.show('创建成功')
+            setTimeout(() => {
+              this._back()
+            }, 1000)
+          } else {
+            this.isSubmit = false
+            this.$toast.show(res.message)
+          }
+          this.$loading.hide()
+        })
+      },
+      setBaseValue(data) {
+        this.goods_skus.base_unit = data.name
+      },
+      setValueList(data) {
+        this.goods_skus.sale_unit = data.name
+      },
+      delPic(index) {
+        this.msg.goods_main_images.splice(index, 1)
+      },
+      delPic2(index) {
+        this.msg.goods_detail_images.splice(index, 1)
       }
     }
   }
@@ -302,6 +552,11 @@
       border-radius: 2px
       position: relative
       overflow: hidden
+      .img
+        width :100%
+        height :@width
+        display :block
+        object-fit :cover
     .close
       icon-image('pic-delete')
       width: 15px

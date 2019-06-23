@@ -21,17 +21,17 @@
         </div>
         <div v-if="blankList.length !== 0" class="list">
           <div v-for="(item, index) in blankList" :key="index" class="list-content list-box">
-            <div class="list-item">{{item.num}}</div>
             <div class="list-item list-double-row">
-              <div class="item-dark">{{item.goods_name}}</div>
-              <div class="item-dark">{{item.goods_sku_encoding}}</div>
+              <div class="item-dark">{{item.name}}</div>
+              <div class="item-dark">{{item.goods_sku_code}}</div>
             </div>
-            <div class="list-item">{{item.goods_category}}</div>
-            <div class="list-item">{{item.supplier_name}}</div>
-            <div class="list-item">{{item.plan_num}}</div>
+            <div class="list-item"><span>{{item.category1}}</span><span v-if="item.category2">/{{item.category2}}</span><span v-if="item.category3">/{{item.category3}}</span></div>
+            <div class="list-item">{{item.base_unit}}</div>
+            <div class="list-item">{{item.base_sale_rate}}{{item.base_unit}}/{{item.sale_unit}}</div>
+            <div class="list-item">￥{{item.trade_price}}/{{item.sale_unit}}</div>
           </div>
         </div>
-        <base-blank v-else></base-blank>
+        <!--<base-blank v-else></base-blank>-->
       </div>
       <div class="back">
         <div class="back-cancel back-btn hand" @click="_back">返回</div>
@@ -48,7 +48,7 @@
 
   const PAGE_NAME = 'PROCUREMENT_LEAD'
   const TITLE = '采购任务导入'
-  const COMMODITIES_LIST = ['商品名称', '分类', '基本单位', '销售规格', '销售单价']
+  const COMMODITIES_LIST = ['商品名称', '类目', '基本单位', '销售规格', '销售单价']
   export default {
     name: PAGE_NAME,
     page: {
@@ -68,17 +68,18 @@
     methods: {
       submitSure() {
         if (!this.blankList.length) {
-          this.$toast.show('导入采购任务单不能为空')
+          this.$toast.show('导入新建商品素材不能为空')
           return
         }
-        this.$refs.confirm.show('是否批量导入采购任务单？')
+        this.$refs.confirm.show('是否批量导入新建商品素材？')
       },
       async confirm() {
         if (!this.isSubmit) {
           return
         }
         this.isSubmit = false
-        let res = await API.Supply.createLeadTask({data: this.blankList})
+        let res = await API.Product.createMoreGoods({data: this.blankList})
+        this.$loading.hide()
         this.$toast.show(res.message, 600)
         if (res.error !== this.$ERR_OK) {
           this.isSubmit = true
@@ -96,7 +97,7 @@
       async importStock(e, index) {
         let param = this._infoFile(e.target.files[0])
         this.$loading.show('上传中...')
-        let res = await API.Supply.leadTask(param, true, 60000)
+        let res = await API.Product.checkGoodsData(param, true, 60000)
         this.$loading.hide()
         this.blankList = res.error === this.$ERR_OK ? res.data : []
         console.log(res)
@@ -127,8 +128,8 @@
     .list-box
       .list-item
         padding-right: 14px
-        &:nth-child(1)
-          flex: 1.2
+        &:nth-child(1), &:nth-child(2)
+          flex: 1.5
         &:nth-child(3), &:nth-child(4), &:nth-child(5)
           flex-wrap: nowrap
 

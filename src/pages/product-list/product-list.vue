@@ -3,13 +3,13 @@
     <div class="down-content">
       <span class="down-tip">类目筛选</span>
       <div class="down-item-small">
-        <base-drop-down :select="statusSelect" radius="2" @setValue="changeWithdrawalStatus"></base-drop-down>
+        <base-drop-down :select="stairSelect" :radius="2" @setValue="setStairValue"></base-drop-down>
       </div>
       <div class="down-item-small">
-        <base-drop-down :select="statusSelect" radius="2" @setValue="changeWithdrawalStatus"></base-drop-down>
+        <base-drop-down :select="secondSelect" :radius="2" @setValue="setSecondValue"></base-drop-down>
       </div>
       <div class="down-item-small">
-        <base-drop-down :select="statusSelect" radius="2" @setValue="changeWithdrawalStatus"></base-drop-down>
+        <base-drop-down :select="thirdlySelect" :radius="2" @setValue="setThirdlyValue"></base-drop-down>
       </div>
       <span class="down-tip">搜索</span>
       <div class="down-item">
@@ -21,41 +21,16 @@
         <div class="identification-page">
           <img src="./icon-product_list@2x.png" class="identification-icon">
           <p class="identification-name">商品中心</p>
-          <base-status-tab :statusList="dispatchSelect" @setStatus="changeTradeType"></base-status-tab>
+          <base-status-tab :statusList="statusTab" @setStatus="changeTradeType"></base-status-tab>
         </div>
         <div class="function-btn">
           <router-link to="edit-goods" append class="btn-main btn-main-end">
             新建商品<span class="add-icon"></span>
           </router-link>
-          <div class="show-more-box g-btn-item" :class="{'show-more-active': showIndex}" @mouseenter="_showTip" @mouseleave="_hideTip">
-            <div class="show-more-text">
-              <div class="show-text">更多</div>
-              <div class="show-icon"></div>
-            </div>
-            <div v-show="showIndex" class="big-hide-box"></div>
-            <transition name="fade">
-              <div v-show="showIndex" class="show-hide-box">
-                <div class="show-all-item">
-                  <div class="show-hide-item">
-                    批量新建
-                    <input
-                      type="file"
-                      class="stock-file hand"
-                      @change="importStock($event, 1)"
-                    >
-                  </div>
-                  <div class="show-hide-item">
-                    批量上架
-                    <input
-                      type="file"
-                      class="stock-file hand"
-                      @change="importStock($event, 0)"
-                    >
-                  </div>
-                </div>
-              </div>
-            </transition>
-          </div>
+          <a :href="downUrl" class="btn-main btn-main-end g-btn-item" target="_blank">商品模板导出</a>
+          <router-link to="lead-goods" append class="btn-main g-btn-item">
+            批量新建
+          </router-link>
         </div>
       </div>
       <div class="big-list">
@@ -63,30 +38,26 @@
           <div v-for="(item,index) in listTitle" :key="index" class="list-item">{{item}}</div>
         </div>
         <div class="list">
-          <!--<div v-for="(item, index) in goodsList" :key="index" class="list-content list-box">-->
-          <div class="list-content list-box">
+          <div v-for="(item, index) in productList" :key="index" class="list-content list-box">
             <div class="list-item">
-              <img class="pic-box" src="http://social-shopping-api-1254297111.picgz.myqcloud.com/corp1%2F2019%2F05%2F24%2F1558702375284-1557569666141-20190511_153817_087.jpg" alt="">
+              <img class="pic-box" :src="item.goods_cover_image" alt="">
             </div>
             <div class="list-item list-double-row">
-              <!--<div class="item-dark">{{item.name}}</div>-->
-              <!--<div class="item-dark">{{item.goods_sku_encoding}}</div>-->
-              <div class="item-dark">5-22雀巢咖啡</div>
-              <div class="item-dark">QW20190531</div>
+              <div class="item-dark">{{item.name}}</div>
+              <div class="item-dark">{{item.goods_sku_code}}</div>
             </div>
-            <!--<div class="list-item">{{item.goods_category_name}}</div>-->
-            <div class="list-item">休闲零食</div>
-            <div class="list-item">休闲零食</div>
-            <div class="list-item">休闲零食</div>
-            <div class="list-item">休闲零食</div>
+            <div class="list-item">{{item.goods_material_category}}</div>
+            <div class="list-item">{{item.base_unit}}</div>
+            <div class="list-item">{{item.base_sale_rate}}{{item.base_unit}}/{{item.sale_unit}}</div>
+            <div class="list-item">￥{{item.trade_price}}/{{item.sale_unit}}</div>
             <div class="list-item">
-              <div class="list-item-btn">
-                <base-switch switchColor="#922C88"></base-switch>
+              <div class="list-item-btn" @click="switchBtn(item, index)">
+                <base-switch :status="item.is_online" confirmText="展示" cancelText="隐藏" switchColor="#922C88"></base-switch>
               </div>
             </div>
             <div class="list-item list-operation-box">
-              <router-link tag="span" :to="'edit-goods?id='" append class="list-operation">编辑</router-link>
-              <span class="list-operation">删除</span>
+              <router-link tag="span" :to="'edit-goods?id=' + item.id" append class="list-operation">编辑</router-link>
+              <span class="list-operation" @click="delGoods(item)">删除</span>
             </div>
           </div>
         </div>
@@ -94,40 +65,215 @@
       <div class="pagination-box">
         <base-pagination
           ref="pagination"
-          :pageDetail="franListPageTotal"
-          :pagination="franListPage"
-          @addPage="setfranListPage"
+          :pageDetail="statePageTotal"
+          @addPage="addPage"
         >
         </base-pagination>
       </div>
     </div>
-
+    <default-confirm ref="confirm" :oneBtn="oneBtn" @confirm="delConfirm"></default-confirm>
   </div>
 </template>
 
 <script type="text/ecmascript-6">
+  import {productComputed, productMethods} from '@state/helpers'
+  import DefaultConfirm from '@components/default-confirm/default-confirm'
+  import API from '@api'
   const PAGE_NAME = 'PRODUCT_LIST'
   const TITLE = '商品素材'
-  const LIST_TITLE = ['图片', '商品名称', '分类', '基本单位', '销售规格', '销售单价', '状态', '操作']
+  const LIST_TITLE = ['图片', '商品名称', '类目', '基本单位', '销售规格', '销售单价', '状态', '操作']
 
   export default {
     name: PAGE_NAME,
     page: {
       title: TITLE
     },
+    components: {
+      DefaultConfirm
+    },
     data() {
       return {
         listTitle: LIST_TITLE,
-        dispatchSelect: [{name: '全部', value: '', key: 'all', num: 0}, {name: '支付', key: 'wait_release', num: 0}, {name: '退款', key: 'wait_purchase', num: 0}],
-        showIndex: false
+        statusTab: [{name: '全部', num: 0, key: ''}, {name: '已上架', num: 0, key: 1}, {name: '已下架', num: 0, key: 0}],
+        stairSelect: {
+          check: false,
+          show: false,
+          content: '一级类目',
+          type: 'default',
+          data: []
+        },
+        secondSelect: {
+          check: false,
+          show: false,
+          content: '二级类目',
+          type: 'default',
+          data: []
+        },
+        thirdlySelect: {
+          check: false,
+          show: false,
+          content: '三级类目',
+          type: 'default',
+          data: []
+        },
+        showIndex: false,
+        oneBtn: false,
+        categoryId: '',
+        keyWord: '',
+        isOnline: '',
+        page: 1,
+        franListKeyword: '',
+        downUrl: '',
+        curItem: ''
       }
     },
+    computed: {
+      ...productComputed
+    },
+    created() {
+      this._getUrl()
+      this.getGoodsStatus()
+      this.getCategoriesData()
+    },
     methods: {
-      _showTip() {
-        this.showIndex = true
+      ...productMethods,
+      getCategoriesData() {
+        API.Product.getCategoryList({parent_id: -1}, false).then((res) => {
+          if (res.error === this.$ERR_OK) {
+            this.stairSelect.data = res.data
+            this.stairSelect.data.unshift({name: '全部', id: ''})
+          } else {
+            this.$toast.show(res.message)
+          }
+        })
       },
-      _hideTip() {
-        this.showIndex = false
+      _getUrl() {
+        let currentId = this.getCurrentId()
+        let token = this.$storage.get('auth.currentUser', '')
+        let params = `access_token=${token.access_token}&is_online=${this.isOnline}&keyword=${
+          this.keyWord}&current_corp=${currentId}&goods_material_category_id=${this.categoryId}`
+        console.log(process.env.NODE_ENV)
+        if (process.env.NODE_ENV === 'development') {
+          this.downUrl = process.env.VUE_APP_API + `/social-shopping/v1/api/platform/create-goods-material-template?${params}`
+        } else {
+          this.downUrl = process.env.VUE_APP_API + `/social-shopping/api/platform/create-goods-material-template?${params}`
+        }
+        console.log(this.downUrl)
+      },
+      changeKeyword(text) {
+        console.log(text)
+        this.keyWord = text
+        this.page = 1
+        this.$refs.pagination.beginPage()
+        this.getReqList()
+      },
+      changeTradeType(selectStatus) {
+        this.isOnline = selectStatus.value
+        this.$refs.pagination.beginPage()
+        this.page = 1
+        this.$refs.pagination.beginPage()
+        this.getReqList(false)
+      },
+      setStairValue(data) {
+        this.secondSelect.content = '二级类目'
+        this.secondSelect.data = data.list
+        this.thirdlySelect.content = '三级类目'
+        this.thirdlySelect.data = ''
+        this.categoryId = data.id
+        this.page = 1
+        this.$refs.pagination.beginPage()
+        this.getReqList()
+      },
+      setSecondValue(data) {
+        this.thirdlySelect.content = '三级类目'
+        this.thirdlySelect.data = data.list
+        this.categoryId = data.id
+        this.page = 1
+        this.$refs.pagination.beginPage()
+        this.getReqList()
+      },
+      setThirdlyValue(data) {
+        this.categoryId = data.id
+        this.page = 1
+        this.$refs.pagination.beginPage()
+        this.getReqList()
+      },
+      addPage(page) {
+        this.page = page
+        this.getReqList(false)
+      },
+      getGoodsStatus() {
+        API.Product.reqGoodsStatus({
+          keyword: this.keyWord,
+          goods_material_category_id: this.categoryId
+        }, false).then((res) => {
+          if (res.error !== this.$ERR_OK) {
+            this.$toast.show(res.message)
+            return
+          }
+          this.statusTab = res.data.map((item, index) => {
+            return {
+              name: item.status_str,
+              value: item.status,
+              num: item.statistic
+            }
+          })
+        })
+      },
+      switchBtn(item, index) {
+        if (item.goods_sku_code.length === 0 && item.is_online * 1 === 0) {
+          this.$toast.show('请先补充商品编码再上架')
+          return
+        }
+        if (item.goods_material_category_id <= 0 && item.is_online * 1 === 0) {
+          this.$toast.show('请先补充类目再上架')
+          return
+        }
+        let data = {
+          goods_material_id: item.id,
+          is_online: item.is_online * 1 === 1 ? 0 : 1
+        }
+        API.Product.onlineGoods(data, false).then((res) => {
+          if (res.error === this.$ERR_OK) {
+            // this.goodsList[index].is_online = item.is_online * 1 === 1 ? 0 : 1
+            this.oneBtn = true
+            this.$refs.confirm.show(item.is_online * 1 === 1 ? '该商品已成功隐藏' : '该商品已成功展示')
+            this.getReqList()
+          } else {
+            this.$toast.show(res.message)
+          }
+        })
+      },
+      delGoods(item) {
+        this.curItem = item
+        this.oneBtn = false
+        this.$refs.confirm.show('确定要删除该商品？')
+      },
+      delConfirm() {
+        API.Product.delGoods(this.curItem.id).then((res) => {
+          if (res.error === this.$ERR_OK) {
+            this.$toast.show('删除成功')
+            if (this.productList.length === 1 && this.page * 1 !== 1) {
+              this.page--
+            }
+            this.getReqList()
+          } else {
+            this.$toast.show(res.message)
+          }
+        })
+      },
+      getReqList(isReq = true) {
+        this.getProductList({
+          categoryId: this.categoryId,
+          page: this.page,
+          isOnline: this.isOnline,
+          keyword: this.keyWord,
+          loading: true
+        })
+        this._getUrl()
+        if (isReq) {
+          this.getGoodsStatus()
+        }
       }
     }
   }
