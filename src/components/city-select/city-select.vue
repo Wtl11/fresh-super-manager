@@ -22,7 +22,7 @@
 </template>
 
 <script type="text/ecmascript-6">
-  import regionArr from './city'
+  import regionArr from './city-data'
 
   export default {
     props: {
