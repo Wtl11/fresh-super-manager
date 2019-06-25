@@ -237,7 +237,7 @@
           data: []
         },
         categoryId: '',
-        id: this.$route.query.id,
+        id: this.$route.query.id || '',
         isSubmit: false
       }
     },

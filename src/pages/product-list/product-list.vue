@@ -13,7 +13,7 @@
       </div>
       <span class="down-tip">搜索</span>
       <div class="down-item">
-        <base-search :infoText="franListKeyword" placeHolder="商品名称或编码" @search="changeKeyword"></base-search>
+        <base-search :infoText="keyWord" placeHolder="商品名称或编码" @search="changeKeyword"></base-search>
       </div>
     </div>
     <div class="table-content">
@@ -268,7 +268,7 @@
           page: this.page,
           isOnline: this.isOnline,
           keyword: this.keyWord,
-          loading: true
+          loading: false
         })
         this._getUrl()
         if (isReq) {
