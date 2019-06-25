@@ -94,7 +94,7 @@
     data() {
       return {
         listTitle: LIST_TITLE,
-        statusTab: [{name: '全部', num: 0, key: ''}, {name: '已上架', num: 0, key: 1}, {name: '已下架', num: 0, key: 0}],
+        statusTab: [{name: '全部', num: 0, key: ''}, {name: '已展示', num: 0, key: 1}, {name: '已隐藏', num: 0, key: 0}],
         stairSelect: {
           check: false,
           show: false,
