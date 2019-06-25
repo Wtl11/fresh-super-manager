@@ -153,8 +153,8 @@
         let params = `access_token=${token.access_token}&is_online=${this.isOnline}&keyword=${
           this.keyWord}&current_corp=${currentId}&goods_material_category_id=${this.categoryId}`
         console.log(process.env.NODE_ENV)
-        if (process.env.NODE_ENV === 'development') {
-          this.downUrl = process.env.VUE_APP_API + `/social-shopping/v1/api/platform/create-goods-material-template?${params}`
+        if (process.env.VUE_APP_ENV === 'release') {
+          this.downUrl = process.env.VUE_APP_API + `/social-shopping/v5/api/platform/create-goods-material-template?${params}`
         } else {
           this.downUrl = process.env.VUE_APP_API + `/social-shopping/api/platform/create-goods-material-template?${params}`
         }
