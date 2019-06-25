@@ -377,6 +377,7 @@
         switch (this.deteleType * 1) {
         case 1:
           API.Product.delCategory(this.oneItem.id).then((res) => {
+            this.$refs.smallModel.hide()
             if (res.error === this.$ERR_OK) {
               this.getCategoryStatus()
               setTimeout(() => {
@@ -392,6 +393,7 @@
           break
         case 2:
           API.Product.delCategory(this.twoItem.id).then((res) => {
+            this.$refs.smallModel.hide()
             if (res.error === this.$ERR_OK) {
               this.getCategoryStatus()
               setTimeout(() => {
@@ -407,6 +409,7 @@
           break
         case 3:
           API.Product.delCategory(this.thrItem.id).then((res) => {
+            this.$refs.smallModel.hide()
             if (res.error === this.$ERR_OK) {
               this.getCategoryStatus()
               setTimeout(() => {
