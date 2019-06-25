@@ -383,11 +383,11 @@
               setTimeout(() => {
                 this.categoryList.splice(this.oneIndex, 1)
                 this.oneBtn = true
-                this.$refs.bigConfirm.show(`该类目已成功删除`)
+                this.$toast.show(`该类目已成功删除`)
               }, 1000)
             } else {
               this.oneBtn = true
-              this.$refs.bigConfirm.show(res.message)
+              this.$toast.show(res.message)
             }
           })
           break
@@ -399,11 +399,11 @@
               setTimeout(() => {
                 this.categoryList[this.oneIndex].list.splice(this.twoIndex, 1)
                 this.oneBtn = true
-                this.$refs.bigConfirm.show(`该类目已成功删除`)
+                this.$toast.show(`该类目已成功删除`)
               }, 1000)
             } else {
               this.oneBtn = true
-              this.$refs.bigConfirm.show(res.message)
+              this.$toast.show(res.message)
             }
           })
           break
@@ -415,11 +415,11 @@
               setTimeout(() => {
                 this.categoryList[this.oneIndex].list[this.twoIndex].list.splice(this.twoIndex, 1)
                 this.oneBtn = true
-                this.$refs.bigConfirm.show(`该类目已成功删除`)
+                this.$toast.show(`该类目已成功删除`)
               }, 1000)
             } else {
               this.oneBtn = true
-              this.$refs.bigConfirm.show(res.message)
+              this.$toast.show(res.message)
             }
           })
           break
