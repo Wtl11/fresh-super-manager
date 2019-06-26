@@ -315,6 +315,7 @@
       _addPic(type, length, e) {
         this.uploadImg = type
         let arr = Array.from(e.target.files)
+        e.target.value = ''
         if (arr.length < 1) return
         if (this.msg[type].length) {
           arr = arr.slice(0, length - this.msg[type].length)
