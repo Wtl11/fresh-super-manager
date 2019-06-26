@@ -3,7 +3,7 @@
     <div class="identification">
       <div class="identification-page">
         <img src="./icon-goods_classify@2x.png" class="identification-icon">
-        <p class="identification-name">商品分类</p>
+        <p class="identification-name">商品类目</p>
         <div class="base-status-tab">
           <div v-for="(item, index) in statusTab" :key="index" class="status-tab-item">
             {{item.name}} ({{item.num}})
@@ -177,11 +177,11 @@
       newConfirm(data) {
         let {name, sort, imageId, type} = data
         if (name.length === 0 || name.length > 10) {
-          this.$toast.show('分类名称的长度不能超过10个字')
+          this.$toast.show('类目名称的长度不能超过10个字')
           return
         }
         if (!imageId && type) {
-          this.$toast.show('请上传分类图标')
+          this.$toast.show('请上传类目图标')
           return
         }
         switch(this.categoryType) {
@@ -296,8 +296,12 @@
       },
       eidtConfirm(data) {
         let {name, sort, id} = data
-        if (name.length === 0 || name.length > 10) {
-          this.$toast.show('分类名称的长度不能超过10个字')
+        if (name.length === 0) {
+          this.$toast.show('类目名称的长度不能为空')
+          return
+        }
+        if (name.length > 10) {
+          this.$toast.show('类目名称的长度不能超过10个字')
           return
         }
         switch (this.editType * 1) {
