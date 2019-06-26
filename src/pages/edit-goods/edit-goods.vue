@@ -349,7 +349,7 @@
           return
         }
         if (this.msg.name.length === 0 || this.msg.name.length >= 30) {
-          this.$toast.show('请选择输入商品名称且小于30字')
+          this.$toast.show('请输入商品名称且小于30字')
           return
         } else if (this.msg.goods_material_category_id <= 0) {
           this.$toast.show('请选择商品类目')
