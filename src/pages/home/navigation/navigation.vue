@@ -95,16 +95,16 @@
   const FIRST_MENU = [
     {
       name: '商品',
-      icon: require('./icon-goods_white@2x.png'),
-      activeIcon: require('./icon-goods@2x.png'),
+      icon: require('./icon-content1@2x.png'),
+      activeIcon: require('./icon-content2@2x.png'),
       isLight: true,
       second: GOODS,
       url: '/home/product-list'
     },
     {
       name: '客户',
-      icon: require('./icon-dashboard_white@2x.png'),
-      activeIcon: require('./icon-dashboard@2x.png'),
+      icon: require('./icon-customer1@2x.png'),
+      activeIcon: require('./icon-customer2@2x.png'),
       isLight: true,
       second: CUSTOMER,
       url: '/home/franchise-list'
