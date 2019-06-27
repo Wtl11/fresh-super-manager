@@ -483,6 +483,8 @@
         layout(row)
         align-items: center
         justify-content: space-between
+        &:hover
+          background: #F5EFF5
       .box-main-none
         border-none()
 
