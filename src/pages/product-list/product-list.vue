@@ -95,27 +95,9 @@
       return {
         listTitle: LIST_TITLE,
         statusTab: [{name: '全部', num: 0, key: ''}, {name: '已展示', num: 0, key: 1}, {name: '已隐藏', num: 0, key: 0}],
-        stairSelect: {
-          check: false,
-          show: false,
-          content: '一级类目',
-          type: 'default',
-          data: []
-        },
-        secondSelect: {
-          check: false,
-          show: false,
-          content: '二级类目',
-          type: 'default',
-          data: []
-        },
-        thirdlySelect: {
-          check: false,
-          show: false,
-          content: '三级类目',
-          type: 'default',
-          data: []
-        },
+        stairSelect: {check: false, show: false, content: '一级类目', type: 'default', data: []},
+        secondSelect: {check: false, show: false, content: '二级类目', type: 'default', data: []},
+        thirdlySelect: {check: false, show: false, content: '三级类目', type: 'default', data: []},
         showIndex: false,
         oneBtn: false,
         categoryId: '',
@@ -137,6 +119,7 @@
     },
     methods: {
       ...productMethods,
+      // 获取类目列表
       getCategoriesData() {
         API.Product.getCategoryList({parent_id: -1}, false).then((res) => {
           if (res.error === this.$ERR_OK) {
@@ -154,13 +137,14 @@
           this.keyWord}&current_corp=${currentId}&goods_material_category_id=${this.categoryId}`
         this.downUrl = process.env.VUE_APP_API + `/social-shopping/api/platform/create-goods-material-template?${params}`
       },
+      // 搜索
       changeKeyword(text) {
-        console.log(text)
         this.keyWord = text
         this.page = 1
         this.$refs.pagination.beginPage()
         this.getReqList()
       },
+      // 切换状态
       changeTradeType(selectStatus) {
         this.isOnline = selectStatus.value
         this.$refs.pagination.beginPage()
@@ -168,6 +152,7 @@
         this.$refs.pagination.beginPage()
         this.getReqList(false)
       },
+      // 选择一级类目
       setStairValue(data) {
         this.secondSelect.content = '二级类目'
         this.secondSelect.data = data.list
@@ -178,6 +163,7 @@
         this.$refs.pagination.beginPage()
         this.getReqList()
       },
+      // 选择二级类目
       setSecondValue(data) {
         this.thirdlySelect.content = '三级类目'
         this.thirdlySelect.data = data.list
@@ -186,16 +172,19 @@
         this.$refs.pagination.beginPage()
         this.getReqList()
       },
+      // 选择三级类目
       setThirdlyValue(data) {
         this.categoryId = data.id
         this.page = 1
         this.$refs.pagination.beginPage()
         this.getReqList()
       },
+      // 分页
       addPage(page) {
         this.page = page
         this.getReqList(false)
       },
+      // 获取状态列表
       getGoodsStatus() {
         API.Product.reqGoodsStatus({
           keyword: this.keyWord,
@@ -214,6 +203,7 @@
           })
         })
       },
+      // 上下架
       switchBtn(item, index) {
         if (item.goods_sku_code.length === 0 && item.is_online * 1 === 0) {
           this.$toast.show('请先补充商品编码再上架')
@@ -238,6 +228,7 @@
           }
         })
       },
+      // 删除商品
       delGoods(item) {
         this.curItem = item
         this.oneBtn = false
@@ -256,6 +247,7 @@
           }
         })
       },
+      // 获取商品列表
       getReqList(isReq = true) {
         this.getProductList({
           categoryId: this.categoryId,

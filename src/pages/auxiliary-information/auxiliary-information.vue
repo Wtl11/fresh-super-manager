@@ -52,6 +52,7 @@
     },
     methods: {
       ...productMethods,
+      // 删除单位
       delItem(item, index) {
         this.curItem = item
         this.delIndex = index
@@ -67,6 +68,7 @@
           }
         })
       },
+      // 修改单位
       changeItem(item) {
         if (item.id) {
           this.curItem = item

@@ -57,7 +57,7 @@
         </div>
       </li>
     </ul>
-    <change-model ref="smallModel" :showCate="false" numberPla="长度不能超过10位" @confirm="eidtConfirm"></change-model>
+    <change-model ref="smallModel" :showCate="false" numberPla="长度不能超过10位" @confirm="editConfirm"></change-model>
     <change-model ref="bigModel" :showCate="false" numberPla="长度不能超过10位" @confirm="newConfirm"></change-model>
     <default-confirm ref="bigConfirm" :oneBtn="oneBtn" @confirm="delConfirm"></default-confirm>
   </div>
@@ -123,6 +123,7 @@
           })
         })
       },
+      // 展示更多
       openList(index) {
         this.categoryList[index].select = !this.categoryList[index].select
         this.$forceUpdate()
@@ -206,6 +207,7 @@
           })
           break
         case 1:
+          // 创建二级类目
           API.Product.createCategory({name: name, sort: sort, parent_id: this.oneItem.id}).then((res) => {
             this.$loading.hide()
             if (res.error === this.$ERR_OK) {
@@ -227,6 +229,7 @@
           })
           break
         case 2:
+          // 修改一级类目
           API.Product.editCategory(this.oneItem.id, {name: name, sort: sort, image_id: imageId, parent_id: 0}).then(
             (res) => {
               this.$loading.hide()
@@ -243,6 +246,7 @@
           )
           break
         case 3:
+          // 创建三级类目
           API.Product.createCategory({name: name, sort: sort, parent_id: this.twoItem.id}).then((res) => {
             this.$loading.hide()
             if (res.error === this.$ERR_OK) {
@@ -294,7 +298,7 @@
           type: false
         })
       },
-      eidtConfirm(data) {
+      editConfirm(data) {
         let {name, sort, id} = data
         if (name.length === 0) {
           this.$toast.show('类目名称的长度不能为空')
@@ -306,6 +310,7 @@
         }
         switch (this.editType * 1) {
         case 2:
+          // 修改二级类目
           API.Product.editCategory(this.twoItem.id, {name: name, sort: sort, parent_id: id}).then((res) => {
             this.$loading.hide()
             if (res.error === this.$ERR_OK) {
@@ -331,8 +336,8 @@
           })
           break
         case 3:
+          // 修改三级类目
           API.Product.editCategory(this.thrItem.id, {name: name, sort: sort, parent_id: this.twoItem.id}).then((res) => {
-            console.log(this.twoItem.id, id)
             this.$loading.hide()
             if (res.error === this.$ERR_OK) {
               this.$refs.smallModel.hide()
@@ -380,6 +385,7 @@
       delConfirm() {
         switch (this.deteleType * 1) {
         case 1:
+          // 删除一级类目
           API.Product.delCategory(this.oneItem.id).then((res) => {
             this.$loading.hide()
             if (res.error === this.$ERR_OK) {
@@ -396,6 +402,7 @@
           })
           break
         case 2:
+          // 删除二级类目
           API.Product.delCategory(this.twoItem.id).then((res) => {
             this.$loading.hide()
             if (res.error === this.$ERR_OK) {
@@ -412,6 +419,7 @@
           })
           break
         case 3:
+          // 删除三级类目
           API.Product.delCategory(this.thrItem.id).then((res) => {
             this.$loading.hide()
             if (res.error === this.$ERR_OK) {
@@ -429,6 +437,7 @@
           break
         }
       },
+      // 排序
       _sort(a, b) {
         return b.sort - a.sort
       }

@@ -201,41 +201,11 @@
           original_price: '',
           goods_material_sku_id: 0
         },
-        stairSelect: {
-          check: false,
-          show: false,
-          content: '一级类目',
-          type: 'default',
-          data: []
-        },
-        secondSelect: {
-          check: false,
-          show: false,
-          content: '二级类目',
-          type: 'default',
-          data: []
-        },
-        thirdlySelect: {
-          check: false,
-          show: false,
-          content: '三级类目',
-          type: 'default',
-          data: []
-        },
-        dispatchSelect: {
-          check: false,
-          show: false,
-          content: '基本单位',
-          type: 'default',
-          data: []
-        },
-        saleSelect: {
-          check: false,
-          show: false,
-          content: '销售单位',
-          type: 'default',
-          data: []
-        },
+        stairSelect: {check: false, show: false, content: '一级类目', type: 'default', data: []},
+        secondSelect: {check: false, show: false, content: '二级类目', type: 'default', data: []},
+        thirdlySelect: {check: false, show: false, content: '三级类目', type: 'default', data: []},
+        dispatchSelect: {check: false, show: false, content: '基本单位', type: 'default', data: []},
+        saleSelect: {check: false, show: false, content: '销售单位', type: 'default', data: []},
         categoryId: '',
         id: this.$route.query.id || '',
         isSubmit: false
@@ -252,15 +222,14 @@
        * @private
        */
       _setData() {
-        console.log(this.detail)
         if (!_.isEmpty(this.detail)) {
           this.msg = _.cloneDeep(this.detail)
-          console.log(this.msg)
           this.goods_skus = this.msg.goods_material_skus[0]
           this.dispatchSelect.content = this.goods_skus.base_unit
           this.saleSelect.content = this.goods_skus.sale_unit
         }
       },
+      // 获取类目列表
       getCategoriesData() {
         API.Product.getCategoryList({parent_id: -1, goods_material_id: this.id}, false).then((res) => {
           if (res.error === this.$ERR_OK) {
@@ -287,6 +256,7 @@
           }
         })
       },
+      // 获取计量单位
       getSelectData() {
         API.Product.getUnitsList({}, false).then((res) => {
           if (res.error === this.$ERR_OK) {
@@ -297,6 +267,7 @@
           }
         })
       },
+      // 选择一级类目
       setStairValue(data) {
         this.secondSelect.content = '二级类目'
         this.secondSelect.data = data.list
@@ -304,14 +275,17 @@
         this.thirdlySelect.data = ''
         this.msg.goods_material_category_id = data.id
       },
+      // 选择二级类目
       setSecondValue(data) {
         this.thirdlySelect.content = '三级类目'
         this.thirdlySelect.data = data.list
         this.msg.goods_material_category_id = data.id
       },
+      // 选择三级类目
       setThirdlyValue(data) {
         this.msg.goods_material_category_id = data.id
       },
+      // 添加图片
       _addPic(type, length, e) {
         this.uploadImg = type
         let arr = Array.from(e.target.files)
@@ -338,12 +312,13 @@
             imagesArr.push(obj)
           })
           this.$set(this.msg, type, this.msg[type].concat(imagesArr))
-          console.log(this.msg[type])
         })
       },
+      // 回退上一页
       _back() {
         this.$router.back()
       },
+      // 提交信息
       _submit() {
         if (this.isSubmit) {
           return
@@ -386,8 +361,6 @@
           return
         }
         this.msg.goods_material_skus[0] = this.goods_skus
-        console.log(this.msg)
-        console.log(this.goods_skus)
         this.isSubmit = true
         if (this.id) {
           API.Product.editGoods(this.id, this.msg).then((res) => {
@@ -417,12 +390,15 @@
           this.$loading.hide()
         })
       },
+      // 选择基本单位
       setBaseValue(data) {
         this.goods_skus.base_unit = data.name
       },
+      // 选择销售单位
       setValueList(data) {
         this.goods_skus.sale_unit = data.name
       },
+      // 删除图片
       delPic(index) {
         this.msg.goods_main_images.splice(index, 1)
       },
