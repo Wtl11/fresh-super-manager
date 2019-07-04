@@ -316,7 +316,7 @@ export default [
        */
       // 创作文章
       {
-        path: 'article-add/:type',
+        path: 'article-add',
         name: 'article-add',
         component: () => lazyLoadView(import('@pages/article-add/article-add')),
         meta: {

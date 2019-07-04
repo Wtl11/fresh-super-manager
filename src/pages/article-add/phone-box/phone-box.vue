@@ -4,7 +4,7 @@
       <div v-if="isShowEmpty" :class="['content-box', 'empty-type-'+type]">
       </div>
       <div v-else class="content-box">
-        <div v-if="type !== '1'" class="content-article-detail">
+        <div v-if="type !== 'video'" class="content-article-detail">
           <video v-if="data.coverVideo.url" :src="data.coverVideo.url" class="cover-photo"></video>
           <img v-else :src="data.coverImage.url" class="cover-photo">
           <div class="auth-wrap">
@@ -37,10 +37,10 @@
             <div v-if="data.foodsList" class="foods-list">
               {{data.foodsList}}
             </div>
-            <div v-if="type==='2'&& data.goodsList.length" class="goods-list">
+            <div v-if="type==='cookbook'&& data.goodsList.length" class="goods-list">
               <goods-item v-for="(item,idx) in data.goodsList" :key="idx" :goodsData="item"></goods-item>
             </div>
-            <template v-if="type!=='1'&& data.details.length">
+            <template v-if="type!=='video'&& data.details.length">
               <div v-for="(item,idx) in data.details" :key="idx" class="article-item">
                 <pre v-if="item.type==='text'" class="article-text">{{item.value}}</pre>
                 <img v-if="item.type==='image'" :src="item.value" mode="widthFix" class="article-image">
@@ -92,7 +92,7 @@
             <div class="operate-wrap">
               <div>
                 <div class="like-operate">
-                  <div class="count">{{data.goodCount > 99 ? '99+' :data.goodCount}}</div>
+                  <div v-if="data.goodCount" class="count">{{data.goodCount > 99 ? '99+' :data.goodCount}}</div>
                   <img src="./icon-fabulous1@2x.png" class="operate-icon">
                 </div>
                 <img src="./icon-share_big@2x.png" class="operate-icon">
@@ -133,7 +133,7 @@
         type: Object
       },
       type: {
-        default: '0',
+        default: 'common',
         required: true,
         type: String
       }
@@ -168,6 +168,7 @@
     width: 340px
     .phone
       position: fixed
+      z-index: 200
       top:13%
       left:320px
       icon-image('pic-tel')

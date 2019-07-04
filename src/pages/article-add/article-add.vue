@@ -48,14 +48,14 @@
             <base-upload :videoUrl="addData.coverVideo.url"
                          :imageUrl="addData.coverImage.url"
                          :picNum="1"
-                         :fileType="currentType!=='1' ?'image-video' :'image'"
+                         :fileType="currentType!=='video' ?'image-video' :'image'"
                          @failFile="failFile"
                          @getPic="getPic"
                          @delPic="delPic"
                          @successVideo="getCoverVideo"
             ></base-upload>
             <div class="tip">
-              <template v-if="currentType === '1'">
+              <template v-if="currentType === 'video'">
                 请添加不大于10M的清晰图片
               </template>
               <template v-else>
@@ -96,7 +96,7 @@
           </div>
         </div>
         <!-- 视频  视频内容-->
-        <div v-if="currentType === '1'" class="edit-item">
+        <div v-if="currentType === 'video'" class="edit-item">
           <div class="edit-title">
             <span class="start">*</span>
             视频内容
@@ -134,7 +134,7 @@
           </div>
         </div>
         <!--视频  视频简介-->
-        <div v-if="currentType === '1'" class="edit-item">
+        <div v-if="currentType === 'video'" class="edit-item">
           <div class="edit-title">
             <span class="start">*</span>
             视频简介
@@ -145,7 +145,7 @@
           </div>
         </div>
         <!--菜谱  食材清单-->
-        <div v-if="currentType === '2'" class="edit-item">
+        <div v-if="currentType === 'cookbook'" class="edit-item">
           <div class="edit-title">
             <span class="start">*</span>
             食材清单
@@ -159,7 +159,7 @@
           </div>
         </div>
         <!--文章/菜谱 内容详情-->
-        <div v-if="currentType!=='1'" class="edit-item">
+        <div v-if="currentType!=='video'" class="edit-item">
           <div class="edit-title">
             <span class="start">*</span>
             内容详情
@@ -187,7 +187,7 @@
             </div>
           </div>
         </div>
-        <draggable v-if="currentType!=='1' && addData.details.length" ref="detailsContent" v-model="addData.details" class="content-details" @update="_setSort()">
+        <draggable v-if="currentType!=='video' && addData.details.length" ref="detailsContent" v-model="addData.details" class="content-details" @update="_setSort()">
           <transition-group>
             <div v-for="(item, idx) in addData.details" :key="idx" class="content-item">
               <div class="close-icon" @click="deleteContentItem(idx,item)"></div>
@@ -261,9 +261,9 @@
   const PAGE_NAME = 'ARTICLE_ADD'
   const TITLE = '创作文章'
 
-  const ARTICLE = '0'
-  const VIDEO = '1'
-  const COOKBOOK = '2'
+  const ARTICLE = 'common'
+  const VIDEO = 'video'
+  const COOKBOOK = 'cookbook'
 
   export default {
     name: PAGE_NAME,
@@ -289,7 +289,7 @@
             name: '菜谱'
           }
         }, // 三种创作
-        currentType: '0', // 现在创作类型
+        currentType: 'common', // 现在创作类型
         addCategoryText: "",
         addData: {
           likes: [],
@@ -329,16 +329,17 @@
       isShowEmpty() {
         return !(this.addData.title || this.addData.coverImage.id
           || this.addData.authPhoto.id || this.addData.authName
-          || ((this.addData.videoContent.id || this.addData.videoIntroduce) && this.currentType === '1')
-          || (this.currentType === '2' && this.addData.foodList)
-          || (this.currentType !== '1' && this.addData.details.length))
+          || ((this.addData.videoContent.id || this.addData.videoIntroduce) && this.currentType === 'video')
+          || (this.currentType === 'cookbook' && this.addData.foodList)
+          || (this.currentType !== 'video' && this.addData.details.length))
       },
       name() {
         return this.typeList[this.currentType] && this.typeList[this.currentType].name || '文章'
       }
     },
     async created() {
-      this.currentType = this.$route.params.type
+      this.currentType = this.$route.query.type
+      this.id = this.$route.query.id || ''
       console.log(this.$route.params.type)
     },
     methods: {
@@ -453,11 +454,11 @@
         else if (!this.addData.coverImage.id) message = '请上传封面'
         else if (!this.addData.authPhoto.id) message = '请上传作者头像'
         else if (!this.addData.authName) message = '请填写作者名字'
-        else if (this.currentType === '1') {
+        else if (this.currentType === 'video') {
           if (!this.addData.videoContent.id) message = '请上传视频内容'
           else if (!this.addData.videoIntroduce) message = '请填写视频简介'
-        } else if (this.currentType === '2' && !this.addData.foodList) message = '请填写食材清单'
-        else if (this.currentType !== '1' && !this.addData.details.length) message = '请编辑内容详情'
+        } else if (this.currentType === 'cookbook' && !this.addData.foodList) message = '请填写食材清单'
+        else if (this.currentType !== 'video' && !this.addData.details.length) message = '请编辑内容详情'
         else if (this.addData.goodCount) this.addData.goodCount = 0
         else if (this.addData.lookCount) this.addData.lookCount = 0
         if (message) {
