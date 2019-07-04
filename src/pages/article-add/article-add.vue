@@ -803,6 +803,7 @@
 
       .add-category-input
         width: 340px
+        margin-top:7px
 
     .title-box
       display: flex
@@ -823,14 +824,13 @@
         icon-image('icon-close')
 
     .back
-      border-top-1px($color-line)
       position: absolute
       left: 0
       right: 0
       bottom: 0
       background: $color-white
       justify-content: flex-end
-      height: 70px
+      border-none()
 
     .page-box
       padding: 0 20px
