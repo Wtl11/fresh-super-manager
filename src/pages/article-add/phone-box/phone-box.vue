@@ -42,7 +42,7 @@
             </div>
             <template v-if="type!=='1'&& data.details.length">
               <div v-for="(item,idx) in data.details" :key="idx" class="article-item">
-                <div v-if="item.type==='text'" class="article-text">{{item.value}}</div>
+                <pre v-if="item.type==='text'" class="article-text">{{item.value}}</pre>
                 <img v-if="item.type==='image'" :src="item.value" mode="widthFix" class="article-image">
                 <video v-if="item.type==='video'" :src="item.value" class="article-video"></video>
                 <goods-item v-if="item.type==='goods'" :goodsData="item.value" :addDisabled="true"></goods-item>
@@ -86,28 +86,21 @@
                 <img src="./icon-lv8@2x.png" class="level-icon">
               </template>
             </div>
-            <div class="text">
+            <pre class="text">
               {{data.videoIntroduce}}
-            </div>
+            </pre>
             <div class="operate-wrap">
               <div>
                 <div class="like-operate">
                   <div class="count">{{data.goodCount > 99 ? '99+' :data.goodCount}}</div>
                   <img src="./icon-fabulous1@2x.png" class="operate-icon">
                 </div>
-                <!--<img src="./icon-fabulous2@2x.png" class="operate-icon">-->
                 <img src="./icon-share_big@2x.png" class="operate-icon">
                 <img src="./icon-shoping_catbig@2x.png" class="operate-icon">
               </div>
-              <div class="goods-btn" @click.stop="showGoodsListBtn">
-                商品({{data.goodsList.length}})
+              <div class="goods-btn">
+                商品
               </div>
-            </div>
-          </div>
-          <div :class="['goods-list-wrap',{show:goodsListVisible}]">
-            <div class="title">全部商品<span class="num">/共{{data.goodsList.length}}个商品</span></div>
-            <div class="good-list">
-              <goods-item v-for="(item,idx) in data.goodsList" :key="idx" :goodsData="item"></goods-item>
             </div>
           </div>
         </div>
@@ -172,12 +165,14 @@
     box-sizing: border-box
     display: flex
     justify-content: center
-
+    width: 340px
     .phone
+      position: fixed
+      top:13%
+      left:320px
       icon-image('pic-tel')
       width: 340px
       height: 726.24px
-      position: relative
 
       .content-box
         box-sizing: border-box

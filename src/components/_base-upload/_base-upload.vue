@@ -258,7 +258,6 @@
         visibility: visible
 
   .show-image
-    margin-bottom: 20px
     background-repeat: no-repeat
     background-size: cover
     background-position: center

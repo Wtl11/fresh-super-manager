@@ -470,7 +470,7 @@
       // 上线
       async submitLaunch() {
         let res = this.justifyConent()
-        console.log(res, this.addData.details)
+        console.log(res, this.addData)
       },
       // 草稿
       async submitDraft() {
