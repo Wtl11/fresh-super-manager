@@ -1,6 +1,6 @@
 <template>
   <default-modal ref="modal">
-    <div slot="content" class="default-input">
+    <div v-if="inputType === 'default'" slot="content" class="default-input">
       <div class="title-box">
         <div class="title">
           {{numberTitle}}
@@ -9,6 +9,25 @@
       </div>
       <div class="main-input">
         <input v-model="numberTxt" type="text" class="main-input-box" :placeholder="numberPla">
+        <div class="btn-group">
+          <span class="btn cancel" @click="cancel">取消</span>
+          <span class="btn confirm" @click="confirm">确定</span>
+        </div>
+      </div>
+    </div>
+    <div v-if="inputType === 'classification'" slot="content" class="default-input classification">
+      <div class="title-box">
+        <div class="title">
+          {{numberTitle}}
+        </div>
+        <span class="close hand" @click="cancel"></span>
+      </div>
+      <div class="main-input">
+        <p class="main-text"><span class="start">*</span>分类名称</p>
+        <div class="input-box">
+          <input v-model="numberTxt" :maxlength="classifyMaxLength" type="text" class="main-input-box" :placeholder="numberPla">
+          <span class="input-num">{{numberTxt.length}}/{{classifyMaxLength}}</span>
+        </div>
         <div class="btn-group">
           <span class="btn cancel" @click="cancel">取消</span>
           <span class="btn confirm" @click="confirm">确定</span>
@@ -26,6 +45,16 @@
   export default {
     name: COMPONENT_NAME,
     components: {DefaultModal},
+    props: {
+      inputType: {
+        type: String,
+        default: 'default'
+      },
+      classifyMaxLength: {
+        type: Number,
+        default: 6
+      }
+    },
     data() {
       return {
         numberTxt: '',
@@ -107,6 +136,31 @@
           color: $color-text-assist
         &:focus
           border-color: $color-main !important
+
   .z
     width: 100%
+
+  .classification
+    width: 534px
+    height: 212px
+    .main-input
+      display: flex
+      align-items: center
+      .main-text
+        font-size: $font-size-14
+        color: #151515
+        margin-right: 14.5px
+        .start
+          color: #F52424
+          margin-right: 1px
+      .main-input-box
+        width: 416px
+  .input-box
+    position :relative
+    .input-num
+      col-center()
+      font-size: $font-size-14
+      color: #ACACAC
+      right: 10px
+      font-family: $font-family-regular
 </style>
