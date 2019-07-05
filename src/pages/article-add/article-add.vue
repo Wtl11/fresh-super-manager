@@ -340,16 +340,14 @@
     async created() {
       this.currentType = this.$route.query.type
       this.id = this.$route.query.id || ''
-      console.log(this.$route.params.type)
+      console.log(this.$route)
     },
     methods: {
       // 获取内容分类列表
       _getArticleCategory() {
-        console.log(111)
       },
       addCategory() {
         this.addCategoryText = ''
-        console.log(111)
         this.$refs.addCategory.showModal()
       },
       _submitCategory() {
