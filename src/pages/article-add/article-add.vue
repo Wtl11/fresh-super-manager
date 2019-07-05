@@ -84,13 +84,15 @@
             <div class="auto-input">
               <input v-model="addData.authName"
                      type="text"
-                     placeholder="请输入作者名称"
+                     placeholder="请输入作者名称10个字以内"
                      class="edit-input"
+                     maxlength="10"
               >
               <input v-model="addData.authSignature"
                      type="text"
-                     placeholder="请输入30个字的个性签名"
+                     placeholder="请输入30个字以内的个性签名"
                      class="edit-input edit-signature"
+                     maxlength="30"
               >
             </div>
           </div>
@@ -165,11 +167,11 @@
             内容详情
           </div>
           <div class="edit-input-box add-cont-type-box">
-            <div class="add-cont-type-item" @click="addTextItem">
+            <div class="add-cont-type-item hand" @click="addTextItem">
               <div class="icon icon-text"></div>
               <div>文本</div>
             </div>
-            <div class="add-cont-type-item">
+            <div class="add-cont-type-item  hand">
               <base-upload fileType="image-custom" @getPic="addImageItem">
                 <div class="add-cont-type-item">
                   <div class="icon icon-img"></div>
@@ -177,9 +179,9 @@
                 </div>
               </base-upload>
             </div>
-            <div class="add-cont-type-item">
+            <div class="add-cont-type-item hand">
               <base-upload fileType="video-custom" @successVideo="addVideoItem">
-                <div class="add-cont-type-item">
+                <div class="add-cont-type-item hand">
                   <div class="icon icon-video"></div>
                   <div>视频</div>
                 </div>
@@ -199,7 +201,7 @@
           </transition-group>
         </draggable>
         <!-- 其他设置 -->
-        <div class="edit-item">
+        <div class="edit-item  other-edit-item">
           <div class="edit-title">
             其他设置
           </div>
@@ -492,7 +494,6 @@
     font-size: $font-size-14
     padding: 0 14px
     border-radius: 2px
-    width: 800px
     height: 40px
     display: flex
     align-items: center
@@ -514,10 +515,11 @@
   .edit-item
     display: flex
     color: #2A2A2A
-    min-height: 40px
     margin-top: 30px
     position: relative
-
+    &.other-edit-item
+    .edit-input
+      width:240px
     .edit-title
       margin-top: 7.5px
       font-size: $font-size-14
@@ -557,6 +559,8 @@
         .auto-input
           margin-left: 20px
 
+          .edit-input
+            width: 670px
           .edit-signature
             margin-top: 10px
 
@@ -565,7 +569,7 @@
         padding: 5px 14px
         height: 94px
         resize: none
-
+        width:800px
       .num
         position: absolute
         right: 10px
