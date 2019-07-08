@@ -18,7 +18,7 @@
             内容分类
           </div>
           <div class="edit-input-box">
-            <base-dropdown v-model="addData.category" :data="articleCategoryList" valueKey="value" :width="400" :height="40"
+            <base-dropdown v-model="addData.category" :data="articleCategoryList" valueKey="id" :width="400" :height="40"
                            placeholder="请选择内容分类" @click="_getArticleCategory"
             ></base-dropdown>
           </div>
@@ -73,7 +73,7 @@
             作者信息
           </div>
           <div class="edit-input-box flex-box author-info-box">
-            <base-upload :imageUrl = "addData.authPhoto.url"
+            <base-upload :imageUrl="addData.authPhoto.url"
                          :picNum="1"
                          imageIconClassName="add-image-head-photo"
                          fileType="image"
@@ -231,8 +231,8 @@
       </div>
     </div>
     <div class="back">
-      <div class="back-cancel back-btn hand" @click="submitDraft()">存为草稿</div>
-      <div class="back-btn back-submit hand" @click="submitLaunch()">上线</div>
+      <div class="back-cancel back-btn hand" @click="_submitBtn('addDraft')">存为草稿</div>
+      <div class="back-btn back-submit hand" @click="_submitBtn('addContent')">上线</div>
     </div>
     <default-modal ref="addCategory">
       <div slot="content" class="shade-box add-category-box">
@@ -257,7 +257,7 @@
 <script type="text/ecmascript-6">
   import DefaultModal from '@components/default-modal/default-modal'
   import PhoneBox from './phone-box/phone-box'
-  // import API from '@api'
+  import API from '@api'
   import Draggable from 'vuedraggable'
 
   const PAGE_NAME = 'ARTICLE_ADD'
@@ -303,7 +303,8 @@
           },
           coverVideo: {
             url: '',
-            id: ''
+            id: '',
+            file_id: ''
           },
           authPhoto: {
             url: '',
@@ -347,21 +348,49 @@
     methods: {
       // 获取内容分类列表
       _getArticleCategory() {
+        API.Content.getSortList().then(res => {
+          if (res.error !== this.$ERR_OK) this.$toast.show(res.message)
+          this.articleCategoryList = res.data
+        }).finally(() => {
+          this.$loading.hide()
+        })
       },
       addCategory() {
         this.addCategoryText = ''
         this.$refs.addCategory.showModal()
       },
       _submitCategory() {
-
+        API.Content.addSort({name: this.addCategoryText}).then(res => {
+          if (res.error !== this.$ERR_OK) {
+            this.$toast.show(res.message)
+          }
+          this.$toast.show(res.message)
+          this.$refs.addCategory.hideModal()
+        }).finally(() => {
+          this.$loading.hide()
+        })
       },
       // 封面
       getCoverVideo(video) {
         console.log('封面视频', video)
         this.addData.coverVideo.id = video.id
+        this.addData.coverVideo.file_id = video.file_id
         this.addData.coverVideo.url = video.full_url
         this.addData.coverImage.id = video.cover_image_id
         this.addData.coverImage.url = video.full_cover_url
+        if (!this.addData.coverImage.id) {
+          setTimeout(() => {
+            this._getCoverImage(video.file_id)
+          }, 10000)
+        }
+      },
+      _getCoverImage() {
+        this.addData.coverVideo.file_id && API.Content.getCoverImage({file_id: this.addData.coverVideo.file_id}).then(res => {
+          console.log(res, this.$ERR_OK)
+          if (res.error !== this.$ERR_OK) return false
+          this.addData.coverImage.id = res.data.cover_image_id
+          this.addData.coverImage.url = res.data.full_cover_url
+        })
       },
       getPic(image) {
         console.log('封面图片', image)
@@ -469,12 +498,121 @@
         }
       },
       // 上线
-      async submitLaunch() {
+      async _submitBtn(name) {
         let res = this.justifyConent()
+        if (res) {
+          let data = this.getSubmitData()
+          res && API.Content[name](data, true).then(res => {
+            this.$toast.show(res.message)
+          }).finally(() => {
+            this.$loading.hide()
+          })
+        }
         console.log(res, this.addData)
       },
       // 草稿
       async submitDraft() {
+
+
+      },
+      getSubmitData() {
+        let params = {
+          type: this.currentType,
+          title: this.addData.title,
+          category_id: this.addData.category,
+          author_image_id: this.addData.authPhoto.id,
+          author_nickname: this.addData.authName,
+          author_sign: this.addData.authSignature,
+          image_cover_id: this.addData.coverImage.id,
+          video_cover_id: this.addData.coverVideo.id,
+          init_fabulous_num: this.addData.goodCount,
+          init_browse_num: this.addData.lookCount,
+          assembly: []
+        }
+        console.log(this.currentType, 'this.currentType')
+        if (this.currentType === 'video' || this.currentType === 'cookbook') {
+          //   params.assembly.push({
+          //   type: "goods",
+          //   style_type: "content_goods_list",
+          //   content: [{
+          //     type: "goods",
+          //     style_type: "goods",
+          //     content: this.addData.goodsList.map(item => {
+          //       return {
+          //         "goods_id":item.goods_id,
+          //         "goods_sku_id": item.goods_sku_id
+          //       }
+          //     })
+          //   }]
+          // })
+          if (this.currentType === 'video') {
+            params.assembly.push({
+              type: "video",
+              style_type: "content_video",
+              content: [{
+                type: "video",
+                style_type: "video",
+                content: [{
+                  video_id: this.addData.videoContent.id,
+                  title: this.addData.videoContent.name,
+                  introduction: this.addData.videoIntroduce
+                }]
+              }]
+            })
+          } else if (this.currentType === 'cookbook') {
+            params.assembly.push({
+              type: "text",
+              style_type: "content_cookbook",
+              content: [{
+                type: "text",
+                style_type: "text",
+                content: [{
+                  text: this.addData.foodList
+                }]
+              }]
+            })
+          }
+        }
+        if (this.currentType !== 'video') {
+          let contents = this.addData.details.map(item => {
+            let newItem = {
+              type: item.type,
+              style_type: 'content_' + item.type
+            }
+            /* eslint-disable */
+            switch (item.type) {
+              case 'goods':
+                newItem.content = [{
+                  goods_id: item.value.goods_id,
+                  goods_sku_id: item.value.goods_sku_id
+                }]
+                break;
+              case 'image':
+                newItem.content = [{
+                  image_id: item.id
+                }]
+                break;
+              case 'video':
+                newItem.content = [{
+                  video_id: item.id,
+                  title: '',
+                  introduction: ''
+                }]
+                break;
+              default:
+                newItem.content = [{
+                  text: item.value
+                }]
+            }
+            return newItem
+          })
+          params.assembly.push({
+            type: "combination",
+            style_type: "content",
+            content: contents
+          })
+        }
+        return params
       }
     }
   }
@@ -517,9 +655,11 @@
     color: #2A2A2A
     margin-top: 30px
     position: relative
+
     &.other-edit-item
     .edit-input
-      width:240px
+      width: 240px
+
     .edit-title
       margin-top: 7.5px
       font-size: $font-size-14
@@ -561,6 +701,7 @@
 
           .edit-input
             width: 670px
+
           .edit-signature
             margin-top: 10px
 
@@ -569,7 +710,8 @@
         padding: 5px 14px
         height: 94px
         resize: none
-        width:800px
+        width: 800px
+
       .num
         position: absolute
         right: 10px
@@ -625,9 +767,10 @@
           padding: 0px 10px
           color: #4D77BD
           border-color #4D77BD
+
           &.btn-main:hover
             background #4D77BD
-            color:#fff
+            color: #fff
 
   /* 布局*/
   .advertisement
@@ -805,7 +948,7 @@
 
       .add-category-input
         width: 340px
-        margin-top:7px
+        margin-top: 7px
 
     .title-box
       display: flex

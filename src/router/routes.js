@@ -316,8 +316,8 @@ export default [
        */
       // 创作文章
       {
-        path: 'article-add',
-        name: 'article-add',
+        path: 'content-center/article-add',
+        name: 'content-center-article-add',
         component: () => lazyLoadView(import('@pages/article-add/article-add')),
         meta: {
           titles: ['商城', '内容', '我的作品', '创作作品'],
