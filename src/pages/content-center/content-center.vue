@@ -17,10 +17,11 @@
         <div class="identification-page">
           <img src="./icon-product_list@2x.png" class="identification-icon">
           <p class="identification-name">我的作品</p>
-          <base-status-tab ref="baseStatusTab" :statusList="dispatchSelect" :infoTabIndex="statusTab" @setStatus="_setStatus"></base-status-tab>
+          <!-- -->
+          <base-status-tab ref="baseStatusTab" :statusList="dispatchSelect" :statusType="statusType" :infoTabIndex="statusTab" @setStatus="_setStatus"></base-status-tab>
         </div>
         <div class="function-btn">
-          <div class="btn-main">创作内容<span class="add-icon"></span></div>
+          <router-link :to="`article-add?type=${workType}`" append class="btn-main">创作内容<span class="add-icon"></span></router-link>
           <!--<div v-else class="btn-main" @click="delContentAll">删除</div>-->
         </div>
       </div>
@@ -37,16 +38,16 @@
             <!--<div class="pro-select-icon hand" :class="{'pro-select-icon-active': item.select}" @click="selectPurchase('one', index)"></div>-->
             <!--</div>-->
             <div class="list-item list-item-img">
-              <img class="pic-box" alt="">
+              <img class="pic-box" :src="item.cover_image_url">
             </div>
-            <div class="list-item">item.name}}</div>
-            <div class="list-item">item.name}}</div>
-            <div class="list-item">item.name}}</div>
-            <div class="list-item">item.name}}</div>
-            <div class="list-item">item.name}}</div>
-            <div class="list-item">item.name}}</div>
-            <div class="list-item">item.name}}</div>
-            <div class="list-item">item.delivery_at}}</div>
+            <div class="list-item">{{item.title}}</div>
+            <div class="list-item">{{item.list_date}}</div>
+            <div v-if="workStatus !== 0" class="list-item">{{item.status_str}}</div>
+            <div v-if="workStatus !== 0" class="list-item">{{item.browse_count}}</div>
+            <div v-if="workStatus !== 0" class="list-item">{{item.share_count}}</div>
+            <div v-if="workStatus !== 0" class="list-item">{{item.fabulous_num}}</div>
+            <div v-if="workStatus !== 0" class="list-item">{{item.guide_goods_rate}}</div>
+            <div v-if="workStatus !== 0" class="list-item">{{item.pay_goods_count}}</div>
             <div class="list-item list-operation-box">
               <span class="list-operation" @click="shwoQrCode(item.id, index)">预览</span>
               <span v-if="status !== 1" class="list-operation" @click="editWork(item)">编辑</span>
@@ -144,9 +145,10 @@
         commonPage: '',
         videoPage: '',
         cookbookPage: '',
-        commonStatus: '',
-        videoStatus: '',
-        cookbookStatus: ''
+        commonStatus: 1,
+        videoStatus: 1,
+        cookbookStatus: 1,
+        statusType: 1
       }
     },
     computed: {
@@ -162,6 +164,10 @@
       categoryIdName() {
         let page = `${this.tabStatus[this.workTabIndex].type}CategoryId`
         return page
+      },
+      statusName() {
+        let status = `${this.tabStatus[this.workTabIndex].type}Status`
+        return status
       }
     },
     watch: {
@@ -173,11 +179,15 @@
         deep: true
       },
       workTabIndex(news) {
-        if (!this.stairSelect.data.length) {
+        if (this.stairSelect.data.length > 1) {
           return
         }
         let item = this.stairSelect.data.find((item) => item.id === this.workCategoryId)
         this.stairSelect.content = item.name || '请选择分类'
+      },
+      statusName(news) {
+        this.statusType = this[news]
+        this.$refs.baseStatusTab.infoStatus(this.statusType)
       }
     },
     async created() {
@@ -189,8 +199,7 @@
       // 获取二维码
       async shwoQrCode(id, index) {
         this.loadImg = true
-        // {path: 'pages/choiceness?s=' + id, is_hyaline: false} 页面参数
-        let res = await API.Content.createQrcode()
+        let res = await API.Content.createQrcode({path: `package-content/content-article-detail-video?c=${id}`, is_hyaline: false})
         if (res.error !== this.$ERR_OK) {
           this.$toast.show(res.message)
           return
@@ -232,7 +241,7 @@
       },
       // 编辑
       editWork(item) {
-        this.$router.push(`/home/article-add?type=${item.type}&id=${item.id}`)
+        this.$router.push(`/home/content-center/article-add?type=${item.type}&id=${item.id}`)
       },
       async freeze() {
         let res = await API.Content.delWork(this.delId)
@@ -241,7 +250,7 @@
       },
       // 获取分类
       async getContentClassList() {
-        let res = await API.Content.getContentClassList({limit: 0, keyword: '', page: 1})
+        let res = await API.Content.getContentClassList({limit: 0, keyword: '', page: 1, status: 1})
         let arr = [{name: '全部', id: ''}]
         if (res.error === this.$ERR_OK) {
           arr = arr.concat(res.data)
@@ -281,6 +290,7 @@
       },
       // 切换状态
       _setStatus(item, index) {
+        this[this.statusName] = item.status
         this._statistic()
         this.getWorkListMore({page: 1, status: item.status})
         this.dispatTitle = item.name === '草稿' ? DISPATCHING_LIST2 : DISPATCHING_LIST
@@ -290,8 +300,7 @@
       changeTab(item, index) {
         this._statistic()
         this.setWorkIndex(index)
-        console.log(this[this.keywordName])
-        this.getWorkListMore({page: this[this.pageName], workCategoryId: this[this.categoryIdName], keyword: this[this.keywordName], tabIndex: index})
+        this.getWorkListMore({page: this[this.pageName], workCategoryId: this[this.categoryIdName], keyword: this[this.keywordName], status: this[this.statusName], tabIndex: index})
         this.$refs.search.infoTextMethods(this[this.keywordName])
       }
     }

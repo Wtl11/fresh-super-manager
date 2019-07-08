@@ -4,26 +4,26 @@ import app from '@src/main'
 const TYPE = ['common', 'video', 'cookbook']
 
 export const state = {
-  contentClassList: [{}],
+  contentClassList: [],
   contentClassPage: {
     total: 1,
     per_page: 10,
     total_page: 1
   },
-  workList: [{id: 1}],
+  workList: [],
   workPage: {
     total: 1,
     per_page: 10,
     total_page: 1
   },
-  centerList: [{id: 1, is_select: false}, {id: 2, is_select: false}],
+  centerList: [],
   centerPage: {
     total: 1,
     per_page: 10,
     total_page: 1
   },
   contentWorkPage: 1,
-  workStatus: '',
+  workStatus: 1,
   workKeyword: '',
   workTabIndex: 0,
   workCategoryId: '',
@@ -199,7 +199,7 @@ export const actions = {
   },
   infoWork({commit}, obj) {
     commit('SET_WORK_CONTENT_PAGE', 1)
-    commit('SET_WORK_STATUS', '')
+    commit('SET_WORK_STATUS', 1)
     commit('SET_WORK_KEYWORD', '')
   },
   setWorkIndex({commit, dispatch}, index) {

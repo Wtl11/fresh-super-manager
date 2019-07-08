@@ -58,7 +58,6 @@ export default {
    * @returns {*}
    */
   getWorkStatusList(data, loading = false) {
-    console.log(data)
     let url = `/social-shopping/api/platform/article-status`
     return request.get(url, data, loading)
   },
