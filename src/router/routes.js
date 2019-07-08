@@ -311,6 +311,19 @@ export default [
           }
         }
       },
+      /**
+       * 内容
+       */
+      // 创作文章
+      {
+        path: 'article-add',
+        name: 'article-add',
+        component: () => lazyLoadView(import('@pages/article-add/article-add')),
+        meta: {
+          titles: ['商城', '内容', '我的作品', '创作作品'],
+          marginBottom: 80
+        }
+      },
       // 作品中心
       {
         path: 'content-center',
