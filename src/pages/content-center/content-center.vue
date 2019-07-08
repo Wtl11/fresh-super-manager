@@ -8,7 +8,7 @@
       </div>
       <span class="down-tip">搜索</span>
       <div class="down-item">
-        <base-search placeHolder="请输入关键词" @search="search"></base-search>
+        <base-search ref="search" :infoText="workKeyword" placeHolder="请输入关键词" @search="search"></base-search>
       </div>
     </div>
 
@@ -101,7 +101,7 @@
     '操作'
   ]
   const DISPATCHING_LIST2 = ['封面图', '文章标题', '创建时间', '操作']
-  const TAB_STATUS = [{text: '图文', statue: ''}, {text: '视频', statue: ''}, {text: '菜谱', statue: ''}]
+  const TAB_STATUS = [{text: '图文', status: '', type: 'common'}, {text: '视频', status: '', type: 'video'}, {text: '菜谱', status: '', type: 'cookbook'}]
   export default {
     name: PAGE_NAME,
     page: {
@@ -137,11 +137,32 @@
           data: []
         },
         select: false,
-        selectId: []
+        selectId: [],
+        commonKeyword: '',
+        videoKeyword: '',
+        cookbookKeyword: '',
+        commonPage: '',
+        videoPage: '',
+        cookbookPage: '',
+        commonStatus: '',
+        videoStatus: '',
+        cookbookStatus: ''
       }
     },
     computed: {
-      ...contentComputed
+      ...contentComputed,
+      keywordName() {
+        let name = `${this.tabStatus[this.workTabIndex].type}Keyword`
+        return name
+      },
+      pageName() {
+        let page = `${this.tabStatus[this.workTabIndex].type}Page`
+        return page
+      },
+      categoryIdName() {
+        let page = `${this.tabStatus[this.workTabIndex].type}CategoryId`
+        return page
+      }
     },
     watch: {
       workList: {
@@ -150,10 +171,18 @@
           this.select = index === -1
         },
         deep: true
+      },
+      workTabIndex(news) {
+        if (!this.stairSelect.data.length) {
+          return
+        }
+        let item = this.stairSelect.data.find((item) => item.id === this.workCategoryId)
+        this.stairSelect.content = item.name || '请选择分类'
       }
     },
-    create() {
-      this._statistic()
+    async created() {
+      await this._statistic()
+      await this.getContentClassList()
     },
     methods: {
       ...contentMethods,
@@ -203,46 +232,67 @@
       },
       // 编辑
       editWork(item) {
-        this.$router.push(`?id=${item.id}`)
+        this.$router.push(`/home/article-add?type=${item.type}&id=${item.id}`)
       },
       async freeze() {
         let res = await API.Content.delWork(this.delId)
         this.$toast.show(res.message)
         this._getWorkList()
       },
+      // 获取分类
+      async getContentClassList() {
+        let res = await API.Content.getContentClassList({limit: 0, keyword: '', page: 1})
+        let arr = [{name: '全部', id: ''}]
+        if (res.error === this.$ERR_OK) {
+          arr = arr.concat(res.data)
+        }
+        this.stairSelect.data = arr
+        console.log(res)
+      },
       // 筛选分类
-      _setStairValue() {
-        this.page = 1
+      _setStairValue(item) {
+        this.getWorkListMore({page: 1, workCategoryId: item.id})
         this.$refs.pages.beginPage()
-        this._getWorkList()
       },
       // 搜索
-      search(text) {
-        this.keyWord = text
-        this.page = 1
+      search(keyword) {
+        this[this.keywordName] = keyword
+        this.getWorkListMore({page: 1, keyword})
         this.$refs.pages.beginPage()
-        this._getWorkList()
       },
       // 翻页
       addPage(page) {
-        this.page = page
-      },
-      // 获取列表和状态
-      _getWorkList() {
+        this[this.pageName] = page
         this._statistic()
-        this.getWorkList({page: this.page, status: this.status, keyword: this.keyWord})
+        this.getWorkListMore({page})
       },
       // 获取状态
-      _statistic() {
+      async _statistic() {
+        let res = await API.Content.getWorkStatusList({type: this.workType, keyword: this.workKeyword, category_id: this.workCategoryId})
+        if (res.error !== this.$ERR_OK) return
+        let selectData = res.data.map((item) => {
+          return {
+            name: item.status_str,
+            status: item.status,
+            num: item.statistic
+          }
+        })
+        this.dispatchSelect = selectData
       },
       // 切换状态
       _setStatus(item, index) {
-        this.statusTab = index
-        this.status = item.status
+        this._statistic()
+        this.getWorkListMore({page: 1, status: item.status})
         this.dispatTitle = item.name === '草稿' ? DISPATCHING_LIST2 : DISPATCHING_LIST
+        // this.getWorkListMore({page: this[this.pageName], status: this[this.statusName], keyword: this[this.keywordName]})
       },
       // 切换tab
-      changeTab() {
+      changeTab(item, index) {
+        this._statistic()
+        this.setWorkIndex(index)
+        console.log(this[this.keywordName])
+        this.getWorkListMore({page: this[this.pageName], workCategoryId: this[this.categoryIdName], keyword: this[this.keywordName], tabIndex: index})
+        this.$refs.search.infoTextMethods(this[this.keywordName])
       }
     }
   }

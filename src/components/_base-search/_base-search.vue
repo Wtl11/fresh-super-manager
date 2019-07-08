@@ -35,8 +35,8 @@
       }
     },
     methods: {
-      infoTextMethods() {
-        this.searchText = ''
+      infoTextMethods(text = '') {
+        this.searchText = text
       },
       _search() {
         this.$emit('search', this.searchText)

@@ -105,8 +105,8 @@ export const productMethods = {
 
 // 内容
 export const contentComputed = {
-  ...mapGetters('content', ['contentClassList', 'contentClassPage', 'workList', 'workPage', 'centerList', 'centerPage'])
+  ...mapGetters('content', ['workType', 'contentWorkPage', 'workStatus', 'workKeyword', 'contentClassList', 'workTabIndex', 'contentClassPage', 'workList', 'workPage', 'centerList', 'centerPage'])
 }
 export const contentMethods = {
-  ...mapActions('content', ['getContentClassList', 'getWorkList', 'selectWork', 'getCenterList'])
+  ...mapActions('content', ['setWorkIndex', 'infoWork', 'getWorkListMore', 'getContentClassList', 'getWorkList', 'selectWork', 'getCenterList'])
 }

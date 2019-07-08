@@ -8,7 +8,7 @@ export default {
    * @returns {*}
    */
   getContentClassList(data, loading = false) {
-    let url = ''
+    let url = `/social-shopping/api/platform/article-category-index`
     return request.get(url, data, loading)
   },
   /**
@@ -48,7 +48,18 @@ export default {
    * @returns {*}
    */
   getWorkList(data, loading = false) {
-    let url = ``
+    let url = `/social-shopping/api/platform/article-index`
+    return request.get(url, data, loading)
+  },
+  /**
+   * 文章列表状态
+   * @param data
+   * @param loading
+   * @returns {*}
+   */
+  getWorkStatusList(data, loading = false) {
+    console.log(data)
+    let url = `/social-shopping/api/platform/article-status`
     return request.get(url, data, loading)
   },
   /**
