@@ -30,10 +30,13 @@ export default {
    * @returns {*}
    */
   getArticleDetail({id}, loading = true) {
-    let url = `/social-shopping/api/backend/shop-manager/${id}`
+    let url = `/social-shopping/api/platform/article-show/${id}`
     return request.get(url, {}, loading)
   },
-
+  editContetnArticle({id,...data}, loading = true){
+    let url = ` /social-shopping/api/platform/article-update/${id}`
+    return request.post(url, data, loading)
+  },
   /**
    * 根據video 返回的 file_id获取cover_image
    * @param data

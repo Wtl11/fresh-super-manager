@@ -65,6 +65,9 @@ router.beforeResolve(async (routeTo, routeFrom, next) => {
               if (routeFrom.name === args[0].name) {
                 NProgress.done()
               }
+              if (args[0].params) {
+                Object.assign(route.meta, args[0])
+              }
               next(...args)
               reject(new Error('Redirected'))
             } else {

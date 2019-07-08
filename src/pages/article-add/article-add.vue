@@ -3,7 +3,7 @@
     <div class="identification">
       <div class="identification-page">
         <img src="./icon-new_commodity@2x.png" class="identification-icon">
-        <p class="identification-name">创作{{name}}</p>
+        <p class="identification-name">{{editName}}{{name}}</p>
       </div>
       <div class="function-btn">
       </div>
@@ -231,8 +231,11 @@
       </div>
     </div>
     <div class="back">
-      <div class="back-cancel back-btn hand" @click="_submitBtn('addDraft')">存为草稿</div>
-      <div class="back-btn back-submit hand" @click="_submitBtn('addContent')">上线</div>
+      <template v-if="!this.id">
+        <div  class="back-cancel back-btn hand" @click="_submitBtn('addDraft')">存为草稿</div>
+        <div class="back-btn back-submit hand" @click="_submitBtn('addContent')">上线</div>
+      </template>
+      <div v-else class="back-btn back-submit hand" @click="_submitBtn('editContetnArticle')">保存</div>
     </div>
     <default-modal ref="addCategory">
       <div slot="content" class="shade-box add-category-box">
@@ -338,14 +341,89 @@
       },
       name() {
         return this.typeList[this.currentType] && this.typeList[this.currentType].name || '文章'
+      },
+      editName(){
+        return this.id ? '编辑' :'创作'
       }
     },
     async created() {
+      this._getArticleCategory()
       this.currentType = this.$route.query.type
       this.id = this.$route.query.id || ''
-      console.log(this.$route)
+      this.$route.meta.params && this.changeDetialData(this.$route.meta.params)
     },
     methods: {
+      changeDetialData(obj) {
+        console.log(obj)
+        this.currentType = obj.type || 'common'
+        this.addData.title = obj.title
+        this.addData.category = obj.id
+        this.addData.coverImage.url = obj.cover_image.source_url
+        this.addData.coverImage.id = obj.cover_image.id
+        this.addData.coverVideo.url = obj.cover_video.full_url || ''
+        this.addData.coverVideo.id = obj.cover_video.id || ''
+        this.addData.authPhoto.url = obj.author.head_image_url
+        this.addData.authPhoto.id = obj.author.head_image_id
+        this.addData.authName = obj.author.nickname
+        this.addData.authSignature = obj.author.sign
+        this.addData.goodCount = obj.browse_count
+        this.addData.lookCount = obj.fabulous_num
+        obj.assembly.forEach(item => {
+          if (item.type === 'combination' && item.style_type === 'content') {
+            let details = []
+            item.content.map(cont => {
+              if(!(cont.content && cont.content.length))return false
+              let contItem = cont.content[0]
+
+              /* eslint-disable */
+              switch (cont.type) {
+                case "image":
+                  console.log({
+                  type: 'image',
+                  value: contItem.image.source_url,
+                  id: contItem.image.id
+                })
+                  details.push({
+                    type: 'image',
+                    value: contItem.image.source_url,
+                    id: contItem.image.id
+                  })
+                  break
+                case "video":
+                  console.log({
+                    type: 'video',
+                    value:contItem.video.full_url,
+                    id: contItem.video.id
+                  })
+                  details.push({
+                    type: 'video',
+                    value:contItem.video.full_url,
+                    id: contItem.video.id
+                  })
+                  break
+                case "text":
+                  console.log({
+                    type: 'text',
+                    value: contItem.text,
+                  })
+                  details.push({
+                    type: 'text',
+                    value: contItem.text,
+                  })
+                  break
+                // case "goods":
+                //    details.push({
+                //     type: 'goods',
+                //     value: contItem.goods,
+                //   })
+                //   break
+              }
+            })
+            this.addData.details = details
+          }
+        })
+        console.log(this.addData)
+      },
       // 获取内容分类列表
       _getArticleCategory() {
         API.Content.getSortList().then(res => {
@@ -435,11 +513,12 @@
       // 内容详情增加
       addDetailContentItem(item) {
         this.addData.details.push(item)
-        this.$nextTick(function () {
-          let el = this.$refs.detailsContent.$el
-          console.log(el)
-          el.scrollTop = el.scrollHeight
-        })
+        if(!this.id){
+          this.$nextTick(function () {
+            let el = this.$refs.detailsContent.$el
+            el.scrollTop = el.scrollHeight
+          })
+        }
       },
       addTextItem() {
         this.addDetailContentItem({
@@ -509,11 +588,6 @@
           })
         }
         console.log(res, this.addData)
-      },
-      // 草稿
-      async submitDraft() {
-
-
       },
       getSubmitData() {
         let params = {
@@ -612,6 +686,7 @@
             content: contents
           })
         }
+        if(this.id) params.id = this.id
         return params
       }
     }

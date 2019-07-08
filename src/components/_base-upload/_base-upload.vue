@@ -4,7 +4,7 @@
       <div v-if="showLoading" class="loading-mask">
         <img src="./loading.gif" class="loading">
       </div>
-        <input type="file" class="sendImage hand" accept="image/*" @change="_addPic">
+      <input type="file" class="sendImage hand" accept="image/*" @change="_addPic">
       <slot>
         上传图片
       </slot>
@@ -13,7 +13,7 @@
       <div v-if="showLoading" class="loading-mask">
         <img src="./loading.gif" class="loading">
       </div>
-        <input type="file" class="sendImage hand" accept="video/*" @change="_addVideo">
+      <input type="file" class="sendImage hand" accept="video/*" @change="_addVideo">
       <slot>
         上传视频
       </slot>
@@ -30,11 +30,11 @@
         <div class="operate-wrap">
           <div class="operate-item hand">
             上传图片
-              <input type="file" class="sendImage hand" accept="image/*" @change="_addPic">
+            <input type="file" class="sendImage hand" accept="image/*" @change="_addPic">
           </div>
           <div class="operate-item hand">
             上传视频
-              <input type="file" class="sendImage hand" accept="video/*" @change="_addVideo">
+            <input type="file" class="sendImage hand" accept="video/*" @change="_addVideo">
           </div>
         </div>
       </div>
