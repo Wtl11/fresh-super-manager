@@ -1,4 +1,6 @@
 import store from '@state/store'
+import API from '@api'
+import {ERR_OK} from '@utils/config'
 
 export default [
   // 登录界面
@@ -316,12 +318,33 @@ export default [
        */
       // 创作文章
       {
-        path: 'article-add',
-        name: 'article-add',
+        path: 'content-center/article-add',
+        name: 'content-center-article-add',
         component: () => lazyLoadView(import('@pages/article-add/article-add')),
         meta: {
           titles: ['商城', '内容', '我的作品', '创作作品'],
-          marginBottom: 80
+          marginBottom: 80,
+          beforeResolve(routeTo, routeFrom, next) {
+            let id = routeTo.query.id
+            // 详情数据
+            if (id) {
+              API.Content.getArticleDetail({id}, false)
+                .then((res) => {
+                  console.log(res, ERR_OK)
+                  if (res.error !== ERR_OK) {
+                    return false
+                  }
+                  next({
+                    params:res.data
+                  })
+                })
+              .catch(() => {
+                next({name: '404'})
+              })
+            } else {
+              next()
+            }
+          }
         }
       },
       // 作品中心
