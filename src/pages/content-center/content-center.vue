@@ -34,9 +34,6 @@
         </div>
         <div v-if="workList.length" class="list">
           <div v-for="(item, index) in workList" :key="index" class="list-content list-box">
-            <!--<div class="list-item">-->
-            <!--<div class="pro-select-icon hand" :class="{'pro-select-icon-active': item.select}" @click="selectPurchase('one', index)"></div>-->
-            <!--</div>-->
             <div class="list-item list-item-img">
               <img class="pic-box" :src="item.cover_image_url">
             </div>
@@ -59,7 +56,7 @@
         <base-blank v-else></base-blank>
       </div>
       <div class="pagination-box">
-        <base-pagination ref="pages" :pageDetail="centerPage" @addPage="addPage"></base-pagination>
+        <base-pagination ref="pages" :pageDetail="workPage" @addPage="addPage"></base-pagination>
       </div>
     </div>
     <default-confirm ref="confirm" @confirm="freeze"></default-confirm>
@@ -175,7 +172,7 @@
           return
         }
         let item = this.stairSelect.data.find((item) => item.id === this.saveValue[this.categoryIdName])
-        this.stairSelect.content = item.name || '请选择分类'
+        this.stairSelect.content = item.name === '全部' ? '请选择分类' : item.name
       },
       statusName(news) {
         this.statusType = this.saveValue[news]
@@ -186,6 +183,9 @@
       this.infoQuery()
       await this.getContentClassList()
       await this._statistic()
+      this.$nextTick(() => {
+        this.$refs.baseStatusTab.infoStatus(this.statusType)
+      })
     },
     methods: {
       ...contentMethods,
@@ -200,6 +200,7 @@
         this.saveValue[this.pageName] = this.workPage
         this.saveValue[this.categoryIdName] = this.workCategoryId
         this.saveValue[this.statusName] = this.workStatus
+        this.statusType = this.saveValue[this.statusName]
       },
       // 获取二维码
       async shwoQrCode(id, index) {
@@ -264,6 +265,8 @@
           arr = arr.concat(res.data)
         }
         this.stairSelect.data = arr
+        let item = this.stairSelect.data.find((item) => item.id === this.saveValue[this.categoryIdName])
+        this.stairSelect.content = item.name === '全部' ? '请选择分类' : item.name
       },
       // 筛选分类
       _setStairValue(item) {

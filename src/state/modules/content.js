@@ -144,7 +144,7 @@ export const actions = {
           per_page: pages.per_page,
           total_page: pages.last_page
         }
-        // [{id: 1, status: 1, title: 'dfs', list_date: 'sd', status_str: 'sds'}]
+        console.log(pageDetail)
         commit('SET_WORK_LIST', list)
         commit('SET_WORK_PAGE', pageDetail)
         return list
