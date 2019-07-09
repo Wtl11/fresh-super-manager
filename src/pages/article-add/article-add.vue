@@ -375,7 +375,7 @@
       changeDetialData(obj) {
         this.currentType = obj.type || 'common'
         this.addData.title = obj.title
-        this.addData.category = obj.id
+        this.addData.category = obj.category.id
         this.addData.coverImage.url = obj.cover_image.source_url
         this.addData.coverImage.id = obj.cover_image.id
         this.addData.coverVideo.url = obj.cover_video.full_url || ''
@@ -426,6 +426,7 @@
             this.addData.videoContent.url = item.content[0].video.full_url
             this.addData.videoContent.name = item.content[0].video.name
             this.addData.videoContent.id = item.content[0].video.id
+            this.addData.videoIntroduce = item.content[0].introduction
           }
         })
       },
@@ -571,16 +572,15 @@
           return true
         }
       },
-      // 上线
+      // 上线 草稿 保存
       async _submitBtn(name) {
         let res = this.justifyConent()
         if (res) {
           let data = this.getSubmitData()
-          res && API.Content[name](data, true).then(res => {
-            this.$toast.show(res.message)
-          }).finally(() => {
-            this.$loading.hide()
-          })
+          let res = await API.Content[name](data, true)
+          this.$toast.show(res.message)
+          this.$loading.hide()
+          if (res.error === this.$ERR_OK) this.$router.go(-1)
         }
       },
       getSubmitData() {
