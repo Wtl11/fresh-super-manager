@@ -189,7 +189,7 @@
             </div>
           </div>
         </div>
-        <draggable v-if="currentType!=='video' && addData.details.length" ref="detailsContent" v-model="addData.details" class="content-details" @update="_setSort()">
+        <draggable v-if="currentType!=='video' && addData.details.length" ref="detailsContent" v-model="addData.details" class="content-details">
           <transition-group>
             <div v-for="(item, idx) in addData.details" :key="idx" class="content-item">
               <div class="close-icon" @click="deleteContentItem(idx,item)"></div>
@@ -354,7 +354,6 @@
     },
     methods: {
       changeDetialData(obj) {
-        console.log(obj)
         this.currentType = obj.type || 'common'
         this.addData.title = obj.title
         this.addData.category = obj.id
@@ -378,11 +377,6 @@
               /* eslint-disable */
               switch (cont.type) {
                 case "image":
-                  console.log({
-                    type: 'image',
-                    value: contItem.image.source_url,
-                    id: contItem.image.id
-                  })
                   details.push({
                     type: 'image',
                     value: contItem.image.source_url,
@@ -390,11 +384,6 @@
                   })
                   break
                 case "video":
-                  console.log({
-                    type: 'video',
-                    value: contItem.video.full_url,
-                    id: contItem.video.id
-                  })
                   details.push({
                     type: 'video',
                     value: contItem.video.full_url,
@@ -402,21 +391,11 @@
                   })
                   break
                 case "text":
-                  console.log({
-                    type: 'text',
-                    value: contItem.text,
-                  })
                   details.push({
                     type: 'text',
                     value: contItem.text,
                   })
                   break
-                // case "goods":
-                //    details.push({
-                //     type: 'goods',
-                //     value: contItem.goods,
-                //   })
-                //   break
               }
             })
             this.addData.details = details
@@ -430,7 +409,6 @@
             this.addData.videoContent.id = item.content[0].video.id
           }
         })
-        console.log(this.addData)
       },
       // 获取内容分类列表
       _getArticleCategory() {
@@ -458,7 +436,6 @@
       },
       // 封面
       getCoverVideo(video) {
-        console.log('封面视频', video)
         this.addData.coverVideo.id = video.id
         this.addData.coverVideo.file_id = video.file_id
         this.addData.coverVideo.url = video.full_url
@@ -472,14 +449,12 @@
       },
       _getCoverImage() {
         this.addData.coverVideo.file_id && API.Content.getCoverImage({file_id: this.addData.coverVideo.file_id}).then(res => {
-          console.log(res, this.$ERR_OK)
           if (res.error !== this.$ERR_OK) return false
           this.addData.coverImage.id = res.data.cover_image_id
           this.addData.coverImage.url = res.data.full_cover_url
         })
       },
       getPic(image) {
-        console.log('封面图片', image)
         this.addData.coverImage.url = image.url
         this.addData.coverImage.id = image.id
       },
@@ -540,16 +515,13 @@
           value: image.url,
           id: image.id
         })
-        console.log(image)
       },
       addVideoItem(video) {
-        console.log('addVideoItem', video)
         this.addDetailContentItem({
           type: 'video',
           value: video.full_url,
           id: video.id
         })
-        console.log(video)
       },
       deleteContentItem(idx, item) {
         this.addData.details.splice(idx, 1)
@@ -557,10 +529,6 @@
           let index = this.addData.goodsList.findIndex(goods => goods.id === item.value.id)
           if (index !== -1) this.addData.goodsList.splice(index, 1)
         }
-      },
-      // 托拽
-      _setSort() {
-        console.log(this.addData.details)
       },
       justifyConent() {
         let message = ''
@@ -595,7 +563,6 @@
             this.$loading.hide()
           })
         }
-        console.log(res, this.addData)
       },
       getSubmitData() {
         let params = {
@@ -611,7 +578,6 @@
           init_browse_num: this.addData.lookCount,
           assembly: []
         }
-        console.log(this.currentType, 'this.currentType')
         if (this.currentType === 'video' || this.currentType === 'cookbook') {
           if (this.currentType === 'video') {
             params.assembly.push({
