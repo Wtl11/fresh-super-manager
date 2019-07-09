@@ -570,8 +570,8 @@
           else if (!this.addData.videoIntroduce) message = '请填写视频简介'
         } else if (this.currentType === 'cookbook' && !this.addData.foodList) message = '请填写食材清单'
         else if (this.currentType !== 'video' && !this.addData.details.length) message = '请编辑内容详情'
-        else if (this.addData.goodCount) this.addData.goodCount = 0
-        else if (this.addData.lookCount) this.addData.lookCount = 0
+        else if (!this.addData.goodCount) this.addData.goodCount = 0
+        else if (!this.addData.lookCount) this.addData.lookCount = 0
         if (message) {
           this.$toast.show(message)
           return false
