@@ -342,8 +342,8 @@
       name() {
         return this.typeList[this.currentType] && this.typeList[this.currentType].name || '文章'
       },
-      editName(){
-        return this.id ? '编辑' :'创作'
+      editName() {
+        return this.id ? '编辑' : '创作'
       }
     },
     async created() {
@@ -372,17 +372,17 @@
           if (item.type === 'combination' && item.style_type === 'content') {
             let details = []
             item.content.map(cont => {
-              if(!(cont.content && cont.content.length))return false
+              if (!(cont.content && cont.content.length)) return false
               let contItem = cont.content[0]
 
               /* eslint-disable */
               switch (cont.type) {
                 case "image":
                   console.log({
-                  type: 'image',
-                  value: contItem.image.source_url,
-                  id: contItem.image.id
-                })
+                    type: 'image',
+                    value: contItem.image.source_url,
+                    id: contItem.image.id
+                  })
                   details.push({
                     type: 'image',
                     value: contItem.image.source_url,
@@ -392,12 +392,12 @@
                 case "video":
                   console.log({
                     type: 'video',
-                    value:contItem.video.full_url,
+                    value: contItem.video.full_url,
                     id: contItem.video.id
                   })
                   details.push({
                     type: 'video',
-                    value:contItem.video.full_url,
+                    value: contItem.video.full_url,
                     id: contItem.video.id
                   })
                   break
@@ -513,7 +513,7 @@
       // 内容详情增加
       addDetailContentItem(item) {
         this.addData.details.push(item)
-        if(!this.id){
+        if (!this.id) {
           this.$nextTick(function () {
             let el = this.$refs.detailsContent.$el
             el.scrollTop = el.scrollHeight
@@ -605,32 +605,14 @@
         }
         console.log(this.currentType, 'this.currentType')
         if (this.currentType === 'video' || this.currentType === 'cookbook') {
-          //   params.assembly.push({
-          //   type: "goods",
-          //   style_type: "content_goods_list",
-          //   content: [{
-          //     type: "goods",
-          //     style_type: "goods",
-          //     content: this.addData.goodsList.map(item => {
-          //       return {
-          //         "goods_id":item.goods_id,
-          //         "goods_sku_id": item.goods_sku_id
-          //       }
-          //     })
-          //   }]
-          // })
           if (this.currentType === 'video') {
             params.assembly.push({
               type: "video",
               style_type: "content_video",
               content: [{
-                type: "video",
-                style_type: "video",
-                content: [{
-                  video_id: this.addData.videoContent.id,
-                  title: this.addData.videoContent.name,
-                  introduction: this.addData.videoIntroduce
-                }]
+                video_id: this.addData.videoContent.id,
+                title: this.addData.videoContent.name,
+                introduction: this.addData.videoIntroduce
               }]
             })
           } else if (this.currentType === 'cookbook') {
@@ -638,11 +620,7 @@
               type: "text",
               style_type: "content_cookbook",
               content: [{
-                type: "text",
-                style_type: "text",
-                content: [{
-                  text: this.addData.foodList
-                }]
+                text: this.addData.foodList
               }]
             })
           }
@@ -686,7 +664,7 @@
             content: contents
           })
         }
-        if(this.id) params.id = this.id
+        if (this.id) params.id = this.id
         return params
       }
     }
