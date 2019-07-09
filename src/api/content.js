@@ -158,5 +158,9 @@ export default {
   getCoverImage(data, loading = false) {
     let url = `/social-shopping/api/cos/get-file-info`
     return request.get(url, data, loading)
-  }
+  },
+  getAuth(loading=false){
+    let url = `/social-shopping/api/platform/article-last-author`
+    return request.get(url, {}, loading)
+  },
 }
