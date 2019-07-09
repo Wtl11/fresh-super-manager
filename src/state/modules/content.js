@@ -144,7 +144,6 @@ export const actions = {
           per_page: pages.per_page,
           total_page: pages.last_page
         }
-        console.log(pageDetail)
         commit('SET_WORK_LIST', list)
         commit('SET_WORK_PAGE', pageDetail)
         return list
