@@ -350,9 +350,28 @@
       this._getArticleCategory()
       this.currentType = this.$route.query.type
       this.id = this.$route.query.id || ''
-      this.id && this.$route.meta.params && this.changeDetialData(this.$route.meta.params)
+      if (this.id) {
+        this.$route.meta.params && this.changeDetialData(this.$route.meta.params)
+      } else {
+        this._getAuth()
+      }
     },
     methods: {
+      // 新增创建时获取最后一次作者信息
+      _getAuth() {
+        API.Content.getAuth().then(res => {
+          if (res.error !== this.$ERR_OK) {
+            this.$toast.show(res.message)
+          }
+          this.addData.authPhoto.url = res.data.head_image_url
+          this.addData.authPhoto.id = res.data.head_image_id
+          this.addData.authName = res.data.nickname
+          this.addData.authSignature = res.data.sign
+        }).finally(() => {
+          this.$loading.hide()
+        })
+      },
+      // 转换详情数据
       changeDetialData(obj) {
         this.currentType = obj.type || 'common'
         this.addData.title = obj.title
@@ -400,10 +419,10 @@
             })
             this.addData.details = details
           }
-          if(item.type === 'text' && item.style_type === 'content_foods_list'){
+          if (item.type === 'text' && item.style_type === 'content_foods_list') {
             this.addData.foodList = item.content[0].text
           }
-          if(item.type === 'video' && item.style_type === 'content_video'){
+          if (item.type === 'video' && item.style_type === 'content_video') {
             this.addData.videoContent.url = item.content[0].video.full_url
             this.addData.videoContent.name = item.content[0].video.name
             this.addData.videoContent.id = item.content[0].video.id
