@@ -192,7 +192,7 @@
         <draggable v-if="currentType!=='video' && addData.details.length" ref="detailsContent" v-model="addData.details" class="content-details">
           <transition-group>
             <div v-for="(item, idx) in addData.details" :key="idx" class="content-item">
-              <div class="close-icon" @click="deleteContentItem(idx,item)"></div>
+              <div class="close-icon hand" @click="deleteContentItem(idx,item)"></div>
               <img v-if="item.type==='image'" :src="item.value" class="conten-image">
               <video v-else-if="item.type==='video'" :src="item.value" class="conten-video"></video>
               <textarea v-else v-model="item.value" class="edit-textarea edit-input" placeholder="输入文字">
@@ -757,6 +757,7 @@
         height: 94px
         resize: none
         width: 800px
+        resize:none
 
       .num
         position: absolute
@@ -963,6 +964,7 @@
             scroll-opacity(5px, 100px)
             height: 100%
             width: 100%
+            resize:none
 
           &:last-child
             margin-bottom: 0px
