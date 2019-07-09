@@ -183,12 +183,13 @@ export const actions = {
     commit('SET_WORK_LIST', arr)
     return ids
   },
-  infoWork({commit}, obj) {
+  infoWork({commit, state}, obj) {
     commit('SET_WORK_CONTENT_PAGE', 1)
     commit('SET_WORK_STATUS', 1)
     commit('SET_WORK_TAB_INDEX', 0)
     commit('SET_WORK_KEYWORD', '')
     commit('SET_WORK_CATEGORY_ID', '')
+    console.log(state.workCategoryId)
   },
   setWorkIndex({commit, dispatch}, index) {
     commit('SET_WORK_TAB_INDEX', index)

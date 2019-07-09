@@ -68,30 +68,34 @@ export default {
    * @param loading
    * @returns {*}
    */
-  getSortList(data={keyword:'',page:1,limit:0,status:1}, loading = false) {
+  getSortList(data = {keyword: '', page: 1, limit: 0, status: 1}, loading = false) {
     let url = `/social-shopping/api/platform/article-category-index`
     return request.get(url, data, loading)
   },
-  addSort(data,loading=false){
+  addSort(data, loading = false) {
     let url = `/social-shopping/api/platform/article-category-store`
     return request.get(url, data, loading)
   },
-  addContent(data,loading=true){
+  addContent(data, loading = true) {
     let url = `/social-shopping/api/platform/article-store`
     return request.post(url, data, loading)
   },
-  addDraft(data,loading=true){
+  addDraft(data, loading = true) {
     let url = `/social-shopping/api/platform/article-draft`
     return request.post(url, data, loading)
   },
   /**
-   * 内容詳情
+   * 文章列表状态
+   * @param data
+   * @param loading
+   * @returns {*}
+   */
   getWorkStatusList(data, loading = false) {
     let url = `/social-shopping/api/platform/article-status`
     return request.get(url, data, loading)
   },
   /**
-   * 我的作品列表
+   * 小程序码
    * @param data
    * @param loading
    * @returns {*}
@@ -122,11 +126,12 @@ export default {
   },
   /**
    * 上下线我的作品列表
+   */
   getArticleDetail({id}, loading = true) {
     let url = `/social-shopping/api/platform/article-show/${id}`
     return request.get(url, {}, loading)
   },
-  editContetnArticle({id,...data}, loading = true){
+  editContetnArticle({id, ...data}, loading = true) {
     let url = ` /social-shopping/api/platform/article-update/${id}`
     return request.post(url, data, loading)
   },
