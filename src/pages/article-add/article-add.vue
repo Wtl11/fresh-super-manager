@@ -350,7 +350,7 @@
       this._getArticleCategory()
       this.currentType = this.$route.query.type
       this.id = this.$route.query.id || ''
-      this.$route.meta.params && this.changeDetialData(this.$route.meta.params)
+      this.id && this.$route.meta.params && this.changeDetialData(this.$route.meta.params)
     },
     methods: {
       changeDetialData(obj) {
@@ -420,6 +420,14 @@
               }
             })
             this.addData.details = details
+          }
+          if(item.type === 'text' && item.style_type === 'content_foods_list'){
+            this.addData.foodList = item.content[0].text
+          }
+          if(item.type === 'video' && item.style_type === 'content_video'){
+            this.addData.videoContent.url = item.content[0].video.full_url
+            this.addData.videoContent.name = item.content[0].video.name
+            this.addData.videoContent.id = item.content[0].video.id
           }
         })
         console.log(this.addData)
