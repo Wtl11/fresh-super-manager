@@ -16,14 +16,14 @@
         </div>
         <div v-if="contentClassList.length" class="list">
           <div v-for="(item, index) in contentClassList" :key="index" class="list-content list-box">
-            <div class="list-item">item.social_name}}</div>
-            <div class="list-item">item.name}}</div>
+            <div class="list-item">{{item.name}}</div>
+            <div class="list-item">{{item.updated_at}}</div>
             <div class="list-item">
               <div class="list-item-btn" @click="changeSwitch(index, item)">
-                <base-switch confirmText="显示" cancelText="隐藏" switchColor="#922C88"></base-switch>
+                <base-switch confirmText="显示" cancelText="隐藏" switchColor="#922C88" :status="item.status"></base-switch>
               </div>
             </div>
-            <div class="list-item">item.delivery_at}}</div>
+            <div class="list-item">{{item.quote_count}}</div>
             <div class="list-item list-operation-box">
               <span class="list-operation" @click="editClassify(item)">
                 编辑
@@ -80,13 +80,15 @@
     // },
     methods: {
       ...contentMethods,
-      changeSwitch(index, item) {
-        console.log(index)
+      async changeSwitch(index, item) {
+        let status = item.status === 1 ? 0 : 1
+        let res = await API.Content.changeClassify(item.id, {status})
+        this.$toast.show(res.message)
+        res.error === this.$ERR_OK && this.contentAddPage({})
         // this.contentClassList[index].status = this.contentClassList[index].status === 0 ? 1 : 0
       },
       addPage(page) {
-        this.page = page
-        this.getContentClassList({page: this.page, loading: false})
+        this.contentAddPage({page})
       },
       delContent(id) {
         this.$refs.confirm.show('确定删除该分类吗？')
@@ -96,7 +98,7 @@
       async freeze() {
         let res = await API.Content.delContentClass(this.delId)
         this.$toast.show(res.message)
-        this.getContentClassList({page: this.page, loading: false})
+        res.error === this.$ERR_OK && this.contentAddPage({})
       },
       async confirmInput(text) {
         console.log(text)
@@ -107,11 +109,16 @@
           this.$toast.show('分类名字的长度不能超过6个字')
           return
         }
-        let res = await API.Content[this.methodsName]({}, this.editId || false)
-        let index = this.contentClassList.findIndex((item) => item.id === this.editId)
-        if (index !== -1) {
-          this.contentClassList[index].name = text
+        let res = await API.Content[this.methodsName]({name: text}, this.editId || true)
+        this.$toast.show(res.message)
+        this.$loading.hide()
+        if (res.error !== this.$ERR_OK) {
+          return
         }
+        this.$refs.modalBox.hide()
+        this.editId = null
+        this.contentAddPage({})
+
         console.log(res)
       },
       editClassify(item) {

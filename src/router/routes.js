@@ -332,6 +332,7 @@ export default [
         meta: {
           titles: ['内容', '内容中心'],
           beforeResolve(routeTo, routeFrom, next) {
+            !routeFrom.fullPath.includes(routeTo.fullPath) && store.dispatch('content/infoWork')
             //  团长列表
             store
               .dispatch('content/getWorkList')
