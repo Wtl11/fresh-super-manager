@@ -53,6 +53,10 @@
         this.statusIndex = index
         this.style = `left: ${this.el[index].offsetLeft}px; width: ${this.el[this.statusIndex].offsetWidth}px`
         this.$emit('setStatus', item, index)
+      },
+      infoStatus(news) {
+        this.statusIndex = this.statusList.findIndex(item => item.status === news)
+        this.checkStatus(this.statusIndex, this.statusList[this.statusIndex])
       }
     }
   }

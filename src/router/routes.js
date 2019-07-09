@@ -346,6 +346,53 @@ export default [
             }
           }
         }
+      },
+      // 作品中心
+      {
+        path: 'content-center',
+        name: 'content-center',
+        component: () => lazyLoadView(import('@pages/content-center/content-center')),
+        meta: {
+          titles: ['内容', '内容中心'],
+          beforeResolve(routeTo, routeFrom, next) {
+            !routeFrom.fullPath.includes(routeTo.fullPath) && store.dispatch('content/infoWork')
+            //  团长列表
+            store
+              .dispatch('content/getWorkList')
+              .then((res) => {
+                if (!res) {
+                  return next({name: '404'})
+                }
+                return next()
+              })
+              .catch(() => {
+                return next({name: '404'})
+              })
+          }
+        }
+      },
+      // 内容分类
+      {
+        path: 'content-classification',
+        name: 'content-classification',
+        component: () => lazyLoadView(import('@pages/content-classification/content-classification')),
+        meta: {
+          titles: ['内容', '内容分类'],
+          beforeResolve(routeTo, routeFrom, next) {
+            //  团长列表
+            store
+              .dispatch('content/getContentClassList')
+              .then((res) => {
+                if (!res) {
+                  return next({name: '404'})
+                }
+                return next()
+              })
+              .catch(() => {
+                return next({name: '404'})
+              })
+          }
+        }
       }
     ]
   },

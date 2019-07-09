@@ -92,14 +92,39 @@
       ]
     }
   ]
+  const CONTENT = [
+    {
+      title: '结算',
+      children: [
+        {
+          title: '内容中心',
+          url: '/home/content-center',
+          isLight: false
+        },
+        {
+          title: '内容分类',
+          url: '/home/content-classification',
+          isLight: false
+        }
+      ]
+    }
+  ]
   const FIRST_MENU = [
     {
       name: '商品',
-      icon: require('./icon-content1@2x.png'),
-      activeIcon: require('./icon-content2@2x.png'),
+      icon: require('./icon-commodity_white@2x.png'),
+      activeIcon: require('./icon-commodity@2x.png'),
       isLight: true,
       second: GOODS,
       url: '/home/product-list'
+    },
+    {
+      name: '内容',
+      icon: require('./icon-content_white@2x.png'),
+      activeIcon: require('./icon-content@2x.png'),
+      isLight: false,
+      second: CONTENT,
+      url: '/home/content-center'
     },
     {
       name: '客户',

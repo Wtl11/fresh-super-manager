@@ -91,7 +91,7 @@ export const intentComputed = {
 }
 
 export const intentMethods = {
-  ...mapActions('intent', ['getIntentList', 'setSearchNum', 'setIntentStatus', 'setIntentType', 'setPage','initData','initType'])
+  ...mapActions('intent', ['getIntentList', 'setSearchNum', 'setIntentStatus', 'setIntentType', 'setPage', 'initData', 'initType'])
 }
 
 // 商品
@@ -101,4 +101,12 @@ export const productComputed = {
 
 export const productMethods = {
   ...mapActions('product', ['getAuxiliaryList', 'getCategoryList', 'getProductList', 'getGoodsDetailData'])
+}
+
+// 内容
+export const contentComputed = {
+  ...mapGetters('content', ['contentPage', 'workType', 'contentWorkPage', 'workStatus', 'workKeyword', 'contentClassList', 'workTabIndex', 'contentClassPage', 'workList', 'workPage', 'centerList', 'centerPage'])
+}
+export const contentMethods = {
+  ...mapActions('content', ['infoContent', 'contentAddPage', 'setWorkIndex', 'infoWork', 'getWorkListMore', 'getContentClassList', 'getWorkList', 'selectWork', 'getCenterList'])
 }
