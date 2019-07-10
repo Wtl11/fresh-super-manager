@@ -127,6 +127,7 @@ export default {
   /**
    * 上下线我的作品列表
    */
+   * */
   getArticleDetail({id}, loading = true) {
     let url = `/social-shopping/api/platform/article-show/${id}`
     return request.get(url, {}, loading)
