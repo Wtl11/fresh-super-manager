@@ -43,10 +43,10 @@
             <div v-if="workStatus !== 0" class="list-item">{{item.browse_count}}</div>
             <div v-if="workStatus !== 0" class="list-item">{{item.share_count}}</div>
             <div v-if="workStatus !== 0" class="list-item">{{item.fabulous_num}}</div>
-            <div v-if="workStatus !== 0" class="list-item">{{item.guide_goods_rate}}</div>
+            <div v-if="workStatus !== 0" class="list-item">{{item.guide_goods_rate}}%</div>
             <div v-if="workStatus !== 0" class="list-item">{{item.pay_goods_count}}</div>
             <div class="list-item list-operation-box">
-              <span class="list-operation" @click="shwoQrCode(item.id, index)">预览</span>
+              <span class="list-operation" @click="shwoQrCode(item.id, index, item)">预览</span>
               <span v-if="item.status !== 1" class="list-operation" @click="editWork(item)">编辑</span>
               <span v-else class="list-operation" @click="upLine(item)">下线</span>
               <div class="list-operation" @click="delContent(item.id)">删除</div>
@@ -203,9 +203,10 @@
         this.statusType = this.saveValue[this.statusName]
       },
       // 获取二维码
-      async shwoQrCode(id, index) {
+      async shwoQrCode(id, index, item) {
+        let url = item.type === 'video' ? `package-content/content-article-detail-video?a=${id}` : `package-content/content-article-detail?a=${id}`
         this.loadImg = true
-        let res = await API.Content.createQrcode({path: `package-content/content-article-detail-video?c=${id}`, is_hyaline: false})
+        let res = await API.Content.createQrcode({path: url, is_hyaline: false})
         if (res.error !== this.$ERR_OK) {
           this.$toast.show(res.message)
           return
