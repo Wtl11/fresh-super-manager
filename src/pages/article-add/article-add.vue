@@ -31,10 +31,17 @@
             {{name}}标题
           </div>
           <div class="edit-input-box">
-            <input v-model="addData.title"
+            <input v-if="currentType === 'video'" v-model="addData.title"
                    type="text"
-                   :placeholder="'在此输入'+name+'标题，最少5个字'"
+                   :placeholder="'在此输入'+name+'标题，最多30个字'"
                    class="edit-input title-input"
+                   max-length="30"
+            >
+            <input v-else v-model="addData.title"
+                   type="text"
+                   :placeholder="'在此输入'+name+'标题，最少5个最多50个字'"
+                   class="edit-input title-input"
+                   max-length="50"
             >
           </div>
         </div>
@@ -47,7 +54,7 @@
           <div class="edit-input-box flex-box">
             <base-upload :videoUrl="addData.coverVideo.url"
                          :imageUrl="addData.coverImage.url"
-                         :picNum="1"
+                         :videoSize="10"
                          :fileType="currentType!=='video' ?'image-video' :'image'"
                          @failFile="failFile"
                          @getPic="getPic"
@@ -84,15 +91,15 @@
             <div class="auto-input">
               <input v-model="addData.authName"
                      type="text"
-                     placeholder="请输入作者名称10个字以内"
+                     placeholder="请输入作者名称15个字以内"
                      class="edit-input"
-                     maxlength="10"
+                     maxlength="15"
               >
               <input v-model="addData.authSignature"
                      type="text"
-                     placeholder="请输入30个字以内的个性签名"
+                     placeholder="请输入20个字以内的个性签名"
                      class="edit-input edit-signature"
-                     maxlength="30"
+                     maxlength="20"
               >
             </div>
           </div>
@@ -122,7 +129,7 @@
                 <base-upload :videoUrl="addData.videoContent.url"
                              :picNum="1"
                              fileType="video-custom"
-                             :size="100"
+                             :videoSize="100"
                              @failFile="failFile"
                              @successVideo="getVideoContent"
                 >
@@ -142,8 +149,8 @@
             视频简介
           </div>
           <div class="edit-input-box">
-            <textarea v-model="addData.videoIntroduce" class="edit-textarea edit-input" placeholder="" maxlength="50"></textarea>
-            <span class="num">{{addData.videoIntroduce && addData.videoIntroduce.length || 0}}/50</span>
+            <textarea v-model="addData.videoIntroduce" class="edit-textarea edit-input" placeholder="" maxlength="60"></textarea>
+            <span class="num">{{addData.videoIntroduce && addData.videoIntroduce.length || 0}}/60</span>
           </div>
         </div>
         <!--菜谱  食材清单-->
@@ -155,9 +162,9 @@
           <div class="edit-input-box">
             <textarea v-model="addData.foodList" class="edit-textarea edit-input"
                       placeholder="例子：大蒜，酱油，猪肉，食材之间用逗号隔开，最多输入50个字符"
-                      maxlength="50"
+                      maxlength="100"
             ></textarea>
-            <span class="num">{{addData.foodList && addData.foodList.length || 0}}/50</span>
+            <span class="num">{{addData.foodList && addData.foodList.length || 0}}/100</span>
           </div>
         </div>
         <!--文章/菜谱 内容详情-->
@@ -192,7 +199,7 @@
         <draggable v-if="currentType!=='video' && addData.details.length" ref="detailsContent" v-model="addData.details" class="content-details">
           <transition-group>
             <div v-for="(item, idx) in addData.details" :key="idx" class="content-item">
-              <div class="close-icon" @click="deleteContentItem(idx,item)"></div>
+              <div class="close-icon hand" @click="deleteContentItem(idx,item)"></div>
               <img v-if="item.type==='image'" :src="item.value" class="conten-image">
               <video v-else-if="item.type==='video'" :src="item.value" class="conten-video"></video>
               <textarea v-else v-model="item.value" class="edit-textarea edit-input" placeholder="输入文字">
@@ -375,7 +382,7 @@
       changeDetialData(obj) {
         this.currentType = obj.type || 'common'
         this.addData.title = obj.title
-        this.addData.category = obj.id
+        this.addData.category = obj.category.id
         this.addData.coverImage.url = obj.cover_image.source_url
         this.addData.coverImage.id = obj.cover_image.id
         this.addData.coverVideo.url = obj.cover_video.full_url || ''
@@ -426,6 +433,7 @@
             this.addData.videoContent.url = item.content[0].video.full_url
             this.addData.videoContent.name = item.content[0].video.name
             this.addData.videoContent.id = item.content[0].video.id
+            this.addData.videoIntroduce = item.content[0].introduction
           }
         })
       },
@@ -488,7 +496,7 @@
         }
       },
       failFile(msg) {
-        this.$emit('showToast', msg)
+        this.$toast.show(msg)
       },
       // 作者头像
       getAuthorPic(image) {
@@ -553,7 +561,7 @@
         let message = ''
         if (!this.addData.category) message = '请选择内容分类'
         else if (!this.addData.title) message = '请输入文章标题'
-        else if (this.addData.title && (this.addData.title.length < 5 || this.addData.title.length > 8)) message = '请输入5-8个字的文章标题'
+        else if (this.addData.title && (this.addData.title.length < 5 || this.addData.title.length > 50)) message = '请输入文章标题最少5个最多50个字符'
         else if (!this.addData.coverImage.id) message = '请上传封面'
         else if (!this.addData.authPhoto.id) message = '请上传作者头像'
         else if (!this.addData.authName) message = '请填写作者名字'
@@ -562,8 +570,8 @@
           else if (!this.addData.videoIntroduce) message = '请填写视频简介'
         } else if (this.currentType === 'cookbook' && !this.addData.foodList) message = '请填写食材清单'
         else if (this.currentType !== 'video' && !this.addData.details.length) message = '请编辑内容详情'
-        else if (this.addData.goodCount) this.addData.goodCount = 0
-        else if (this.addData.lookCount) this.addData.lookCount = 0
+        else if (!this.addData.goodCount) this.addData.goodCount = 0
+        else if (!this.addData.lookCount) this.addData.lookCount = 0
         if (message) {
           this.$toast.show(message)
           return false
@@ -571,16 +579,15 @@
           return true
         }
       },
-      // 上线
+      // 上线 草稿 保存
       async _submitBtn(name) {
         let res = this.justifyConent()
         if (res) {
           let data = this.getSubmitData()
-          res && API.Content[name](data, true).then(res => {
-            this.$toast.show(res.message)
-          }).finally(() => {
-            this.$loading.hide()
-          })
+          let res = await API.Content[name](data, true)
+          this.$toast.show(res.message)
+          this.$loading.hide()
+          if (res.error === this.$ERR_OK) this.$router.go(-1)
         }
       },
       getSubmitData() {
@@ -757,6 +764,7 @@
         height: 94px
         resize: none
         width: 800px
+        resize: none
 
       .num
         position: absolute
@@ -963,6 +971,7 @@
             scroll-opacity(5px, 100px)
             height: 100%
             width: 100%
+            resize: none
 
           &:last-child
             margin-bottom: 0px
