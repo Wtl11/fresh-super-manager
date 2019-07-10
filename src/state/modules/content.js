@@ -144,7 +144,6 @@ export const actions = {
           per_page: pages.per_page,
           total_page: pages.last_page
         }
-        // [{id: 1, status: 1, title: 'dfs', list_date: 'sd', status_str: 'sds'}]
         commit('SET_WORK_LIST', list)
         commit('SET_WORK_PAGE', pageDetail)
         return list
@@ -183,12 +182,13 @@ export const actions = {
     commit('SET_WORK_LIST', arr)
     return ids
   },
-  infoWork({commit}, obj) {
+  infoWork({commit, state}, obj) {
     commit('SET_WORK_CONTENT_PAGE', 1)
     commit('SET_WORK_STATUS', 1)
     commit('SET_WORK_TAB_INDEX', 0)
     commit('SET_WORK_KEYWORD', '')
     commit('SET_WORK_CATEGORY_ID', '')
+    console.log(state.workCategoryId)
   },
   setWorkIndex({commit, dispatch}, index) {
     commit('SET_WORK_TAB_INDEX', index)

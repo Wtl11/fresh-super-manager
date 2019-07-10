@@ -1,6 +1,6 @@
 <template>
   <div class="my-work table">
-    <base-tab-select :infoTabIndex="tabIndex" :tabStatus="tabStatus" @getStatusTab="changeTab"></base-tab-select>
+    <base-tab-select :infoTabIndex="workTabIndex" :tabStatus="tabStatus" @getStatusTab="changeTab"></base-tab-select>
     <div class="down-content">
       <span class="down-tip">分类</span>
       <div class="down-item">
@@ -34,9 +34,6 @@
         </div>
         <div v-if="workList.length" class="list">
           <div v-for="(item, index) in workList" :key="index" class="list-content list-box">
-            <!--<div class="list-item">-->
-            <!--<div class="pro-select-icon hand" :class="{'pro-select-icon-active': item.select}" @click="selectPurchase('one', index)"></div>-->
-            <!--</div>-->
             <div class="list-item list-item-img">
               <img class="pic-box" :src="item.cover_image_url">
             </div>
@@ -46,10 +43,10 @@
             <div v-if="workStatus !== 0" class="list-item">{{item.browse_count}}</div>
             <div v-if="workStatus !== 0" class="list-item">{{item.share_count}}</div>
             <div v-if="workStatus !== 0" class="list-item">{{item.fabulous_num}}</div>
-            <div v-if="workStatus !== 0" class="list-item">{{item.guide_goods_rate}}</div>
+            <div v-if="workStatus !== 0" class="list-item">{{item.guide_goods_rate}}%</div>
             <div v-if="workStatus !== 0" class="list-item">{{item.pay_goods_count}}</div>
             <div class="list-item list-operation-box">
-              <span class="list-operation" @click="shwoQrCode(item.id, index)">预览</span>
+              <span class="list-operation" @click="shwoQrCode(item.id, index, item)">预览</span>
               <span v-if="item.status !== 1" class="list-operation" @click="editWork(item)">编辑</span>
               <span v-else class="list-operation" @click="upLine(item)">下线</span>
               <div class="list-operation" @click="delContent(item.id)">删除</div>
@@ -59,7 +56,7 @@
         <base-blank v-else></base-blank>
       </div>
       <div class="pagination-box">
-        <base-pagination ref="pages" :pageDetail="centerPage" @addPage="addPage"></base-pagination>
+        <base-pagination ref="pages" :pageDetail="workPage" @addPage="addPage"></base-pagination>
       </div>
     </div>
     <default-confirm ref="confirm" @confirm="freeze"></default-confirm>
@@ -175,7 +172,7 @@
           return
         }
         let item = this.stairSelect.data.find((item) => item.id === this.saveValue[this.categoryIdName])
-        this.stairSelect.content = item.name || '请选择分类'
+        this.stairSelect.content = item.name === '全部' ? '请选择分类' : item.name
       },
       statusName(news) {
         this.statusType = this.saveValue[news]
@@ -186,6 +183,9 @@
       this.infoQuery()
       await this.getContentClassList()
       await this._statistic()
+      this.$nextTick(() => {
+        this.$refs.baseStatusTab.infoStatus(this.statusType)
+      })
     },
     methods: {
       ...contentMethods,
@@ -200,11 +200,13 @@
         this.saveValue[this.pageName] = this.workPage
         this.saveValue[this.categoryIdName] = this.workCategoryId
         this.saveValue[this.statusName] = this.workStatus
+        this.statusType = this.saveValue[this.statusName]
       },
       // 获取二维码
-      async shwoQrCode(id, index) {
+      async shwoQrCode(id, index, item) {
+        let url = item.type === 'video' ? `package-content/content-article-detail-video?a=${id}` : `package-content/content-article-detail?a=${id}`
         this.loadImg = true
-        let res = await API.Content.createQrcode({path: `package-content/content-article-detail-video?c=${id}`, is_hyaline: false})
+        let res = await API.Content.createQrcode({path: url, is_hyaline: false})
         if (res.error !== this.$ERR_OK) {
           this.$toast.show(res.message)
           return
@@ -242,7 +244,7 @@
       },
       // 下线
       upLine(item) {
-        this.methodsName = item.status === 1 ? 'downLineWork' : 'upLineWork'
+        this.methodsName = 'downLineWork'
         this.delId = item.id
         this.$refs.confirm.show('确定要下线该作品吗？')
       },
@@ -254,7 +256,10 @@
         let res = await API.Content[this.methodsName](this.delId)
         this.$toast.show(res.message)
         this.$loading.hide()
-        res.error === this.$ERR_OK && this.getWorkList()
+        if(res.error === this.$ERR_OK){
+          this._statistic()
+          this.getWorkList()
+        }
       },
       // 获取分类
       async getContentClassList() {
@@ -264,6 +269,8 @@
           arr = arr.concat(res.data)
         }
         this.stairSelect.data = arr
+        let item = this.stairSelect.data.find((item) => item.id === this.saveValue[this.categoryIdName])
+        this.stairSelect.content = item.name === '全部' ? '请选择分类' : item.name
       },
       // 筛选分类
       _setStairValue(item) {
