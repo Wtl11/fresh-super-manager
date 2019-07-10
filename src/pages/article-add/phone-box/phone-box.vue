@@ -39,7 +39,7 @@
             </div>
             <template v-if="type!=='video'&& data.details.length">
               <div v-for="(item,idx) in data.details" :key="idx" class="article-item">
-                <pre v-if="item.type==='text'" class="article-text">{{item.value}}</pre>
+                <div v-if="item.type==='text'" class="article-text">{{item.value}}</div>
                 <img v-if="item.type==='image'" :src="item.value" mode="widthFix" class="article-image">
                 <video v-if="item.type==='video'" :src="item.value" class="article-video"></video>
               </div>
@@ -82,9 +82,7 @@
                 <img src="./icon-lv8@2x.png" class="level-icon">
               </template>
             </div>
-            <pre class="text">
-              {{data.videoIntroduce}}
-            </pre>
+            <div class="text">{{data.videoIntroduce}}</div>
             <div class="operate-wrap">
               <div>
                 <div class="like-operate">
@@ -312,6 +310,7 @@
         .article-image
         .article-video
           width: 100%
+          border-radius 6px
 
 
       .bottom-operate-wrap

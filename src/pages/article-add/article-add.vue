@@ -327,8 +327,8 @@
           },
           authName: '',
           authSignature: '',
-          goodCount: 0,
-          lookCount: 0,
+          goodCount: 30,
+          lookCount: 50,
           // 不同情况的字段
           videoContent: {
             url: '',
