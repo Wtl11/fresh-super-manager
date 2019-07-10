@@ -18,9 +18,9 @@
             内容分类
           </div>
           <div class="edit-input-box">
-            <base-dropdown v-model="addData.category" :data="articleCategoryList" valueKey="id" :width="400" :height="40"
+            <zb-dropdown v-model="addData.category" :data="articleCategoryList" valueKey="id" :width="400" :height="40"
                            placeholder="请选择内容分类" @click="_getArticleCategory"
-            ></base-dropdown>
+            ></zb-dropdown>
           </div>
           <div class="add-category-operate hand" @click="addCategory">添加分类</div>
         </div>
@@ -242,7 +242,10 @@
         <div class="back-cancel back-btn hand" @click="_submitBtn('addDraft')">存为草稿</div>
         <div class="back-btn back-submit hand" @click="_submitBtn('addContent')">上线</div>
       </template>
-      <div v-else class="back-btn back-submit hand" @click="_submitBtn('editContetnArticle')">保存</div>
+      <template v-else>
+        <div class="back-btn back-cancel hand" @click="_submitBtn('editContetnArticle',0)">存为草稿</div>
+        <div class="back-btn back-submit hand" @click="_submitBtn('editContetnArticle',1)">上线</div>
+      </template>
     </div>
     <default-modal ref="addCategory">
       <div slot="content" class="shade-box add-category-box">
@@ -269,7 +272,7 @@
   import PhoneBox from './phone-box/phone-box'
   import API from '@api'
   import Draggable from 'vuedraggable'
-
+  import ZbDropdown from '@components/zb-dropdown/zb-dropdown'
   const PAGE_NAME = 'ARTICLE_ADD'
   const TITLE = '创作文章'
 
@@ -282,7 +285,8 @@
     components: {
       DefaultModal,
       PhoneBox,
-      Draggable
+      Draggable,
+      ZbDropdown
     },
     page: {
       title: TITLE
@@ -391,8 +395,8 @@
         this.addData.authPhoto.id = obj.author.head_image_id
         this.addData.authName = obj.author.nickname
         this.addData.authSignature = obj.author.sign
-        this.addData.goodCount = obj.browse_count
-        this.addData.lookCount = obj.fabulous_num
+        this.addData.goodCount = obj.init_fabulous_num || 0
+        this.addData.lookCount = obj.init_browse_num || 0
         obj.assembly.forEach(item => {
           if (item.type === 'combination' && item.style_type === 'content') {
             let details = []
@@ -426,7 +430,7 @@
             })
             this.addData.details = details
           }
-          if (item.type === 'text' && item.style_type === 'content_foods_list') {
+          if (item.type === 'text' && item.style_type === 'content_cookbook_food_list') {
             this.addData.foodList = item.content[0].text
           }
           if (item.type === 'video' && item.style_type === 'content_video') {
@@ -570,6 +574,7 @@
           else if (!this.addData.videoIntroduce) message = '请填写视频简介'
         } else if (this.currentType === 'cookbook' && !this.addData.foodList) message = '请填写食材清单'
         else if (this.currentType !== 'video' && !this.addData.details.length) message = '请编辑内容详情'
+        else if (this.addData.goodCount > this.addData.lookCount) message = '初始化点赞数不能大于初始化浏览数'
         else if (!this.addData.goodCount) this.addData.goodCount = 0
         else if (!this.addData.lookCount) this.addData.lookCount = 0
         if (message) {
@@ -580,17 +585,18 @@
         }
       },
       // 上线 草稿 保存
-      async _submitBtn(name) {
+      async _submitBtn(name,status) {
+        console.log(name,status)
         let res = this.justifyConent()
         if (res) {
-          let data = this.getSubmitData()
+          let data = this.getSubmitData(status)
           let res = await API.Content[name](data, true)
           this.$toast.show(res.message)
           this.$loading.hide()
           if (res.error === this.$ERR_OK) this.$router.go(-1)
         }
       },
-      getSubmitData() {
+      getSubmitData(status) {
         let params = {
           type: this.currentType,
           title: this.addData.title,
@@ -602,7 +608,8 @@
           video_cover_id: this.addData.coverVideo.id,
           init_fabulous_num: this.addData.goodCount,
           init_browse_num: this.addData.lookCount,
-          assembly: []
+          assembly: [],
+          status
         }
         if (this.currentType === 'video' || this.currentType === 'cookbook') {
           if (this.currentType === 'video') {
@@ -618,7 +625,7 @@
           } else if (this.currentType === 'cookbook') {
             params.assembly.push({
               type: "text",
-              style_type: "content_cookbook",
+              style_type: "content_cookbook_food_list",
               content: [{
                 text: this.addData.foodList
               }]
