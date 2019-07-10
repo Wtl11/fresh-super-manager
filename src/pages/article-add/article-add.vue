@@ -19,7 +19,7 @@
           </div>
           <div class="edit-input-box">
             <zb-dropdown v-model="addData.category" :data="articleCategoryList" valueKey="id" :width="400" :height="40"
-                           placeholder="请选择内容分类" @click="_getArticleCategory"
+                         placeholder="请选择内容分类" @click="_getArticleCategory"
             ></zb-dropdown>
           </div>
           <div class="add-category-operate hand" @click="addCategory">添加分类</div>
@@ -273,6 +273,7 @@
   import API from '@api'
   import Draggable from 'vuedraggable'
   import ZbDropdown from '@components/zb-dropdown/zb-dropdown'
+
   const PAGE_NAME = 'ARTICLE_ADD'
   const TITLE = '创作文章'
 
@@ -585,8 +586,8 @@
         }
       },
       // 上线 草稿 保存
-      async _submitBtn(name,status) {
-        console.log(name,status)
+      async _submitBtn(name, status) {
+        console.log(name, status)
         let res = this.justifyConent()
         if (res) {
           let data = this.getSubmitData(status)
