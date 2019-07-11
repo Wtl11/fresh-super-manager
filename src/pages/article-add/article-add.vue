@@ -239,8 +239,8 @@
     </div>
     <div class="back">
       <template v-if="!id">
-        <div class="back-cancel back-btn hand" @click="_submitBtn('addDraft')">存为草稿</div>
-        <div class="back-btn back-submit hand" @click="_submitBtn('addContent')">上线</div>
+        <div class="back-cancel back-btn hand" @click="_submitBtn('addDraft',0)">存为草稿</div>
+        <div class="back-btn back-submit hand" @click="_submitBtn('addContent',1)">上线</div>
       </template>
       <template v-else>
         <div class="back-btn back-cancel hand" @click="_submitBtn('editContetnArticle',0)">存为草稿</div>
@@ -585,10 +585,20 @@
           return true
         }
       },
+      justifyDraft() {
+        let message = ''
+        if (!this.addData.title) message = '请输入文章标题'
+        if (message) {
+          this.$toast.show(message)
+          return false
+        } else {
+          return true
+        }
+      },
       // 上线 草稿 保存
       async _submitBtn(name, status) {
         console.log(name, status)
-        let res = this.justifyConent()
+        let res = status ? this.justifyConent() : this.justifyDraft()
         if (res) {
           let data = this.getSubmitData(status)
           let res = await API.Content[name](data, true)
