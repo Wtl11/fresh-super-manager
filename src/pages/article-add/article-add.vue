@@ -366,6 +366,8 @@
         this.$route.meta.params && this.changeDetialData(this.$route.meta.params)
       } else {
         this._getAuth()
+
+
       }
       this._getLikes()
     },
@@ -488,12 +490,12 @@
         this.addData.coverImage.url = video.full_cover_url
         if (!this.addData.coverImage.id) {
           setTimeout(() => {
-            this._getCoverImage(video.file_id)
+            this._getCoverImage(this.addData.coverVideo.file_id)
           }, 10000)
         }
       },
-      _getCoverImage() {
-        this.addData.coverVideo.file_id && API.Content.getCoverImage({file_id: this.addData.coverVideo.file_id}).then(res => {
+      _getCoverImage(file_id) {
+        this.addData.coverVideo.file_id && API.Content.getCoverImage({file_id}).then(res => {
           if (res.error !== this.$ERR_OK) return false
           this.addData.coverImage.id = res.data.cover_image_id
           this.addData.coverImage.url = res.data.full_cover_url
@@ -565,7 +567,8 @@
         this.addDetailContentItem({
           type: 'video',
           value: video.full_url,
-          id: video.id
+          id: video.id,
+          file_id: ''
         })
       },
       deleteContentItem(idx, item) {
@@ -580,17 +583,21 @@
         if (!this.addData.category) message = '请选择内容分类'
         else if (!this.addData.title) message = '请输入文章标题'
         else if (this.addData.title && (this.addData.title.length < 5 || this.addData.title.length > 50)) message = '请输入文章标题最少5个最多50个字符'
-        else if (!this.addData.coverImage.id) message = '请上传封面'
+        else if (this.currentType === 'video' && this.addData.coverImage.id === '') message = '请上传封面'
+        else if (this.currentType !== 'video' && !this.addData.coverVideo.id && !this.addData.coverImage.id) message = '请上传封面'
+        else if (this.currentType !== 'video' && this.addData.coverVideo.id && !this.addData.coverImage.id) {
+          this._getCoverImage(this.addData.coverVideo.file_id)
+          message = '正在处理视频第一帧作为封面图，请稍等5s上线'
+        } else if (!this.addData.authPhoto.id) message = '请上传作者头像'
         else if (!this.addData.authPhoto.id) message = '请上传作者头像'
-        else if (!this.addData.authName) message = '请填写作者名字'
         else if (this.currentType === 'video') {
           if (!this.addData.videoContent.id) message = '请上传视频内容'
           else if (!this.addData.videoIntroduce) message = '请填写视频简介'
         } else if (this.currentType === 'cookbook' && !this.addData.foodList) message = '请填写食材清单'
         else if (this.currentType !== 'video' && !this.addData.details.length) message = '请编辑内容详情'
         else if (this.addData.goodCount > this.addData.lookCount) message = '初始化点赞数不能大于初始化浏览数'
-        else if (!(/^[+]{0,1}(\d+)$/.test(this.addData.goodCount)))  message = '请输入正确的初始化点赞数'
-        else if (!(/^[+]{0,1}(\d+)$/.test(this.addData.lookCount)))  message = '请输入正确的初始化浏览数'
+        else if (!(/^[+]{0,1}(\d+)$/.test(this.addData.goodCount))) message = '请输入正确的初始化点赞数'
+        else if (!(/^[+]{0,1}(\d+)$/.test(this.addData.lookCount))) message = '请输入正确的初始化浏览数'
         if (message) {
           this.$toast.show(message)
           return false
@@ -681,6 +688,7 @@
                   title: '',
                   introduction: ''
                 }]
+                this._getCoverImage(item.file_id)
                 break;
               default:
                 newItem.content = [{
