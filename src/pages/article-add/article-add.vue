@@ -367,8 +367,21 @@
       } else {
         this._getAuth()
       }
+      this._getLikes()
     },
     methods: {
+      _getLikes() {
+        let limit = this.addData.goodCount < 10 ? this.addData.goodCount : 10
+        let params = {article_id: this.articleId || 0, preview: 1, limit, page: 1}
+        console.log(params)
+        API.Content.getLikes(params).then(res => {
+          console.log(res)
+          if (res.error !== this.$ERR_OK) {
+            this.$toast.show(res.message)
+          }
+          this.addData.likes = res.data
+        })
+      },
       // 新增创建时获取最后一次作者信息
       _getAuth() {
         API.Content.getAuth().then(res => {

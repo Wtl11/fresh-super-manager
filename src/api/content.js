@@ -163,4 +163,8 @@ export default {
     let url = `/social-shopping/api/platform/article-last-author`
     return request.get(url, {}, loading)
   },
+  getLikes(data, loading = false) {
+    const url = `/social-shopping/api/wap/content/article-fabulou-list`
+    return request.get(url, data, loading)
+  }
 }
