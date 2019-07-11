@@ -48,7 +48,7 @@
             <div class="list-item list-operation-box">
               <span class="list-operation" @click="shwoQrCode(item.id, index, item)">预览</span>
               <span v-if="item.status !== 1" class="list-operation" @click="editWork(item)">编辑</span>
-              <span v-else class="list-operation" @click="upLine(item)">下线</span>
+              <span v-if="item.status !== 0" class="list-operation" @click="upLine(item)">{{item.status === 1 ? '下线' : '上线'}}</span>
               <div class="list-operation" @click="delContent(item.id)">删除</div>
             </div>
           </div>
@@ -245,9 +245,9 @@
       },
       // 下线
       upLine(item) {
-        this.methodsName = 'downLineWork'
+        this.methodsName = item.status === 1 ? 'downLineWork' : 'upLineWork'
         this.delId = item.id
-        this.$refs.confirm.show('确定要下线该作品吗？')
+        this.$refs.confirm.show(`确定要${item.status === 1 ? '下线' : '上线'}该作品吗？`)
       },
       // 编辑
       editWork(item) {
@@ -334,8 +334,8 @@
   .list-box
     .list-item
       &:last-child
-        max-width: 128px
-        min-width: 128px
+        max-width: 166px
+        min-width: 166px
         padding: 0
 
   .list-item-img
