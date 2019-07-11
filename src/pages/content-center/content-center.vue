@@ -120,10 +120,10 @@
         dispatTitle: DISPATCHING_LIST,
         statusTab: 1,
         dispatchSelect: [
-          {name: '全部', value: '', key: 'all', num: 0},
-          {name: '已上线', value: 1, key: 'wait_release', num: 0},
-          {name: '草稿', value: 2, key: 'wait_purchase', num: 0},
-          {name: '已下线', value: 3, key: 'success', num: 0}
+          {name: '全部', status: '', key: 'all', num: 0},
+          {name: '已上线', status: 1, key: 'wait_release', num: 0},
+          {name: '草稿', status: 0, key: 'wait_purchase', num: 0},
+          {name: '已下线', status: 2, key: 'success', num: 0}
         ],
         tabIndex: 0,
         delId: null,
@@ -183,9 +183,9 @@
       this.infoQuery()
       await this.getContentClassList()
       await this._statistic()
-      this.$nextTick(() => {
-        this.$refs.baseStatusTab.infoStatus(this.statusType)
-      })
+      // this.$nextTick(() => {
+      //   this.$refs.baseStatusTab.infoStatus(this.statusType)
+      // })
     },
     methods: {
       ...contentMethods,
@@ -201,6 +201,7 @@
         this.saveValue[this.categoryIdName] = this.workCategoryId
         this.saveValue[this.statusName] = this.workStatus
         this.statusType = this.saveValue[this.statusName]
+        this.statusTab = this.dispatchSelect.findIndex((item) => item.status === this.statusType)
       },
       // 获取二维码
       async shwoQrCode(id, index, item) {
@@ -256,7 +257,7 @@
         let res = await API.Content[this.methodsName](this.delId)
         this.$toast.show(res.message)
         this.$loading.hide()
-        if(res.error === this.$ERR_OK){
+        if (res.error === this.$ERR_OK) {
           this._statistic()
           this.getWorkList()
         }
