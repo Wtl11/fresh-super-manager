@@ -123,26 +123,27 @@
                 <div>视频名称-{{addData.videoContent.name}}</div>
               </div>
             </template>
-            <div v-else class="video-content-wrap">
-              <div class="video-tip"></div>
-              <div class="upload-video-wrap">
-                <base-upload :videoUrl="addData.videoContent.url"
-                             :picNum="1"
-                             fileType="video-custom"
-                             :videoSize="100"
-                             @failFile="failFile"
-                             @successVideo="getVideoContent"
-                >
-                  <button class="upload-video btn-main  hand">
-                    点击上传视频
-                  </button>
-                </base-upload>
+            <template v-else>
+              <div class="video-content-wrap">
+                <div class="video-tip"></div>
+                <div class="upload-video-wrap">
+                  <base-upload :videoUrl="addData.videoContent.url"
+                               :picNum="1"
+                               fileType="video-custom"
+                               :size="100"
+                               @failFile="failFile"
+                               @successVideo="getVideoContent"
+                  >
+                    <button class="upload-video btn-main  hand">
+                      点击上传视频
+                    </button>
+                  </base-upload>
+                </div>
               </div>
-
-            </div>
-            <div class="tip">
-              请添加小于100M,格式为mp4、3gp、m3u8、webm的视频
-            </div>
+              <div class="tip">
+                请添加小于100M,格式为mp4、3gp、m3u8、webm的视频
+              </div>
+            </template>
           </div>
         </div>
         <!--视频  视频简介-->
@@ -715,10 +716,11 @@
 
 <style scoped lang="stylus" rel="stylesheet/stylus">
   @import "~@design"
+
   .add-category-operate
     color: #4D77BD
     text-decoration underline
-    height: 40px
+    height: 40PX
     line-height: 40px
     margin-left: 20px
 
@@ -762,7 +764,6 @@
       white-space: nowrap
       min-width: 64px
       text-align: right
-
     .start
       display: inline-block
       margin-right: -2px
@@ -781,7 +782,7 @@
         .edit-title
           text-align left
           min-width: 105px
-
+          color:#666
       .look-item
         margin-top 20px
         margin-bottom: 60px
@@ -807,7 +808,6 @@
         resize: none
         width: 800px
         resize: none
-
       .num
         position: absolute
         right: 10px
@@ -891,7 +891,7 @@
         display flex
         flex: 1
         border-1px()
-
+        background-color #fdfdfd
         .add-cont-type-item
           height 46px
           border-right-1px()
@@ -1014,7 +1014,6 @@
             height: 100%
             width: 100%
             resize: none
-
           &:last-child
             margin-bottom: 0px
 
