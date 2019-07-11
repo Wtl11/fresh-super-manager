@@ -19,7 +19,7 @@
           </div>
           <div class="edit-input-box">
             <zb-dropdown v-model="addData.category" :data="articleCategoryList" valueKey="id" :width="400" :height="40"
-                         placeholder="请选择内容分类" @click="_getArticleCategory"
+                         placeholder="请选择内容分类" @change-visible="_getArticleCategory"
             ></zb-dropdown>
           </div>
           <div class="add-category-operate hand" @click="addCategory">添加分类</div>
@@ -327,8 +327,8 @@
           },
           authName: '',
           authSignature: '',
-          goodCount: 0,
-          lookCount: 0,
+          goodCount: 30,
+          lookCount: 50,
           // 不同情况的字段
           videoContent: {
             url: '',
@@ -576,8 +576,8 @@
         } else if (this.currentType === 'cookbook' && !this.addData.foodList) message = '请填写食材清单'
         else if (this.currentType !== 'video' && !this.addData.details.length) message = '请编辑内容详情'
         else if (this.addData.goodCount > this.addData.lookCount) message = '初始化点赞数不能大于初始化浏览数'
-        else if (!this.addData.goodCount) this.addData.goodCount = 0
-        else if (!this.addData.lookCount) this.addData.lookCount = 0
+        else if (!(/^[+]{0,1}(\d+)$/.test(this.addData.goodCount)))  message = '请输入正确的初始化点赞数'
+        else if (!(/^[+]{0,1}(\d+)$/.test(this.addData.lookCount)))  message = '请输入正确的初始化浏览数'
         if (message) {
           this.$toast.show(message)
           return false
