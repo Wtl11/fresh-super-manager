@@ -333,6 +333,11 @@
 
   .list-box
     .list-item
+      &:nth-child(2)
+        flex: 2.3
+      &:nth-child(1)
+        max-width: 140px
+        min-width: 140px
       &:last-child
         max-width: 166px
         min-width: 166px
@@ -344,7 +349,7 @@
 
   .pic-box
     height: 40px
-    width: 40px
+    width: 80px
     border-radius: 2px
     object-fit: cover
     background-repeat: no-repeat
