@@ -13,7 +13,7 @@
       <div v-if="showLoading" class="loading-mask">
         <img src="./loading.gif" class="loading">
       </div>
-      <input type="file" class="sendImage hand" accept="video/*" @change="_addVideo">
+      <input type="file" class="sendImage hand" :accept="videoType" @change="_addVideo">
       <slot>
         上传视频
       </slot>
@@ -34,7 +34,7 @@
           </div>
           <div class="operate-item hand">
             上传视频
-            <input type="file" class="sendImage hand" accept="video/*" @change="_addVideo">
+            <input type="file" class="sendImage hand" :accept="videoType" @change="_addVideo">
           </div>
         </div>
       </div>
@@ -116,6 +116,10 @@
       imageSize: {
         type: Number, // 单位 m
         default: 10
+      },
+      videoType:{
+        type: String,
+        default: 'video/mp4,video/3gp,video/m3u8,video/webm'
       }
     },
     data() {
@@ -161,7 +165,6 @@
       },
       _addVideo(e) {
         this.showLoading = true
-        console.log(e.target.files)
         let arr = Array.from(e.target.files)
         e.target.value = ''
         let size = (arr[0].size / 1024 / 1024)
@@ -227,7 +230,7 @@
     opacity: 0
     z-index: 1
     position: absolute
-    font-size 0
+    font-size: 0
 
   .add-image-head-photo
     icon-image('pic-head_author')
