@@ -152,7 +152,7 @@
             <span class="start">*</span>
             视频简介
           </div>
-          <div class="edit-input-box">
+          <div class="edit-input-box  flex-box flex-1">
             <textarea v-model="addData.videoIntroduce" class="edit-textarea edit-input" placeholder="" maxlength="60"></textarea>
             <span class="num">{{addData.videoIntroduce && addData.videoIntroduce.length || 0}}/60</span>
           </div>
@@ -163,7 +163,7 @@
             <span class="start">*</span>
             食材清单
           </div>
-          <div class="edit-input-box">
+          <div class="edit-input-box  flex-box flex-1">
             <textarea v-model="addData.foodList" class="edit-textarea edit-input"
                       placeholder="例子：大蒜，酱油，猪肉，食材之间用逗号隔开，最多输入50个字符"
                       maxlength="100"
@@ -492,11 +492,11 @@
         this.addData.coverVideo.url = video.full_url
         this.addData.coverImage.id = video.cover_image_id
         this.addData.coverImage.url = video.full_cover_url
-        if (!this.addData.coverImage.id) {
-          setTimeout(() => {
-            this._getCoverImage(this.addData.coverVideo.file_id)
-          }, 10000)
-        }
+        // if (!this.addData.coverImage.id) {
+        //   setTimeout(() => {
+        //     this._getCoverImage(this.addData.coverVideo.file_id)
+        //   }, 10000)
+        // }
       },
       _getCoverImage(file_id) {
         this.addData.coverVideo.file_id && API.Content.getCoverImage({file_id}).then(res => {
@@ -587,13 +587,14 @@
         if (!this.addData.category) message = '请选择内容分类'
         else if (!this.addData.title) message = '请输入文章标题'
         else if (this.addData.title && (this.addData.title.length < 5 || this.addData.title.length > 50)) message = '请输入文章标题最少5个最多50个字符'
-        else if (this.currentType === 'video' && this.addData.coverImage.id === '') message = '请上传封面'
-        else if (this.currentType !== 'video' && !this.addData.coverVideo.id && !this.addData.coverImage.id) message = '请上传封面'
-        else if (this.currentType !== 'video' && this.addData.coverVideo.id && !this.addData.coverImage.id) {
-          this._getCoverImage(this.addData.coverVideo.file_id)
-          message = '正在处理视频第一帧作为封面图，请稍等5s上线'
-        } else if (!this.addData.authPhoto.id) message = '请上传作者头像'
+        else if (!this.addData.coverVideo.id && !this.addData.coverImage.id) message = '请上传封面'
+        // else if (this.currentType !== 'video' && this.addData.coverVideo.id && !this.addData.coverImage.id) {
+        //   this._getCoverImage(this.addData.coverVideo.file_id)
+        //   message = '正在处理视频第一帧作为封面图，请稍等5s上线'
+        // }
         else if (!this.addData.authPhoto.id) message = '请上传作者头像'
+        else if (!this.addData.authName) message = '请填写作者名字'
+        else if (!this.addData.authSignature) message = '请填写作者签名'
         else if (this.currentType === 'video') {
           if (!this.addData.videoContent.id) message = '请上传视频内容'
           else if (!this.addData.videoIntroduce) message = '请填写视频简介'
@@ -692,7 +693,6 @@
                   title: '',
                   introduction: ''
                 }]
-                // this._getCoverImage(item.file_id)
                 break;
               default:
                 newItem.content = [{
@@ -745,7 +745,10 @@
   .flex-box
     display flex
     align-items center
-
+  .flex-1
+    flex:1
+    .edit-textarea
+      width:100%
   /* 编辑每一行样式*/
   .edit-item
     display: flex
@@ -796,7 +799,7 @@
           margin-left: 20px
 
           .edit-input
-            width: 670px
+            min-width: 270px
 
           .edit-signature
             margin-top: 10px
@@ -806,7 +809,7 @@
         padding: 5px 14px
         height: 94px
         resize: none
-        width: 800px
+        min-width: 370px
         resize: none
       .num
         position: absolute
