@@ -42,6 +42,8 @@
     watch: {
       infoTabIndex(newVal) {
         this.statusIndex = newVal
+        this.el = document.querySelectorAll('.status-tab-item')
+        this.style = `left: ${this.el[this.statusIndex].offsetLeft}px; width: ${this.el[this.statusIndex].offsetWidth}px`
       }
     },
     mounted() {
