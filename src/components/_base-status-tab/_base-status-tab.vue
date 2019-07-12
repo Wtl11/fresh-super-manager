@@ -4,7 +4,6 @@
          :class="{'status-tab-item-active': statusIndex === index}" @click="checkStatus(index, item)"
     >
       {{item.name}} ({{item.num}})
-      <!--<span class="status-slider"></span>-->
     </div>
     <span class="status-slider" :style="style"></span>
   </div>
@@ -44,32 +43,17 @@
       infoTabIndex(newVal) {
         this.statusIndex = newVal
         this.el = document.querySelectorAll('.status-tab-item')
-        this.elActive = document.querySelector('.status-tab-item-active')
-        setTimeout(() => {
-          this.style = `left: ${this.el[this.statusIndex].offsetLeft}px; width: ${this.elActive.offsetWidth}px`
-        }, 200)
-      },
-      statusList: {
-        handler(news) {
-          this.el = document.querySelectorAll('.status-tab-item')
-          this.elActive = document.querySelector('.status-tab-item-active')
-          this.style = `left: ${this.el[this.statusIndex].offsetLeft}px; width: ${this.elActive.offsetWidth}px`
-        },
-        deep: true
+        this.style = `left: ${this.el[this.statusIndex].offsetLeft}px; width: ${this.el[this.statusIndex].offsetWidth}px`
       }
     },
     mounted() {
       this.el = document.querySelectorAll('.status-tab-item')
-      this.elActive = document.querySelector('.status-tab-item-active')
-      setTimeout(() => {
-        this.style = `left: ${this.el[this.statusIndex].offsetLeft}px; width: ${this.elActive.offsetWidth}px`
-      }, 200)
+      this.style = `left: ${this.el[this.statusIndex].offsetLeft}px; width: ${this.el[this.statusIndex].offsetWidth}px`
     },
     methods: {
       checkStatus(index, item) {
         this.statusIndex = index
-        this.elActive = document.querySelector('.status-tab-item-active')
-        this.style = `left: ${this.el[index].offsetLeft}px; width: ${this.elActive.offsetWidth}px`
+        this.style = `left: ${this.el[index].offsetLeft}px; width: ${this.el[this.statusIndex].offsetWidth}px`
         this.$emit('setStatus', item, index)
       },
       infoStatus(news) {
@@ -94,7 +78,7 @@
     .status-tab-item
       user-select: none
       border-radius: 100px
-      padding: 0 22px
+      width: 106px
       color: $color-text-main
       line-height: 30px
       text-align: center
@@ -108,8 +92,8 @@
       color: $color-white
 
   .status-slider
+    width: 106px
     position: absolute
-    width: 100%
     top: 0
     left: 0
     height: 30px
