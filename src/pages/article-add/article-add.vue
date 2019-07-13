@@ -827,7 +827,7 @@
         height: 140px
         border-radius 4px
         position: relative
-        object-fit: fill
+        object-fit: cover
 
         .delete-icon
           position: absolute
