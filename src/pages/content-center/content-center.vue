@@ -311,6 +311,7 @@
         this.getWorkListMore({page: 1, status: item.status})
         this._statistic()
         this.dispatTitle = item.name === '草稿' ? DISPATCHING_LIST2 : DISPATCHING_LIST
+        this.$refs.pages.beginPage()
         // this.getWorkListMore({page: this[this.pageName], status: this[this.statusName], keyword: this[this.keywordName]})
       },
       // 切换tab
