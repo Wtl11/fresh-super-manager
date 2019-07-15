@@ -275,6 +275,7 @@
         visibility: visible
 
   .show-image
+    background-color $color-np-content
     background-repeat: no-repeat
     background-size: cover
     background-position: center
@@ -292,7 +293,7 @@
       width: 100%
       height: 100%
       object-fit: cover
-
+      background-color $color-np-content
     .full-video
       visibility hidden
 

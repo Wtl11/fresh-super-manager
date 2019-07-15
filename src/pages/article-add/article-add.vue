@@ -864,7 +864,7 @@
         border-radius 4px
         position: relative
         object-fit: cover
-        background-color #333333
+        background-color $color-np-content
         .delete-icon
           position: absolute
           top: 0
@@ -1045,7 +1045,7 @@
             width: 112px
             height @width
             border-radius 2px
-            background-color #333
+            background-color $color-np-content
             object-fit: cover
           .edit-textarea
             border-width: 0px

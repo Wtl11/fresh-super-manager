@@ -205,6 +205,7 @@
       scroll-opacity(5px, 50px,rgba(0,0,0,0),rgba(0,0,0,0.15))
       .cover-photo
         width: 100%
+        background-color $color-np-content
       .cookbook-title
         font-family: $font-family-medium
         font-size: $font-size-22
@@ -363,7 +364,7 @@
         .article-video
           width: 100%
           border-radius 6px
-
+          background-color $color-np-content
 
       .bottom-operate-wrap
         height: 50px
