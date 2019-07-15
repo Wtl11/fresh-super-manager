@@ -18,11 +18,18 @@
             内容分类
           </div>
           <div class="edit-input-box">
-            <zb-dropdown v-model="addData.category" :data="articleCategoryList" valueKey="id" :width="400" :height="40"
-                         placeholder="请选择内容分类" @change-visible="_getArticleCategory"
+            <zb-dropdown v-model="addData.category"
+                         :data="articleCategoryList"
+                         :defaultLabel="addData.categoryName"
+                         :disabled="isDisabled"
+                         :width="400"
+                         :height="40"
+                         valueKey="id"
+                         placeholder="请选择内容分类"
+                         @change-visible="_getArticleCategory"
             ></zb-dropdown>
           </div>
-          <div class="add-category-operate hand" @click="addCategory">添加分类</div>
+          <div v-if="!isDisabled" class="add-category-operate hand" @click="addCategory">添加分类</div>
         </div>
         <!--标题-->
         <div class="edit-item">
@@ -33,12 +40,14 @@
           <div class="edit-input-box">
             <input v-if="currentType === 'video'" v-model="addData.title"
                    type="text"
+                   :disabled="isDisabled"
                    :placeholder="'在此输入'+name+'标题，最多30个字'"
                    class="edit-input title-input"
                    max-length="30"
             >
             <input v-else v-model="addData.title"
                    type="text"
+                   :disabled="isDisabled"
                    :placeholder="'在此输入'+name+'标题，最少5个最多50个字'"
                    class="edit-input title-input"
                    max-length="50"
@@ -55,13 +64,14 @@
             <base-upload :videoUrl="addData.coverVideo.url"
                          :imageUrl="addData.coverImage.url"
                          :videoSize="10"
+                         :disabled="isDisabled"
                          :fileType="currentType!=='video' ?'image-video' :'image'"
                          @failFile="failFile"
                          @getPic="getPic"
                          @delPic="delPic"
                          @successVideo="getCoverVideo"
             ></base-upload>
-            <div class="tip">
+            <div v-if="!isDisabled" class="tip">
               <template v-if="currentType === 'video'">
                 请添加不大于10M的清晰图片
               </template>
@@ -81,7 +91,7 @@
           </div>
           <div class="edit-input-box flex-box author-info-box">
             <base-upload :imageUrl="addData.authPhoto.url"
-                         :picNum="1"
+                         :disabled="isDisabled"
                          imageIconClassName="add-image-head-photo"
                          fileType="image"
                          @failFile="failFile"
@@ -90,12 +100,14 @@
             ></base-upload>
             <div class="auto-input">
               <input v-model="addData.authName"
+                     :disabled="isDisabled"
                      type="text"
                      placeholder="请输入作者名称15个字以内"
                      class="edit-input"
                      maxlength="15"
               >
               <input v-model="addData.authSignature"
+                     :disabled="isDisabled"
                      type="text"
                      placeholder="请输入20个字以内的个性签名"
                      class="edit-input edit-signature"
@@ -116,10 +128,12 @@
               <div class="video-wrap">
                 <video :src="addData.videoContent.url" class="video-wrap">
                 </video>
-                <div class="delete-icon" @click="deleteVideoContent"></div>
+                <div v-if="!isDisabled" class="delete-icon" @click="deleteVideoContent"></div>
               </div>
               <div class="tip">
-                视频上传成功，处理完成
+                <template v-if="!isDisabled">
+                  视频上传成功，处理完成
+                </template>
                 <div>视频名称-{{addData.videoContent.name}}</div>
               </div>
             </template>
@@ -129,8 +143,9 @@
                 <div class="upload-video-wrap">
                   <base-upload :videoUrl="addData.videoContent.url"
                                :picNum="1"
-                               fileType="video-custom"
                                :size="100"
+                               :disabled="isDisabled"
+                               fileType="video-custom"
                                @failFile="failFile"
                                @successVideo="getVideoContent"
                   >
@@ -153,7 +168,7 @@
             视频简介
           </div>
           <div class="edit-input-box  flex-box flex-1">
-            <textarea v-model="addData.videoIntroduce" class="edit-textarea edit-input" placeholder="" maxlength="60"></textarea>
+            <textarea v-model="addData.videoIntroduce" :disabled="isDisabled" class="edit-textarea edit-input" placeholder="" maxlength="60"></textarea>
             <span class="num">{{addData.videoIntroduce && addData.videoIntroduce.length || 0}}/60</span>
           </div>
         </div>
@@ -164,7 +179,7 @@
             食材清单
           </div>
           <div class="edit-input-box  flex-box flex-1">
-            <textarea v-model="addData.foodList" class="edit-textarea edit-input"
+            <textarea v-model="addData.foodList" :disabled="isDisabled" class="edit-textarea edit-input"
                       placeholder="例子：大蒜，酱油，猪肉，食材之间用逗号隔开，最多输入50个字符"
                       maxlength="100"
             ></textarea>
@@ -177,40 +192,43 @@
             <span class="start">*</span>
             内容详情
           </div>
-          <div class="edit-input-box add-cont-type-box">
-            <div class="add-cont-type-item hand" @click="addTextItem">
-              <div class="icon icon-text"></div>
-              <div>文本</div>
+          <div class=" edit-input-box flex-1">
+            <div class="add-cont-type-box">
+              <div class="add-cont-type-item hand" @click="addTextItem">
+                <div class="icon icon-text"></div>
+                <div>文本</div>
+              </div>
+              <div class="add-cont-type-item  hand">
+                <base-upload fileType="image-custom" @getPic="addImageItem">
+                  <div class="add-cont-type-item">
+                    <div class="icon icon-img"></div>
+                    <div>图片</div>
+                  </div>
+                </base-upload>
+              </div>
+              <div class="add-cont-type-item hand">
+                <base-upload fileType="video-custom" @successVideo="addVideoItem">
+                  <div class="add-cont-type-item hand">
+                    <div class="icon icon-video"></div>
+                    <div>视频</div>
+                  </div>
+                </base-upload>
+              </div>
             </div>
-            <div class="add-cont-type-item  hand">
-              <base-upload fileType="image-custom" @getPic="addImageItem">
-                <div class="add-cont-type-item">
-                  <div class="icon icon-img"></div>
-                  <div>图片</div>
+            <draggable v-if="currentType!=='video' && addData.details.length" ref="detailsContent" v-model="addData.details" class="content-details">
+              <transition-group>
+                <div v-for="(item, idx) in addData.details" :key="idx" class="content-item">
+                  <div v-if="!isDisabled" class="close-icon hand" @click="deleteContentItem(idx,item)"></div>
+                  <img v-if="item.type==='image'" :src="item.value" class="content-image">
+                  <video v-else-if="item.type==='video'" :src="item.value" class="content-video"></video>
+                  <textarea v-else v-model="item.value" class="edit-textarea edit-input" placeholder="输入文字">
+              </textarea>
                 </div>
-              </base-upload>
-            </div>
-            <div class="add-cont-type-item hand">
-              <base-upload fileType="video-custom" @successVideo="addVideoItem">
-                <div class="add-cont-type-item hand">
-                  <div class="icon icon-video"></div>
-                  <div>视频</div>
-                </div>
-              </base-upload>
-            </div>
+              </transition-group>
+            </draggable>
           </div>
         </div>
-        <draggable v-if="currentType!=='video' && addData.details.length" ref="detailsContent" v-model="addData.details" class="content-details">
-          <transition-group>
-            <div v-for="(item, idx) in addData.details" :key="idx" class="content-item">
-              <div class="close-icon hand" @click="deleteContentItem(idx,item)"></div>
-              <img v-if="item.type==='image'" :src="item.value" class="conten-image">
-              <video v-else-if="item.type==='video'" :src="item.value" class="conten-video"></video>
-              <textarea v-else v-model="item.value" class="edit-textarea edit-input" placeholder="输入文字">
-              </textarea>
-            </div>
-          </transition-group>
-        </draggable>
+
         <!-- 其他设置 -->
         <div class="edit-item  other-edit-item">
           <div class="edit-title">
@@ -222,6 +240,7 @@
                 初始点赞人数
               </div>
               <input v-model="addData.goodCount"
+                     :disabled="isDisabled"
                      type="number"
                      placeholder=""
                      class="edit-input"
@@ -232,6 +251,7 @@
                 初始浏览人数
               </div>
               <input v-model="addData.lookCount"
+                     :disabled="isDisabled"
                      type="number"
                      placeholder=""
                      class="edit-input"
@@ -245,6 +265,9 @@
       <template v-if="!id">
         <div class="back-cancel back-btn hand" @click="_submitBtn('addDraft',0)">存为草稿</div>
         <div class="back-btn back-submit hand" @click="_submitBtn('addContent',1)">上线</div>
+      </template>
+      <template v-else-if="isDisabled">
+        <div class="back-cancel back-btn hand" @click="goBack">返回</div>
       </template>
       <template v-else>
         <div class="back-btn back-cancel hand" @click="_submitBtn('editContetnArticle',0)">存为草稿</div>
@@ -298,7 +321,9 @@
     },
     data() {
       return {
+        id: "",
         isCanSelectMore: true,
+        isDisabled: false,
         typeList: {
           [ARTICLE]: {
             name: '文章'
@@ -359,7 +384,7 @@
         return this.typeList[this.currentType] && this.typeList[this.currentType].name || '文章'
       },
       editName() {
-        return this.id ? '编辑' : '创作'
+        return this.id ? (this.isDisabled ? '查看' : '编辑') : '创作'
       }
     },
     async created() {
@@ -370,8 +395,6 @@
         this.$route.meta.params && this.changeDetialData(this.$route.meta.params)
       } else {
         this._getAuth()
-
-
       }
       this._getLikes()
     },
@@ -404,6 +427,7 @@
       },
       // 转换详情数据
       changeDetialData(obj) {
+        this.isDisabled = obj.status === 1
         this.currentType = obj.type || 'common'
         this.addData.title = obj.title
         this.addData.category = obj.category.id
@@ -467,7 +491,7 @@
         API.Content.getSortList().then(res => {
           if (res.error !== this.$ERR_OK) this.$toast.show(res.message)
           this.articleCategoryList = res.data
-          if(!this.articleCategoryList.find(item => item.id === this.addData.category)) this.addData.category = ''
+          if (!this.articleCategoryList.find(item => item.id === this.addData.category)) this.addData.category = ''
         }).finally(() => {
           this.$loading.hide()
         })
@@ -644,8 +668,8 @@
           author_sign: this.addData.authSignature.trim(),
           image_cover_id: this.addData.coverImage.id,
           video_cover_id: this.addData.coverVideo.id,
-          init_fabulous_num: (this.addData.goodCount+'').trim(),
-          init_browse_num:  (this.addData.lookCount+'').trim(),
+          init_fabulous_num: (this.addData.goodCount + '').trim(),
+          init_browse_num: (this.addData.lookCount + '').trim(),
           assembly: [],
           status
         }
@@ -711,6 +735,9 @@
         }
         if (this.id) params.id = this.id
         return params
+      },
+      goBack() {
+        this.$router.go(-1)
       }
     }
   }
@@ -744,13 +771,19 @@
     &:focus
       border-color: $color-main
 
+    &[disabled]:hover
+      border: 1px solid $color-line
+
   .flex-box
     display flex
     align-items center
+
   .flex-1
-    flex:1
+    flex: 1
+
     .edit-textarea
-      width:100%
+      width: 100%
+
   /* 编辑每一行样式*/
   .edit-item
     display: flex
@@ -769,6 +802,7 @@
       white-space: nowrap
       min-width: 64px
       text-align: right
+
     .start
       display: inline-block
       margin-right: -2px
@@ -787,7 +821,8 @@
         .edit-title
           text-align left
           min-width: 105px
-          color:#666
+          color: #666
+
       .look-item
         margin-top 20px
         margin-bottom: 60px
@@ -813,6 +848,7 @@
         resize: none
         min-width: 370px
         resize: none
+
       .num
         position: absolute
         right: 10px
@@ -828,7 +864,7 @@
         border-radius 4px
         position: relative
         object-fit: cover
-
+        background-color #333333
         .delete-icon
           position: absolute
           top: 0
@@ -897,6 +933,7 @@
         flex: 1
         border-1px()
         background-color #fdfdfd
+
         .add-cont-type-item
           height 46px
           border-right-1px()
@@ -943,9 +980,6 @@
         border-radius: 2px
         padding: 20px
         margin-top: 20px
-        margin-left: 104px
-        max-height: 600px
-        overflow auto
 
         .content-item
           border-1px(#D3D8DC)
@@ -1006,12 +1040,13 @@
               text-decoration-line line-through
               margin-left 6px
 
-          .conten-video
-          .conten-image
+          .content-video
+          .content-image
             width: 112px
             height @width
             border-radius 2px
-
+            background-color #333
+            object-fit: cover
           .edit-textarea
             border-width: 0px
             padding: 0px
@@ -1019,6 +1054,7 @@
             height: 100%
             width: 100%
             resize: none
+
           &:last-child
             margin-bottom: 0px
 

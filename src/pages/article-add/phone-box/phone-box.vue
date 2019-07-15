@@ -23,14 +23,20 @@
             </div>
           </div>
           <div class="browse-wrap">
-            <div v-if="data.lookCount && type !== 'cookbook'" class="browse-title">浏览{{data.lookCount>= 10000 ? data.lookCount/10000 +'万':data.lookCount}}</div>
-            <div v-if="type === 'cookbook'" class="browse-title"></div>
+            <!--<div v-if="data.lookCount && type !== 'cookbook'" class="browse-title">浏览{{data.lookCount>= 10000 ? data.lookCount/10000 +'万':data.lookCount}}</div>-->
+            <!--v-if="type === 'cookbook'"-->
+            <div class="browse-title"></div>
             <div v-if="data.goodCount" class="like-wrap">
               <div class="like-total">
                 <img src="./icon-like_big1@2x.png" alt="" class="like-icon">
                 <div class="total-count">{{data.goodCount}}</div>
               </div>
-              <img v-for="(item,idx) in data.likes" :key="idx" :src="item.avatar" class="liker-photo">
+              <div class="good-list-wrap">
+                <template  v-if="data.goodCount">
+                  <img v-for="(item,idx) in data.likes" :key="idx" :src="item.avatar" class="liker-photo">
+                </template>
+                <template v-else>快来第一个点赞吧~</template>
+              </div>
             </div>
           </div>
           <div class="line-middle"></div>
@@ -181,9 +187,9 @@
         top: 111px
         left: 21px
         position: absolute
-        width: 298px
+        width: 303px
         height: 503px
-        overflow-x: hidden
+        overflow: hidden
 
         &.empty-type-video
           icon-image(pic-video_empty)
@@ -192,17 +198,11 @@
         &.empty-type-cookbook
           icon-image(pic-content_empty)
 
-        &::-webkit-scrollbar
-          width: 0
-
     .content-article-detail
       width: 100%
       height: 100%;
       overflow: auto
-
-      &::-webkit-scrollbar
-        width: 0
-
+      scroll-opacity(5px, 50px,rgba(0,0,0,0),rgba(0,0,0,0.15))
       .cover-photo
         width: 100%
       .cookbook-title
@@ -224,11 +224,11 @@
         &.cookbook
           justify-content: center
           .good-article-icon
-            top:12px
+            top:0px
         .good-article-icon
           position absolute
           right: 11px
-          top: 35px
+          top: 10px
           width: 48px
           height: @width
 
@@ -292,6 +292,16 @@
               color: #111
               margin-top: 1px
 
+        .good-list-wrap
+          flex: 1
+          overflow hidden
+          height: 56px
+          line-height: 56px
+          display flex
+          justify-content space-between
+          flex-wrap  wrap
+          color:#808080
+          font-size:$font-size-12
           .liker-photo
             margin 15px 15px 15px 0px
             width: 26px
