@@ -32,7 +32,7 @@
                 <div class="total-count">{{data.goodCount}}</div>
               </div>
               <div class="good-list-wrap">
-                <template  v-if="data.goodCount">
+                <template v-if="data.goodCount">
                   <img v-for="(item,idx) in data.likes" :key="idx" :src="item.avatar" class="liker-photo">
                 </template>
                 <template v-else>快来第一个点赞吧~</template>
