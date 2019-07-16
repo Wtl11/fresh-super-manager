@@ -1,6 +1,7 @@
 const appConfig = require('./src/app.config')
 module.exports = {
   configureWebpack: {
+    baseUrl: process.env.VUE_APP_ENV !== 'production' ? './' : '/',
     name: appConfig.title,
     resolve: {
       alias: require('./aliases.config').webpack
