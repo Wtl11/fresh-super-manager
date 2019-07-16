@@ -221,7 +221,7 @@
                   <div v-if="!isDisabled" class="close-icon hand" @click="deleteContentItem(idx,item)"></div>
                   <img v-if="item.type==='image'" :src="item.value" class="content-image">
                   <video v-else-if="item.type==='video'" :src="item.value" class="content-video"></video>
-                  <textarea v-else v-model="item.value" class="edit-textarea edit-input" placeholder="输入文字">
+                  <textarea v-else v-model="item.value" :disabled="isDisabled" class="edit-textarea edit-input" placeholder="输入文字">
               </textarea>
                 </div>
               </transition-group>
@@ -988,58 +988,6 @@
           height: 140px
           position relative
           margin-bottom: 20px
-          padding: 14px
-
-          .good-item
-            height: 112px
-            display flex
-
-            .goods-photo
-              width: 112px
-              height: @width
-
-            .info
-              margin-left: 14px
-              flex: 1
-              display flex
-              flex-direction column
-              justify-content space-around
-
-            .name
-              font-family $font-family-medium
-              font-size: $font-size-16
-              color: #111111
-              overflow hidden
-              text-overflow ellipsis
-              white-space: nowrap
-
-            .details
-              font-family $font-family-regular
-              font-size: $font-size-14
-              color: #808080
-              margin: 0px 0px 5px
-              overflow hidden
-              text-overflow ellipsis
-              white-space: nowrap
-
-            .price-now
-              color: #FA7500
-              font-size: 32px
-              font-family $font-family-medium
-
-              .small
-                font-size: $font-size-20
-
-                .unit
-                  font-family $font-family-regular
-
-            .price
-              color: #B7B7B7
-              font-size: $font-size-30
-              font-family $font-family-regular
-              text-decoration-line line-through
-              margin-left 6px
-
           .content-video
           .content-image
             width: 112px
@@ -1047,9 +995,10 @@
             border-radius 2px
             background-color $color-np-content
             object-fit: cover
+            margin: 14px
           .edit-textarea
             border-width: 0px
-            padding: 0px
+            padding: 14px
             scroll-opacity(5px, 100px)
             height: 100%
             width: 100%
