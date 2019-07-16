@@ -388,9 +388,11 @@
       }
     },
     async created() {
+      let query = this.$route.query
       this._getArticleCategory()
-      this.currentType = this.$route.query.type
-      this.id = this.$route.query.id || ''
+      this.currentType = query.type
+      this.id = query.id || ''
+      this.isDisabled = query.isSee || false
       if (this.id) {
         this.$route.meta.params && this.changeDetialData(this.$route.meta.params)
       } else {
@@ -427,7 +429,7 @@
       },
       // 转换详情数据
       changeDetialData(obj) {
-        this.isDisabled = obj.status === 1
+        this.isDisabled = obj.status === 1 || this.$route.query.isSee
         this.currentType = obj.type || 'common'
         this.addData.title = obj.title
         this.addData.category = obj.category.id
