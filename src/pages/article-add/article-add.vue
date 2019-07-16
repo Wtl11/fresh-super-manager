@@ -215,7 +215,7 @@
                 </base-upload>
               </div>
             </div>
-            <draggable v-if="currentType!=='video' && addData.details.length" ref="detailsContent" v-model="addData.details" class="content-details">
+            <draggable v-if="currentType!=='video' && addData.details.length" ref="detailsContent" v-model="addData.details" :options="{disabled:isDisabled}" class="content-details">
               <transition-group>
                 <div v-for="(item, idx) in addData.details" :key="idx" class="content-item">
                   <div v-if="!isDisabled" class="close-icon hand" @click="deleteContentItem(idx,item)"></div>
@@ -933,6 +933,7 @@
         flex: 1
         border-1px()
         background-color #fdfdfd
+        margin-bottom: 20px
 
         .add-cont-type-item
           height 46px
@@ -979,7 +980,6 @@
         background: #F5F7FA
         border-radius: 2px
         padding: 20px
-        margin-top: 20px
 
         .content-item
           border-1px(#D3D8DC)
