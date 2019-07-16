@@ -193,7 +193,7 @@
             内容详情
           </div>
           <div class=" edit-input-box flex-1">
-            <div class="add-cont-type-box">
+            <div v-if="!isDisabled" class="add-cont-type-box">
               <div class="add-cont-type-item hand" @click="addTextItem">
                 <div class="icon icon-text"></div>
                 <div>文本</div>
