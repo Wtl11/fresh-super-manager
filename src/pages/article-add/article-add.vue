@@ -392,7 +392,7 @@
       this._getArticleCategory()
       this.currentType = query.type
       this.id = query.id || ''
-      this.isDisabled = query.isSee || false
+      this.isDisabled = Boolean(query.isSee) || false
       if (this.id) {
         this.$route.meta.params && this.changeDetialData(this.$route.meta.params)
       } else {
@@ -864,6 +864,7 @@
         position: relative
         object-fit: cover
         background-color $color-np-content
+
         .delete-icon
           position: absolute
           top: 0
@@ -987,6 +988,7 @@
           height: 140px
           position relative
           margin-bottom: 20px
+
           .content-video
           .content-image
             width: 112px
@@ -995,6 +997,7 @@
             background-color $color-np-content
             object-fit: cover
             margin: 14px
+
           .edit-textarea
             border-width: 0px
             padding: 14px
