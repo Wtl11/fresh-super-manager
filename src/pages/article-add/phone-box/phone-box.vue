@@ -359,7 +359,8 @@
           font-family $font-family-regular
           font-size $font-size-15
           color: #111111
-
+          white-space: pre-wrap;
+          word-wrap: break-word
         .article-image
         .article-video
           width: 100%
@@ -465,7 +466,8 @@
           font-size: $font-size-15
           line-height 21px
           margin: 12px 0px 25px
-
+          white-space: pre-wrap;
+          word-wrap: break-word
         .operate-wrap
           display flex
           justify-content space-between
