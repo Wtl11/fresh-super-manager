@@ -43,6 +43,7 @@
             <div v-if="workStatus !== 0" class="list-item">{{item.browse_count}}</div>
             <div v-if="workStatus !== 0" class="list-item">{{item.share_count}}</div>
             <div v-if="workStatus !== 0" class="list-item">{{item.fabulous_num}}</div>
+            <div v-if="workStatus !== 0" class="list-item">{{item.guide_goods_rate}}%</div>
             <div v-if="workStatus !== 0" class="list-item">{{item.pay_goods_count}}</div>
             <div class="list-item list-operation-box">
               <span class="list-operation" @click="shwoQrCode(item.id, index, item)">预览</span>
@@ -92,6 +93,8 @@
     '阅读数',
     '分享次数',
     '点赞数',
+    '商品页跳转率',
+    '支付笔数',
     '操作'
   ]
   const QUERY = ['Keyword', 'Page', 'Status', 'CategoryId']
