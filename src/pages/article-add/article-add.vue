@@ -404,9 +404,7 @@
       _getLikes() {
         let limit = this.addData.goodCount < 10 ? this.addData.goodCount : 10
         let params = {article_id: this.articleId || 0, preview: 1, limit, page: 1}
-        console.log(params)
         API.Content.getLikes(params).then(res => {
-          console.log(res)
           if (res.error !== this.$ERR_OK) {
             this.$toast.show(res.message)
           }
@@ -650,7 +648,6 @@
       },
       // 上线 草稿 保存
       async _submitBtn(name, status) {
-        console.log(name, status)
         let res = status ? this.justifyConent() : this.justifyDraft()
         if (res) {
           let data = this.getSubmitData(status)
