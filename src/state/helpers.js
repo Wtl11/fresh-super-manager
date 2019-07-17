@@ -18,10 +18,10 @@ export const globalComputed = {
 
 // 交易记录
 export const tradeComputed = {
-  ...mapGetters('trade', ['trades', 'pageDetail', 'page', 'date', 'keyword', 'type'])
+  ...mapGetters('trade', ['trades', 'pageDetail', 'page', 'date', 'keyword', 'type', 'orderType'])
 }
 export const tradeMethods = {
-  ...mapActions('trade', ['setPage', 'setTradeType', 'setDate', 'setKeyword'])
+  ...mapActions('trade', ['setPage', 'setTradeType', 'setDate', 'setKeyword', 'setOrderType'])
 }
 
 
@@ -101,4 +101,13 @@ export const productComputed = {
 
 export const productMethods = {
   ...mapActions('product', ['getAuxiliaryList', 'getCategoryList', 'getProductList', 'getGoodsDetailData'])
+}
+
+// 全国包邮-商品
+export const fsGoodsComputed = {
+  ...mapGetters('freeShippingGoodsManage', ['goodsList', 'statePageTotal'])
+}
+
+export const fsGoodsMethods = {
+  ...mapActions('freeShippingGoodsManage', ['getGoodsList', 'getGoodsDetailData'])
 }

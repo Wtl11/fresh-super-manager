@@ -310,7 +310,116 @@ export default [
               })
           }
         }
-      }
+      },
+      // 全国包邮-商品管理
+      {
+        path: 'free-shipping-goods-manage',
+        name: 'free-shipping-goods-manage',
+        component: () => lazyLoadView(import('@pages/free-shipping-goods-manage/free-shipping-goods-manage')),
+        meta: {
+          titles: ['商品', '商品市集'],
+          beforeResolve(routeTo, routeFrom, next) {
+            store
+              .dispatch('freeShippingGoodsManage/getGoodsList', {})
+              .then((res) => {
+                if (!res) {
+                  return next({name: '404'})
+                }
+                return next()
+              })
+              .catch(() => {
+                return next({name: '404'})
+              })
+          }
+        }
+      },
+      // 全国包邮-新建商品
+      {
+        path: 'free-shipping-goods-manage/free-shipping-edit-goods',
+        name: 'free-shipping-edit-goods',
+        component: () => lazyLoadView(import('@pages/free-shipping-edit-goods/free-shipping-edit-goods')),
+        meta: {
+          titles: ['商品', '商品管理', '商品'],
+          variableIndex: 2,
+          marginBottom: 80,
+          beforeResolve(routeTo, routeFrom, next) {
+            if (!routeTo.query.id) {
+              return next()
+            }
+            store
+              .dispatch('product/getGoodsDetailData', routeTo.query.id)
+              .then((response) => {
+                if (!response) {
+                  return next({name: '404'})
+                }
+                routeTo.params.detail = response
+                next()
+              })
+              .catch(() => {
+                next({name: '404'})
+              })
+          }
+        },
+        props: (route) => ({detail: route.params.detail})
+      },
+      // 全国包邮-订单管理
+      {
+        path: 'free-shipping-order-manage',
+        name: 'free-shipping-order-manage',
+        component: () => lazyLoadView(import('@pages/free-shipping-order-manage/free-shipping-order-manage')),
+        meta: {
+          titles: ['订单', '订单', '订单管理'],
+          beforeResolve(routeTo, routeFrom, next) {
+            store
+              .dispatch('trade/getTradeList')
+              .then((res) => {
+                if (!res) {
+                  return next({name: '404'})
+                }
+                return next()
+              })
+              .catch(() => {
+                return next({name: '404'})
+              })
+          }
+        }
+      },
+      // 全国包邮-订单详情
+      {
+        path: 'free-shipping-order-manage/free-shipping-order-detail',
+        name: 'free-shipping-order-detail',
+        component: () => lazyLoadView(import('@pages/free-shipping-order-detail/free-shipping-order-detail')),
+        meta: {
+          titles: ['订单', '订单', '订单管理', '详情'],
+        }
+      },
+      // 全国包邮-商品选品
+      {
+        path: 'free-shipping-goods-choose',
+        name: 'free-shipping-goods-choose',
+        component: () => lazyLoadView(import('@pages/free-shipping-goods-choose/free-shipping-goods-choose')),
+        meta: {
+          titles: ['商品', '1688商品', '商品选品'],
+        }
+      },
+      // 全国包邮-供应商列表
+      {
+        path: 'free-shipping-suppliers-manage',
+        name: 'free-shipping-suppliers-manage',
+        component: () => lazyLoadView(import('@pages/free-shipping-suppliers-manage/free-shipping-suppliers-manage')),
+        meta: {
+          titles: ['商品', '供应商管理'],
+        }
+      },
+      // 全国包邮-同步供应商
+      {
+        path: 'free-shipping-suppliers-manage/free-shipping-suppliers-choose',
+        name: 'free-shipping-suppliers-choose',
+        component: () => lazyLoadView(import('@pages/free-shipping-suppliers-choose/free-shipping-suppliers-choose')),
+        meta: {
+          titles: ['商品', '供应商管理', '同步供应商信息'],
+        }
+      },
     ]
   },
   {
