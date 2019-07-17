@@ -388,9 +388,11 @@
       }
     },
     async created() {
+      let query = this.$route.query
       this._getArticleCategory()
-      this.currentType = this.$route.query.type
-      this.id = this.$route.query.id || ''
+      this.currentType = query.type
+      this.id = query.id || ''
+      this.isDisabled = query.isSee || false
       if (this.id) {
         this.$route.meta.params && this.changeDetialData(this.$route.meta.params)
       } else {
@@ -402,9 +404,7 @@
       _getLikes() {
         let limit = this.addData.goodCount < 10 ? this.addData.goodCount : 10
         let params = {article_id: this.articleId || 0, preview: 1, limit, page: 1}
-        console.log(params)
         API.Content.getLikes(params).then(res => {
-          console.log(res)
           if (res.error !== this.$ERR_OK) {
             this.$toast.show(res.message)
           }
@@ -427,7 +427,7 @@
       },
       // 转换详情数据
       changeDetialData(obj) {
-        this.isDisabled = obj.status === 1
+        this.isDisabled = obj.status === 1 || this.$route.query.isSee
         this.currentType = obj.type || 'common'
         this.addData.title = obj.title
         this.addData.category = obj.category.id
@@ -648,7 +648,6 @@
       },
       // 上线 草稿 保存
       async _submitBtn(name, status) {
-        console.log(name, status)
         let res = status ? this.justifyConent() : this.justifyDraft()
         if (res) {
           let data = this.getSubmitData(status)

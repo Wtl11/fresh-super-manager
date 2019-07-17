@@ -46,9 +46,7 @@
             <div class="foodlist-title">
               <img src="./icon-ingredients@2x.png" class="foodlist-icon">食材
             </div>
-            <div v-if="data.foodList" class="foods-list">
-              {{data.foodList}}
-            </div>
+            <div v-if="data.foodList" class="foods-list">{{data.foodList}}</div>
             <div class="goods-list">
               <goods-item v-for="(item,idx) in data.goodsList" :key="idx" :goodsData="item"></goods-item>
             </div>
@@ -347,6 +345,8 @@
         letter-spacing 0.4px
         color: #111111
         margin: 15px
+        white-space pre-wrap
+        word-wrap: break-word
       .goods-list
         padding:0px 15px 5px
       .article-cont
@@ -359,7 +359,8 @@
           font-family $font-family-regular
           font-size $font-size-15
           color: #111111
-
+          white-space: pre-wrap;
+          word-wrap: break-word
         .article-image
         .article-video
           width: 100%
@@ -465,7 +466,8 @@
           font-size: $font-size-15
           line-height 21px
           margin: 12px 0px 25px
-
+          white-space pre-wrap
+          word-wrap: break-word
         .operate-wrap
           display flex
           justify-content space-between
