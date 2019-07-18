@@ -626,9 +626,9 @@
           else if (!this.addData.videoIntroduce) message = '请填写视频简介'
         } else if (this.currentType === 'cookbook' && !this.addData.foodList) message = '请填写食材清单'
         else if (this.currentType !== 'video' && !this.addData.details.length) message = '请编辑内容详情'
-        // else if (this.addData.goodCount > this.addData.lookCount) message = '初始化点赞数不能大于初始化浏览数'
         else if (!(/^[+]{0,1}(\d+)$/.test(this.addData.goodCount))) message = '请输入正确的初始化点赞数'
         // else if (!(/^[+]{0,1}(\d+)$/.test(this.addData.lookCount))) message = '请输入正确的初始化浏览数'
+        // else if (this.addData.goodCount > this.addData.lookCount) message = '初始化点赞数不能大于初始化浏览数'
         if (message) {
           this.$toast.show(message)
           return false
@@ -791,10 +791,9 @@
     position: relative
 
     &.other-edit-item
-    &:last-child
       margin-bottom: 60px
-    .edit-input
-      width: 240px
+      .edit-input
+        width: 240px
 
     .edit-title
       margin-top: 7.5px
