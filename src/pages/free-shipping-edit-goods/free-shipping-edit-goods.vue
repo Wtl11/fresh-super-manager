@@ -20,7 +20,7 @@
         <div class="edit-input-box">
           <input v-model="msg.name" type="text" class="edit-input" maxlength="29" @mousewheel.native.prevent>
         </div>
-        <div class="edit-pla">查看1688商品</div>
+        <div class="edit-pla link hand">查看1688商品</div>
       </div>
       <div class="edit-item">
         <div class="edit-title">
@@ -676,6 +676,9 @@
     display: flex
     align-items: center
     margin-left: 10px
+    &.link
+      text-decoration: underline
+      color: #3F77C3
 
   .goods-box .edit-item .goods-select-box
     layout()
