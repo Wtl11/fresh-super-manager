@@ -21,6 +21,9 @@ module.exports = {
             },
             '/scm': {
               target: process.env.VUE_APP_SCM_API
+            },
+            '/market': {
+              target: process.env.VUE_APP_MARKET_API
             }
           }
         }
