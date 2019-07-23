@@ -9,17 +9,17 @@
       </div>
       <div class="search-con">
         供应商链接
-        <input v-model="searchText" type="text" class="search-input" @keydown="_searchGoods">
-        <div class="search-btn hand" @click="_searchGoods">查找供应商</div>
+        <input v-model="searchText" type="text" class="search-input" @keyup.enter="searchSuppliers">
+        <div class="search-btn hand" @click="searchSuppliers">查找供应商</div>
       </div>
       <div class="big-list">
         <div class="list-header list-box">
           <div v-for="(item,index) in listTitle" :key="index" class="list-item">{{item}}</div>
         </div>
-        <div v-if="suppliersList.length" class="list">
-          <div v-for="(item, index) in suppliersList" :key="index" class="list-content list-box">
-            <div class="list-item">{{item.name}}</div>
-            <div class="list-item">{{item.goods_material_category}}</div>
+        <div v-if="suppliersList.name" class="list">
+          <div class="list-content list-box">
+            <div class="list-item">{{suppliersList.name}}</div>
+            <div class="list-item">{{suppliersList.company_name}}</div>
           </div>
         </div>
         <div v-else class="empty-con">
@@ -29,15 +29,13 @@
       </div>
     </div>
     <div class="bottom-btn">
-      <div :class="[suppliersList.length?'':'disabled']" class="button hand" @click="_syncSuppliersList">同步</div>
+      <div :class="[suppliersList.name?'':'disabled']" class="button hand" @click="_syncSuppliersList">同步</div>
     </div>
-    <popup-input ref="popupModal" @confirm="_PIConfirm"></popup-input>
   </div>
 </template>
 
 <script type="text/ecmascript-6">
   import API from '@api'
-  import PopupInput from './popup-input/popup-input'
 
   const PAGE_NAME = 'FREE_SHIPPING_SUPPLIERS_CHOOSE'
   const TITLE = '同步供应商信息'
@@ -48,46 +46,44 @@
     page: {
       title: TITLE
     },
-    components: {
-      PopupInput
-    },
     data() {
       return {
         listTitle: LIST_TITLE,
-        suppliersList: [],
+        suppliersList: {},
         searchText: ''
       }
     },
-    created() {
-      this.getSuppliersList()
-    },
     methods: {
+      searchSuppliers() {
+        if (!this.searchText.length) {
+          this.$toast.show('请输入供应商链接')
+          return
+        }
+        this.getSuppliersList()
+      },
       getSuppliersList() {
-        API.Product.reqGoodsList({},false).then((res) => {
+        API.FreeShipping.suppliersSearch({domin: this.searchText}).then((res) => {
           if (res.error === this.$ERR_OK) {
             this.suppliersList = res.data
           } else {
             this.$toast.show(res.message)
           }
+        }).finally(()=>{
+          this.$loading.hide()
         })
       },
-      _searchGoods() {
-        if (!this.searchText.length) {
-          this.$toast.show('请输入供应商链接')
-          return
-        }
-        console.log('搜索供应商！')
-        this.getSuppliersList()
-      },
       _syncSuppliersList() {
-        if (!this.suppliersList.length) return
-        // 同步供应商逻辑，点击就同步，然后弹窗提示绑定供应商，可暂时不绑定
-        this.$refs.popupModal.show()
+        if (!this.suppliersList.name) return
+        API.FreeShipping.suppliersCreate(this.suppliersList).then((res) => {
+          if (res.error === this.$ERR_OK) {
+            this.$toast.show('同步成功！')
+          } else {
+            this.$toast.show(res.message)
+          }
+        }).finally(()=>{
+          this.$loading.hide()
+        })
       },
-      _PIConfirm() {
-        console.log('绑定成功！')
-        this.$refs.popupModal.hide()
-      }
     }
   }
 </script>

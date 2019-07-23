@@ -15,7 +15,7 @@ export default {
     return request.post(url, data, loading)
   },
   // 商品详情
-  goodsInfo(id, loading = true) {
+  getGoodsInfo(id, loading = true) {
     let url = `/market/api/backend/goods/${id}`
     return request.get(url, loading)
   },

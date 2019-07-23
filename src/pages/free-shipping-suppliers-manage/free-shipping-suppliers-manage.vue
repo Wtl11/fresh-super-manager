@@ -23,7 +23,7 @@
         <div v-if="suppliersList.length" class="list">
           <div v-for="(item, index) in suppliersList" :key="index" class="list-content list-box">
             <div class="list-item">{{item.name}}</div>
-            <div class="list-item">{{item.goods_material_category}}</div>
+            <div class="list-item">{{item.company_name}}</div>
           </div>
         </div>
       </div>
@@ -63,7 +63,8 @@
           total_page: 1
         },
         requestParams: {
-          page: 1
+          page: 1,
+          limit: 10
         },
       }
     },
@@ -78,7 +79,7 @@
         }
       },
       getSuppliersList() {
-        API.Product.reqGoodsList({},false).then((res) => {
+        API.FreeShipping.getSuppliersList(this.requestParams,false).then((res) => {
           if (res.error === this.$ERR_OK) {
             this.suppliersList = res.data
           } else {
