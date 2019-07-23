@@ -17,7 +17,7 @@ export default {
   // 商品详情
   getGoodsInfo(id, loading = true) {
     let url = `/market/api/backend/goods/${id}`
-    return request.get(url, loading)
+    return request.get(url, null, loading)
   },
   // 商品编辑（完善资料）
   goodsModify(data, id, loading = true) {
@@ -27,7 +27,7 @@ export default {
   // 删除商品
   goodsDelete(id, loading = false) {
     let url = `/market/api/backend/goods/${id}`
-    return request.delete(url, loading)
+    return request.delete(url, null, loading)
   },
   // 商品上下架
   goodsOnline(data, loading = false) {

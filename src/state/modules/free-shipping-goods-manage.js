@@ -30,16 +30,8 @@ export const mutations = {
 
 export const actions = {
   // 商品列表
-  getGoodsList({state, commit}, {keyword = '', page = 1, categoryId = '', isOnline = '', limit = 10, infoState = '', source = '', loading = true}) {
-    return API.Product.reqGoodsList({
-      keyword,
-      page,
-      goods_material_category_id: categoryId,
-      is_online: isOnline,
-      infoState,
-      source,
-      limit
-    }, loading)
+  getGoodsList({state, commit}, params, loading = true) {
+    return API.FreeShipping.getGoodsList(params, loading)
       .then((res) => {
         if (res.error !== app.$ERR_OK) {
           return false
@@ -52,7 +44,6 @@ export const actions = {
         }
         commit('SET_GOODS_LIST', arr)
         commit('SET_PAGE_TOTAL', statePageTotal)
-        app.$loading.hide()
         return true
       })
       .catch(() => {
@@ -63,20 +54,4 @@ export const actions = {
       })
   },
   // 获取商品详情
-  getGoodsDetailData({commit}, id) {
-    return API.Product.getGoods(id)
-      .then((res) => {
-        if (res.error !== app.$ERR_OK) {
-          return false
-        }
-        let goodsDetail = res.data
-        return goodsDetail
-      })
-      .catch(() => {
-        return false
-      })
-      .finally(() => {
-        app.$loading.hide()
-      })
-  }
 }

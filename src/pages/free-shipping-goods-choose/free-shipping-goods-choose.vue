@@ -9,23 +9,24 @@
       </div>
       <div class="search-con">
         商品链接
-        <input v-model="searchText" type="text" class="search-input" @keydown="_searchGoods">
+        <input v-model="searchText" type="text" class="search-input" @keyup.enter="_searchGoods">
         <div class="search-btn hand" @click="_searchGoods">查找1688商品信息</div>
       </div>
       <div class="big-list">
         <div class="list-header list-box">
           <div v-for="(item,index) in listTitle" :key="index" class="list-item">{{item}}</div>
         </div>
-        <div v-if="goodsList.length" class="list">
-          <div v-for="(item, index) in goodsList" :key="index" class="list-content list-box">
+        <div v-if="goodsList.goods_skus&&goodsList.goods_skus.length>0" class="list">
+          <div v-for="(item, index) in goodsList.goods_skus" :key="index" class="list-content list-box">
             <div class="list-item">
-              <img class="pic-box" :src="item.goods_cover_image" alt="">
+              <img v-if="item.image_url" class="pic-box" :src="item.image_url" alt="">
+              <img v-else-if="goodsList.goods_banner_images&&goodsList.goods_banner_images[0]" class="pic-box" :src="goodsList.goods_banner_images[0]" alt="">
             </div>
-            <div class="list-item">{{item.name}}</div>
-            <div class="list-item">{{item.goods_material_category}}</div>
-            <div class="list-item">{{item.original_price}}</div>
-            <div class="list-item">{{item.id}}</div>
-            <div class="list-item">{{item.sale_unit}}</div>
+            <div class="list-item">{{goodsList.name}}</div>
+            <div class="list-item">{{goodsList.category_str}}</div>
+            <div class="list-item">{{item.purchase_price}}</div>
+            <div class="list-item">{{item.usable_stock}}</div>
+            <div class="list-item">{{item.attribute_str}}</div>
           </div>
         </div>
         <div v-else class="empty-con">
@@ -35,13 +36,15 @@
       </div>
     </div>
     <div class="bottom-btn">
-      <div :class="[goodsList.length?'':'disabled']" class="button hand" @click="_syncSuppliersList">同步</div>
+      <div :class="[goodsList.goods_skus?'':'disabled']" class="button hand" @click="syncGoodsList">同步</div>
     </div>
+    <popup-input ref="popupModal" @confirm="_PIConfirm"></popup-input>
   </div>
 </template>
 
 <script type="text/ecmascript-6">
   import API from '@api'
+  import PopupInput from './popup-input/popup-input'
 
   const PAGE_NAME = 'FREE_SHIPPING_GOODS_CHOOSE'
   const TITLE = '商品选品'
@@ -52,26 +55,17 @@
     page: {
       title: TITLE
     },
+    components: {
+      PopupInput
+    },
     data() {
       return {
         listTitle: LIST_TITLE,
-        goodsList: [],
-        searchText: ''
+        goodsList: {},
+        searchText: 'https://detail.1688.com/offer/598838051167.html?spm=a262eq.12572798.jsczf959.22.79792fb185Qz7b'
       }
     },
-    created() {
-      this.getGoodsList()
-    },
     methods: {
-      getGoodsList() {
-        API.Product.reqGoodsList({},false).then((res) => {
-          if (res.error === this.$ERR_OK) {
-            this.goodsList = res.data
-          } else {
-            this.$toast.show(res.message)
-          }
-        })
-      },
       _searchGoods() {
         if (!this.searchText.length) {
           this.$toast.show('请输入商品链接')
@@ -80,11 +74,59 @@
         console.log('搜索商品！')
         this.getGoodsList()
       },
-      _syncSuppliersList() {
-        if (!this.goodsList.length) return
-        // 同步供应商逻辑，点击就同步，然后弹窗提示绑定供应商，可暂时不绑定
-        this.$refs.popupModal.show()
-      }
+      getGoodsList() {
+        API.FreeShipping.goodsSearch({domin: this.searchText}).then((res) => {
+          if (res.error === this.$ERR_OK) {
+            this.goodsList = res.data
+          } else {
+            this.$toast.show(res.message)
+          }
+        }).finally(()=>{
+          this.$loading.hide()
+        })
+      },
+      // 同步商品
+      syncGoodsList() {
+        if (!this.goodsList.goods_skus) return
+        // 同步商品逻辑，点击就同步，然后弹窗提示绑定供应商，可暂时不绑定
+        API.FreeShipping.goodsCreate(this.goodsList).then((res) => {
+          if (res.error === this.$ERR_OK) {
+            this.$refs.popupModal.show()
+          } else {
+            this.$toast.show(res.message)
+          }
+        }).finally(()=>{
+          this.$loading.hide()
+        })
+      },
+      _PIConfirm(searchText) {
+        this.getSuppliersMsg(searchText)
+      },
+      getSuppliersMsg(searchText) {
+        this.$loading.show()
+        API.FreeShipping.suppliersSearch({domin: searchText}).then((res) => {
+          if (res.error === this.$ERR_OK) {
+            this._syncSuppliersList(res.data)
+          } else {
+            this.$toast.show(res.message)
+            this.$loading.hide()
+          }
+        }).catch(()=>{
+          this.$loading.hide()
+        })
+      },
+      _syncSuppliersList(suppliersMsg) {
+        API.FreeShipping.suppliersCreate(suppliersMsg).then((res) => {
+          if (res.error === this.$ERR_OK) {
+            this.$toast.show('绑定成功！')
+            this.$refs.popupModal.hide()
+          } else {
+            this.$toast.show(res.message)
+          }
+        }).finally(()=>{
+          this.$loading.hide()
+        })
+      },
     }
   }
 </script>
@@ -94,6 +136,7 @@
 
   .big-list
     min-height: 645px
+    max-height: none
   .tab-header
     height: 80px
     display: flex

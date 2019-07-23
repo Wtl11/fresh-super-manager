@@ -13,15 +13,15 @@
       </div>
       <span class="down-tip">资料状态</span>
       <div class="down-item-small">
-        <base-drop-down :select="infoStateSelect" :radius="2" @setValue="setSelectValue($event, 'infoState')"></base-drop-down>
+        <base-drop-down :select="infoStateSelect" :radius="2" @setValue="setSelectValue($event, 'complete_status')"></base-drop-down>
       </div>
       <span class="down-tip">来源</span>
       <div class="down-item-small">
-        <base-drop-down :select="sourceSelect" :radius="2" @setValue="setSelectValue($event, 'source')"></base-drop-down>
+        <base-drop-down :select="sourceSelect" :radius="2" @setValue="setSelectValue($event, 'source_type')"></base-drop-down>
       </div>
       <span class="down-tip">搜索</span>
       <div class="down-item">
-        <base-search :infoText="requestParams.keyWord" placeHolder="商品名称或编码" @search="changeKeyword"></base-search>
+        <base-search :infoText="requestParams.keyword" placeHolder="商品名称或编码" @search="changeKeyword"></base-search>
       </div>
     </div>
     <div class="table-content">
@@ -39,19 +39,19 @@
         <div class="list">
           <div v-for="(item, index) in goodsList" :key="index" class="list-content list-box">
             <div class="list-item">
-              <img class="pic-box" :src="item.goods_cover_image" alt="">
+              <img class="pic-box" :src="item.image_url" alt="">
             </div>
-            <div class="list-item list-double-row">
-              <div class="item-dark">{{item.name}}</div>
-              <div class="item-dark">{{item.goods_sku_code}}</div>
-            </div>
-            <div class="list-item">￥{{item.trade_price}}/{{item.sale_unit}}</div>
-            <div class="list-item">{{item.base_unit}}</div>
-            <div class="list-item">{{item.base_sale_rate}}{{item.base_unit}}/{{item.sale_unit}}</div>
-            <div class="list-item">{{item.goods_sku_code}}</div>
+            <div class="list-item">{{item.name}}</div>
+            <div class="list-item">￥{{item.trade_price}}</div>
+            <div class="list-item">{{item.usable_stock}}</div>
+            <div class="list-item">{{item.source_type_str}}</div>
+            <div class="list-item">{{item.created_at}}</div>
             <div class="list-item list-popup">
-              {{item.goods_material_category}}
-              <div class="popup-tip">{{item.trade_price}}</div>
+              <template v-if="item.goods_update_notice">
+                描述信息变更！
+                <div class="popup-tip">具体更新内容：图文信息变更</div>
+              </template>
+              <template v-else>--</template>
             </div>
             <div class="list-item">
               <div class="list-item-btn" @click="switchBtn(item, index)">
@@ -59,7 +59,7 @@
               </div>
             </div>
             <div class="list-item list-operation-box">
-              <router-link v-if="requestParams.infoState===1" tag="span" :to="'free-shipping-edit-goods?complete=1&id=' + item.id" append class="list-operation list-operation-all">完善资料</router-link>
+              <router-link v-if="item.complete_status===0" tag="span" :to="'free-shipping-edit-goods?complete=1&id=' + item.id" append class="list-operation list-operation-all">完善资料</router-link>
               <router-link v-else tag="span" :to="'free-shipping-edit-goods?id=' + item.id" append class="list-operation">编辑</router-link>
               <span class="list-operation" @click="delGoods(item)">删除</span>
             </div>
@@ -98,21 +98,21 @@
     data() {
       return {
         listTitle: LIST_TITLE,
-        statusTab: [{name: '全部', num: 0, key: ''}, {name: '已上架', num: 0, key: 1}, {name: '已下架', num: 0, key: 0}],
+        statusTab: [{name: '全部', num: 0}, {name: '已上架', num: 0}, {name: '已下架', num: 0}],
         stairSelect: {check: false, show: false, content: '一级类目', type: 'default', data: []},
         secondSelect: {check: false, show: false, content: '二级类目', type: 'default', data: []},
         thirdlySelect: {check: false, show: false, content: '三级类目', type: 'default', data: []},
-        infoStateSelect: {check: false, show: false, content: '待完善', type: 'default', data: [{name:'待完善',id:1},{name:'已完善',id:2}]},
-        sourceSelect: {check: false, show: false, content: '1688市场', type: 'default', data: [{name:'1688市场',id:1},{name:'自建',id:2}]},
+        infoStateSelect: {check: false, show: false, content: '待完善', type: 'default', data: [{name:'待完善',id:0},{name:'已完善',id:1}]},
+        sourceSelect: {check: false, show: false, content: '1688市场', type: 'default', data: [{name:'1688市场',id:2},{name:'自建',id:1}]},
         showIndex: false,
         oneBtn: false,
         requestParams: {
-          categoryId: '',
-          keyWord: '',
-          isOnline: '',
-          page: 1,
-          infoState: 1,
-          source: 1
+          goods_category_id: '',
+          keyword: '',
+          is_online: '',
+          complete_status: '',
+          source_type: 2,
+          page: 1
         },
         franListKeyword: '',
         curItem: ''
@@ -122,17 +122,15 @@
       ...fsGoodsComputed
     },
     created() {
-      this.getGoodsStatus()
-      this.getCategoriesData()
+      this.getGoodsOnlineStatus()
+      this.getCategoryData()
+      this.getGoodsList(this.requestParams)
     },
     methods: {
       ...fsGoodsMethods,
       // 获取状态列表
-      getGoodsStatus() {
-        API.Product.reqGoodsStatus({
-          keyword: this.requestParams.keyWord,
-          goods_material_category_id: this.requestParams.categoryId
-        }, false).then((res) => {
+      getGoodsOnlineStatus() {
+        API.FreeShipping.goodsOnlineStatus(this.requestParams).then((res) => {
           if (res.error !== this.$ERR_OK) {
             this.$toast.show(res.message)
             return
@@ -147,7 +145,7 @@
         })
       },
       // 获取类目列表
-      getCategoriesData() {
+      getCategoryData() {
         API.Product.getCategoryList({parent_id: -1}, false).then((res) => {
           if (res.error === this.$ERR_OK) {
             this.stairSelect.data = res.data
@@ -157,14 +155,23 @@
           }
         })
       },
+      // 获取商品列表
+      _getGoodsList(resPage=true) {
+        if (resPage) {
+          this.requestParams.page = 1
+          this.$refs.pagination.beginPage()
+        }
+        this.getGoodsList(this.requestParams)
+        this.getGoodsOnlineStatus()
+      },
       // 搜索
       changeKeyword(text) {
-        this.requestParams.keyWord = text
+        this.requestParams.keyword = text
         this._getGoodsList()
       },
       // 切换状态
       changeTradeType(selectStatus) {
-        this.requestParams.isOnline = selectStatus.value
+        this.requestParams.is_online = selectStatus.value
         this._getGoodsList()
       },
       // 选择一级类目
@@ -173,19 +180,19 @@
         this.secondSelect.data = data.list
         this.thirdlySelect.content = '三级类目'
         this.thirdlySelect.data = ''
-        this.requestParams.categoryId = data.id
+        this.requestParams.goods_category_id = data.id
         this._getGoodsList()
       },
       // 选择二级类目
       setSecondValue(data) {
         this.thirdlySelect.content = '三级类目'
         this.thirdlySelect.data = data.list
-        this.requestParams.categoryId = data.id
+        this.requestParams.goods_category_id = data.id
         this._getGoodsList()
       },
       // 选择三级类目
       setThirdlyValue(data) {
-        this.requestParams.categoryId = data.id
+        this.requestParams.goods_category_id = data.id
         this._getGoodsList()
       },
       // 选择资料状态/来源
@@ -200,23 +207,22 @@
       },
       // 上下架
       switchBtn(item, index) {
-        if (item.goods_sku_code.length === 0 && item.is_online * 1 === 0) {
-          this.$toast.show('请先补充商品编码再上架')
-          return
-        }
-        if (item.goods_material_category_id <= 0 && item.is_online * 1 === 0) {
-          this.$toast.show('请先补充类目再上架')
-          return
-        }
+        // if (item.goods_sku_code.length === 0 && item.is_online * 1 === 0) {
+        //   this.$toast.show('请先补充商品编码再上架')
+        //   return
+        // }
+        // if (item.goods_material_category_id <= 0 && item.is_online * 1 === 0) {
+        //   this.$toast.show('请先补充类目再上架')
+        //   return
+        // }
         let data = {
-          goods_material_id: item.id,
+          goods_id: item.id,
           is_online: item.is_online * 1 === 1 ? 0 : 1
         }
-        API.Product.onlineGoods(data, false).then((res) => {
+        API.FreeShipping.goodsOnline(data).then((res) => {
           if (res.error === this.$ERR_OK) {
-            // this.goodsList[index].is_online = item.is_online * 1 === 1 ? 0 : 1
             this.oneBtn = true
-            this.$refs.confirm.show(item.is_online * 1 === 1 ? '该商品已成功隐藏' : '该商品已成功展示')
+            this.$refs.confirm.show(item.is_online * 1 === 1 ? '该商品已成功下架' : '该商品已成功上架')
             this._getGoodsList(false)
           } else {
             this.$toast.show(res.message)
@@ -230,7 +236,7 @@
         this.$refs.confirm.show('确定要删除该商品？')
       },
       delConfirm() {
-        API.Product.delGoods(this.curItem.id).then((res) => {
+        API.FreeShipping.goodsDelete(this.curItem.id).then((res) => {
           if (res.error === this.$ERR_OK) {
             this.$toast.show('删除成功')
             if (this.goodsList.length === 1 && this.requestParams.page * 1 !== 1) {
@@ -241,15 +247,6 @@
             this.$toast.show(res.message)
           }
         })
-      },
-      // 获取商品列表
-      _getGoodsList(resPage=true) {
-        if (resPage) {
-          this.requestParams.page = 1
-          this.$refs.pagination.beginPage()
-        }
-        this.getGoodsList({...this.requestParams, loading: false})
-        this.getGoodsStatus()
       }
     }
   }
