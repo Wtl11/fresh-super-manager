@@ -123,7 +123,7 @@
 
   const PAGE_NAME = 'EDIT_FRANCHISE'
   const TITLE = '新建加盟商'
-  const TELREG = /^(13[0-9]|14[0-9]|15[0-3,5-9]|16[6]|17[0135678]|18[0-9]|19[89])\d{8}$/
+  const TELREG = /^(([1-9][0-9]*)|([1-9][0-9]*\.\d{1,2})|([0-9])|([0-9]*\.\d{1,2}))$/
 
   export default {
     name: PAGE_NAME,
