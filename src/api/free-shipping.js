@@ -103,6 +103,11 @@ export default {
     let url = '/market/api/backend/orders'
     return request.get(url, data, loading)
   },
+  // 订单列表状态统计
+  getOrderListStatus(data, loading = false) {
+    let url = '/market/api/backend/order-status-statistic'
+    return request.get(url, data, loading)
+  },
   // 订单详情
   getOrderInfo(id, loading = true) {
     let url = `/market/api/backend/orders/${id}`

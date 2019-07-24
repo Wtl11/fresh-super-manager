@@ -113,7 +113,7 @@ export const fsGoodsMethods = {
 
 // 全国包邮-订单
 export const fsOrderComputed = {
-  ...mapGetters('fsOrder', ['list', 'pageDetail', 'page', 'date', 'keyword', 'type', 'orderType'])
+  ...mapGetters('fsOrder', ['list', 'pageDetail', 'page', 'date', 'keyword', 'type'])
 }
 export const fsOrderMethods = {
   ...mapActions('fsOrder', ['setPage', 'setOrderType', 'setDate', 'setKeyword', 'getOrderList'])

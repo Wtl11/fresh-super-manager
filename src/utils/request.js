@@ -38,16 +38,19 @@ http.interceptors.response.use(
 
 function checkStatus(response) {
   // _loading
-  // 全国包邮1688授权
-  if(response && response.code === 14001) {
-    window.open("https://auth.1688.com/oauth/authorize?client_id=6699805&site=1688&redirect_uri=https%3A%2F%2Fmarket-api.jkweixin.net%2Fmarket%2Fapi%2Fauthorized")
-    return
-  }
   // 如果http状态码正常，则直接返回数据
   if (
     response &&
     (response.status === 200 || response.status === 201 || response.status === 304 || response.status === 422)
   ) {
+    // 全国包邮1688授权
+    if(response && response.data.code === 14001) {
+      window.open("https://auth.1688.com/oauth/authorize?client_id=6699805&site=1688&redirect_uri=https%3A%2F%2Fmarket-api.jkweixin.net%2Fmarket%2Fapi%2Fauthorized")
+      return {
+        status: ERR_NO,
+        msg: '请重新登录1688账号'
+      }
+    }
     return response
     // 如果不需要除了data之外的数据，可以直接 return response.data
   }

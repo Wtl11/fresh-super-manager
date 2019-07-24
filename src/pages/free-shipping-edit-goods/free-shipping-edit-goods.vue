@@ -3,7 +3,7 @@
     <div class="identification">
       <div class="identification-page">
         <img src="./icon-wanshan_commodity@2x.png" class="identification-icon">
-        <p class="identification-name">{{id ? '编辑商品' : '完善资料'}}</p>
+        <p class="identification-name">{{isComplete ? '完善资料' : '编辑商品'}}</p>
       </div>
       <div class="function-btn">
       </div>
@@ -199,7 +199,7 @@
   // import _ from 'lodash'
 
   const PAGE_NAME = 'EDIT_GOODS'
-  const TITLE = '新建商品'
+  const TITLE = '编辑商品'
 
   export default {
     name: PAGE_NAME,
@@ -218,7 +218,6 @@
       }
     },
     data() {
-      // const params = this.$route.meta.params
       return {
         picNum: 5,
         showLoading: false,
@@ -245,6 +244,7 @@
         thirdlySelect: {check: false, show: false, content: '三级类目', type: 'default', data: []},
         supplierSelect: {check: false, show: false, content: '选择供应商', type: 'default', data: []},
         id: this.$route.query.id || '',
+        isComplete: this.$route.query.complete || false,
         isSubmit: false,
         selectedIdx: 0
       }
@@ -252,7 +252,6 @@
     created() {
       this.getGoodsInfo()
       this.getCategoryData()
-      this._getSuppliersList()
     },
     methods: {
       getGoodsInfo() {
@@ -267,15 +266,12 @@
               this.msg.sale_name = res.data.name
             }
             this._setData()
+            this._getSuppliersList()
           })
           .finally((e) => {
             this.$loading.hide()
           })
       },
-      /**
-       * 设置默认数据 -> 编辑状态
-       * @private
-       */
       _setData() {
         // if (!_.isEmpty(this.detail)) {
         // this.msg = _.cloneDeep(this.detail)
@@ -323,8 +319,12 @@
               return
             }
             if (res.data.length>0&&res.data[0].name) {
-              this.supplierSelect.content = res.data[0].name
               this.supplierSelect.data = res.data
+              res.data.forEach((item)=>{
+                if (item.id === this.msg.supplier_id) {
+                  this.supplierSelect.content = item.name
+                }
+              })
             }
           })
       },
@@ -413,6 +413,7 @@
           return
         }
         let skuCheck = false
+        // 遍历数组检查是否有选择规格和输入商品编码
         for(let i = 0; i < this.msg.goods_skus.length; i++) {
           const item = this.msg.goods_skus[i]
           if(item.is_default===1) {
@@ -437,6 +438,7 @@
           this.$toast.show('划线价请大于销售单价')
           return
         }
+        // 把输入的划线价、单价填入选择的规格
         this.msg.goods_skus[this.selectedIdx].original_price = this.goods_skus.original_price
         this.msg.goods_skus[this.selectedIdx].trade_price = this.goods_skus.trade_price
         this.isSubmit = true

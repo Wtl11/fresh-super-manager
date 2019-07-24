@@ -69,15 +69,15 @@
 
   const PAGE_NAME = 'FREE_SHIPPING_ORDER_MANAGE'
   const TITLE = '订单管理'
-  const LIST_TITLE = [{name:'订单号',class:'width-3'}, {name:'会员名称',class:'width-3'}, {name:'订单总价',class:'width-2'}, {name:'实付金额',class:'width-2'}, {name:'所属社区',class:'width-3'}, {name:'状态',class:'width-1'}, {name:'操作',class:''}]
+  const LIST_TITLE = [{name:'订单号',class:'width-3'}, {name:'会员名称',class:'width-3'}, {name:'订单总价',class:'width-2'}, {name:'实付金额',class:'width-2'}, {name:'供应商',class:'width-3'}, {name:'状态',class:'width-1'}, {name:'操作',class:''}]
   const STATUS_TAB = [
-    {name: '全部', key: '', num: 0},
-    {name: '待推送', key: '0', num: 0},
-    {name: '待结算', key: '1', num: 0},
-    {name: '待发货', key: '3', num: 0},
-    {name: '配送中', key: '4', num: 0},
-    {name: '已完成', key: '5', num: 0},
-    {name: '已关闭', key: '6', num: 0}
+    {name: '全部', status: '', num: 0},
+    {name: '待推送', status: 0, num: 0},
+    {name: '待结算', status: 1, num: 0},
+    {name: '待发货', status: 2, num: 0},
+    {name: '配送中', status: 3, num: 0},
+    {name: '已完成', status: 4, num: 0},
+    {name: '已关闭', status: 5, num: 0}
   ]
 
   export default {
@@ -125,34 +125,34 @@
         } else {
           this.orderList = this.list
         }
-        // this._getOrderType()
+        this._getOrderType()
         if (!first) {
           this.$refs.pagination.beginPage()
         }
       },
       // 获取订单状态统计
       async _getOrderType() {
-        let res = await API.Trade.getTradeOrderType({
+        API.FreeShipping.getOrderListStatus({
           keyword: this.keyword,
-          date: this.date[0] && this.date[1] ? this.date.join(',') : ''
+          start_time: this.date[0],
+          end_time: this.date[1]
         })
-        if (res.error !== this.$ERR_OK) {
-          console.warn('获取交易状态类型失败')
-          return
-        }
-        let selectData = res.data
-        // this.dispatchSelect = selectData.map((item) => {
-        //   item.num = item.statistic
-        //   item.name = item.status_str
-        //   return item
-        // })
-        this.dispatchSelect.forEach((item) => {
-          item.num = selectData[0].statistic
-        })
+          .then((res) => {
+            if (res.error !== this.$ERR_OK) {
+              this.$toast.show(res.message)
+              // return
+            }
+            let selectData = res.data
+            this.dispatchSelect = selectData.map((item) => {
+              item.num = item.statistic
+              item.name = item.status_str
+              return item
+            })
+          })
       },
       changeOrderType(select) {
-        this.tabType = select.key
-        this.setOrderType(select.key)
+        this.tabType = select.status
+        this.setOrderType(select.status)
         this._getOrderList()
       },
       changeDate(date) {
@@ -184,6 +184,8 @@
             }
             this.payUrl = res.data.pay_url
             this.$refs.popupModal.show()
+          }).finally((e) => {
+            this.$loading.hide()
           })
       },
       // 获取订单详情
