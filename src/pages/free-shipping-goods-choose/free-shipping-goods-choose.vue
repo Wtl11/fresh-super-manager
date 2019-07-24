@@ -62,7 +62,7 @@
       return {
         listTitle: LIST_TITLE,
         goodsList: {},
-        searchText: 'https://detail.1688.com/offer/598838051167.html?spm=a262eq.12572798.jsczf959.22.79792fb185Qz7b'
+        searchText: ''
       }
     },
     methods: {

@@ -3,7 +3,7 @@
 import axios from 'axios'
 import * as Utils from './request-utils'
 
-const TIME_OUT = 60000
+const TIME_OUT = 10000
 const ERR_OK = 0
 const ERR_NO = -404
 const COMMON_HEADER = {}

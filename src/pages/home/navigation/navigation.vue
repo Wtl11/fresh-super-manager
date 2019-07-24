@@ -28,6 +28,26 @@
   // const HEIGHT = 40
   const GOODS = [
     {
+      title: '1688商品',
+      children: [
+        {
+          title: '商品管理',
+          url: '/home/free-shipping-goods-manage',
+          isLight: false
+        },
+        {
+          title: '商品选品',
+          url: '/home/free-shipping-goods-choose',
+          isLight: false
+        },
+        {
+          title: '供应商管理',
+          url: '/home/free-shipping-suppliers-manage',
+          isLight: false
+        }
+      ]
+    },
+    {
       title: '商品',
       children: [
         {
@@ -43,6 +63,18 @@
         {
           title: '辅助资料',
           url: '/home/auxiliary-information',
+          isLight: false
+        }
+      ]
+    }
+  ]
+  const ORDER = [
+    {
+      title: '订单',
+      children: [
+        {
+          title: '订单管理',
+          url: '/home/free-shipping-order-manage',
           isLight: false
         }
       ]
@@ -100,6 +132,14 @@
       isLight: true,
       second: GOODS,
       url: '/home/product-list'
+    },
+    {
+      name: '订单',
+      icon: require('./icon-content1@2x.png'),
+      activeIcon: require('./icon-content2@2x.png'),
+      isLight: true,
+      second: ORDER,
+      url: '/home/free-shipping-order-manage'
     },
     {
       name: '客户',
