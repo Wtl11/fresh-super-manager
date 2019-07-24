@@ -520,11 +520,6 @@
       //   this.addData.coverVideo.url = video.full_url
       //   this.addData.coverImage.id = video.cover_image_id
       //   this.addData.coverImage.url = video.full_cover_url
-        // if (!this.addData.coverImage.id) {
-        //   setTimeout(() => {
-        //     this._getCoverImage(this.addData.coverVideo.file_id)
-        //   }, 10000)
-        // }
       // },
       getCoverImage(image) {
         this.addData.coverImage.url = image.url
