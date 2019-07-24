@@ -9,8 +9,8 @@
       </div>
       <div class="main-input">
         <div class="text-con">
-          <p style="margin-bottom: 12px">订单数：<span class="num-val">1234</span></p>
-          <p>合计支付金额：<span class="num-val">1234</span>元</p>
+          <p style="margin-bottom: 12px">订单数：<span class="num-val">{{count}}</span></p>
+          <p>合计支付金额：<span class="num-val">{{total}}</span>元</p>
         </div>
         <div class="btn-group">
           <span class="btn cancel" @click="cancel">取消</span>
@@ -29,6 +29,16 @@
   export default {
     name: COMPONENT_NAME,
     components: {DefaultModal},
+    props: {
+      count: {
+        type: Number,
+        default: 0
+      },
+      total: {
+        type: Number,
+        default: 0
+      },
+    },
     data() {
       return {
         isSubmit: false

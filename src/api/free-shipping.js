@@ -104,8 +104,8 @@ export default {
     return request.get(url, data, loading)
   },
   // 订单详情
-  getOrderInfo(data, id, loading = true) {
+  getOrderInfo(id, loading = true) {
     let url = `/market/api/backend/orders/${id}`
-    return request.get(url, data, loading)
+    return request.get(url, null, loading)
   }
 }

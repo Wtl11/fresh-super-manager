@@ -1,0 +1,291 @@
+@import "./variable.styl"
+@import "./private.styl"
+@import "./mixin.styl"
+.detail-content
+  flex: 1
+  background: $color-white
+  padding: 0 20px
+  box-sizing: border-box
+
+.detail-item
+  layout()
+  .top
+    border-bottom-1px($color-line)
+    layout(row)
+    position: relative
+    .title
+      padding-bottom: 15px
+      box-sizing: border-box
+      font-family: $font-family-regular
+      font-size: $font-size-16
+      color: $color-text-main
+    .line
+      transition: all .3s
+      background: $color-main
+      height: 2px
+      width: 34px
+      position: absolute
+      left: 0
+      z-index: 10
+      bottom: 0
+
+.bot
+  layout(row)
+  flex-wrap: warp
+  margin-bottom: 26px
+  .info-item
+    word-break: break-all
+    font-family: $font-family-regular
+    font-size: $font-size-14
+    color: $color-text-main
+    line-height: 18px
+    width: 230px
+    padding-bottom: 20px
+    margin-right: 80px
+    &:last-child
+      width: 320px
+      margin-right: 0
+
+.sobot
+  padding: 30px 0 0px 15px
+  width: 1280px
+  box-sizing: border-box
+
+.goods-list
+  margin: 28px 0px 0px
+  width: 100%
+  box-sizing: border-box
+  .ro-order-list
+    width: 100%
+    .ro-order-list-box
+      width: 100%
+      padding: 0 20px
+      layout(row)
+      white-space: nowrap
+      height: 60px
+      box-sizing: border-box
+      align-items: center
+      background: $color-white
+      position: relative
+      &:nth-child(2n)
+        background: #F5F7FA
+      &:hover
+        background: #F7FAF5
+      &:before
+        content: ""
+        pointer-events: none // 解决iphone上的点击无效Bug
+        display: block
+        position: absolute
+        left: 0
+        top: 0
+        transform-origin: 0 0
+        border-right: 1px solid #E9ECEE
+        border-bottom: 1px solid #E9ECEE
+        border-left: 1px solid #E9ECEE
+        box-sizing border-box
+        width: 200%
+        height: 200%
+        transform: scale(.5) translateZ(0)
+      @media (-webkit-min-device-pixel-ratio: 3), (min-device-pixel-ratio: 3)
+        width: 300%
+        height: 300%
+        transform: scale(1 / 3) translateZ(0)
+      .ro-order-list-item
+        font-family: $font-family-regular
+        font-size: $font-size-14
+        color: $color-text-main
+      .ro-order-list-item-double
+        white-space: normal
+        line-height: 18px
+        no-wrap-plus()
+  .ro-order-list-header
+    width: 100%
+    layout(row)
+    padding: 0 20px
+    white-space: nowrap
+    box-sizing: border-box
+    align-items: center
+    height: 45px
+    background: #F5F7FA
+    font-size: $font-size-14
+    border-bottom-1px(#E9ECEE)
+    &:before
+      content: ""
+      pointer-events: none // 解决iphone上的点击无效Bug
+      display: block
+      position: absolute
+      left: 0
+      top: 0
+      transform-origin: 0 0
+      border-right: 1px solid #E9ECEE
+      border-top: 1px solid #E9ECEE
+      border-left: 1px solid #E9ECEE
+      box-sizing border-box
+      width: 200%
+      height: 200%
+      transform: scale(.5) translateZ(0)
+    @media (-webkit-min-device-pixel-ratio: 3), (min-device-pixel-ratio: 3)
+      width: 300%
+      height: 300%
+      transform: scale(1 / 3) translateZ(0)
+    .ro-order-list-item
+      font-family: $font-family-regular
+      font-size: $font-size-14
+      color: $color-text-main
+      line-height: 16px
+
+.ro-order-list-footer
+  background: $color-white
+  layout(row)
+  align-items: center
+  justify-content: flex-end
+  width: 100%
+  padding-top: 20px
+  .ro-order-list-foot-box
+    layout(row)
+    justify-content: flex-end
+  .foot-item
+    font-family: $font-family-regular
+    font-size: $font-size-14
+    color: $color-text-main
+    margin-left: 48px
+    &:first-child
+      margin-left: 0
+
+.essential-information
+  margin-bottom: 26px
+  .essential-information-detail
+    display: flex
+    margin-top: 30px
+    padding: 0 20px
+    box-sizing: border-box
+    flex-wrap: wrap
+    .essential-information-item
+      margin-bottom: 24px
+      font-size: $font-size-14
+      font-family: $font-family-regular
+      color: $color-text-main
+      word-break: break-all
+      margin-right: 80px
+      line-height: 20px
+      width: 230px
+
+.list-of-commodities
+  margin-bottom: 20px
+  box-sizing: border-box
+  .com-list-box
+    .com-list-double
+      white-space: normal
+      line-height: 18px
+      no-wrap-plus()
+
+.history-record
+  box-sizing: border-box
+  padding: 0 20px
+  padding-bottom: 80px
+
+.commodities-list-header
+  margin-top: 28px
+  min-height: 45px
+  background: #F5F7FA
+  position: relative
+  &:before
+    content: ""
+    pointer-events: none // 解决iphone上的点击无效Bug
+    display: block
+    position: absolute
+    left: 0
+    top: 0
+    transform-origin: 0 0
+    border: 1px solid #E9ECEE
+    box-sizing border-box
+    width: 200%
+    height: 200%
+    transform: scale(.5) translateZ(0)
+  @media (-webkit-min-device-pixel-ratio: 3), (min-device-pixel-ratio: 3)
+    width: 300%
+    height: 300%
+    transform: scale(1 / 3) translateZ(0)
+  .com-list-item
+    font-size: $font-size-14
+
+.com-list-content
+  min-height: 58.5px
+  &:before
+    content: ""
+    pointer-events: none // 解决iphone上的点击无效Bug
+    display: block
+    position: absolute
+    left: 0
+    top: 0
+    transform-origin: 0 0
+    border-right: 1px solid #E9ECEE
+    border-left: 1px solid #E9ECEE
+    border-bottom: 1px solid #E9ECEE
+    box-sizing border-box
+    width: 200%
+    height: 200%
+    transform: scale(.5) translateZ(0)
+  @media (-webkit-min-device-pixel-ratio: 3), (min-device-pixel-ratio: 3)
+    width: 300%
+    height: 300%
+    transform: scaleX(1 / 3) translateZ(0)
+  &:nth-child(2n)
+    background: #F5F7FA
+  &:nth-child(2n - 1)
+    background: $color-white
+  &:hover
+    background: #F7FAF5
+  .com-list-item
+    font-size: $font-size-14
+
+.com-list-box
+  padding-left: 30px
+  box-sizing: border-box
+  display: flex
+  align-items: center
+  position: relative
+  .com-list-item
+    flex: 1
+    padding-right: 20px
+    box-sizing: border-box
+    no-wrap()
+    color: $color-text-main
+    font-family: $font-family-regular
+    &:nth-child(1)
+      flex: 0.5
+
+.total-money
+  text-align: right
+  margin-top: 21px
+  font-family: $font-family-regular
+  color: $color-text-main
+  font-size: $font-size-14
+
+/*基本信息类头部盒子样式*/
+.content-header
+  border-bottom-1px($color-line)
+  display: flex
+  align-items: center
+  justify-content: space-between
+  position: relative
+  box-sizing: border-box
+  padding-bottom: 16px
+  line-height: 1
+  .excel
+    margin-left: 20px
+    &:hover
+      color: $color-white
+  &:before
+    content: ''
+    position: absolute
+    width: 34px
+    height: 2px
+    background: $color-main
+    border-radius: 2px
+    bottom: 0px
+    left: 0
+  .content-title
+    color: $color-text-main
+    font-family: $font-family-regular
+    font-size: $font-size-16

@@ -259,6 +259,7 @@
         API.FreeShipping.getGoodsInfo(this.id)
           .then((res) => {
             if (res.error !== this.$ERR_OK) {
+              this.$toast.show(res.message)
               return
             }
             this.msg = res.data

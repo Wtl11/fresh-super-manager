@@ -65,11 +65,13 @@ export const actions = {
       status: type,
       keyword,
       page,
-      date: startDate && endDate ? `${startDate},${endDate}` : ''
+      start_time: startDate,
+      end_time: endDate
     }
     return API.FreeShipping.getOrderList(data)
       .then((res) => {
         if (res.error !== app.$ERR_OK) {
+          app.$toast.show(res.message)
           return
         }
         let list = res.data
@@ -90,23 +92,19 @@ export const actions = {
         app.$loading.hide()
       })
   },
-  setTradeType({commit, dispatch}, select) {
-    commit('SET_TYPE', select.status)
+  setOrderType({commit, dispatch}, select) {
+    commit('SET_TYPE', select)
     commit('SET_PAGE', 1)
-    dispatch('getTradeList')
   },
   setPage({commit, dispatch}, page) {
     commit('SET_PAGE', page)
-    dispatch('getTradeList')
   },
   setDate({commit, dispatch}, date) {
     commit('SET_DATE', date)
     commit('SET_PAGE', 1)
-    dispatch('getTradeList')
   },
   setKeyword({commit, dispatch}, keyword) {
     commit('SET_KEYWORD', keyword)
     commit('SET_PAGE', 1)
-    dispatch('getTradeList')
   }
 }

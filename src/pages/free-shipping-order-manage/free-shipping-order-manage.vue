@@ -15,33 +15,33 @@
         <div class="identification-page">
           <img src="./icon-product_list@2x.png" class="identification-icon">
           <p class="identification-name">订单列表</p>
-          <base-status-tab :statusList="dispatchSelect" @setStatus="changeTradeType"></base-status-tab>
+          <base-status-tab :statusList="dispatchSelect" @setStatus="changeOrderType"></base-status-tab>
         </div>
         <div class="function-btn">
-          <div v-if="tabType === 'wait_pay'" class="btn-main btn-main-end" @click="_orderPay">付款</div>
+          <div v-if="tabType === '1' && orderList.length > 0" class="btn-main btn-main-end" @click="_orderPay">付款</div>
         </div>
       </div>
       <div class="big-list">
         <div class="list-header list-box">
-          <div v-if="tabType === 'wait_pay'" class="list-item small-item">
+          <div v-if="tabType === '1'" class="list-item small-item">
             <div :class="[allChecked?'checked':'']" class="list-radio" @click="_radioAllChecked"></div>
           </div>
           <div v-for="(item,index) in listTitle" :key="index" :class="item.class" class="list-item">{{item.name}}</div>
         </div>
         <div v-if="orderList.length" class="list">
           <div v-for="(item, index) in orderList" :key="index" class="list-content list-box">
-            <div v-if="tabType === 'wait_pay'" class="list-item small-item">
+            <div v-if="tabType === '1'" class="list-item small-item">
               <div :class="[item.checked?'checked':'']" class="list-radio" @click="_radioChecked(item)"></div>
             </div>
             <div class="list-item list-double-row width-3">
               <div class="item-dark">{{item.order_sn}}</div>
               <div class="item-dark order-date">{{item.created_at}}</div>
             </div>
-            <div class="list-item width-3">{{item.store_name}}</div>
+            <div class="list-item width-3">{{item.buyer_name}}</div>
             <div class="list-item width-2">{{item.total}}</div>
-            <div class="list-item width-2">{{item.total}}</div>
-            <div class="list-item width-3">{{item.out_trade_sn}}</div>
-            <div class="list-item width-1">{{item.trade_type}}</div>
+            <div class="list-item width-2">{{item.real_pay}}</div>
+            <div class="list-item width-3">{{item.distributor_name}}</div>
+            <div class="list-item width-1">{{item.status_str}}</div>
             <div class="list-item list-operation-box">
               <router-link tag="span" :to="'free-shipping-order-detail?id=' + item.order_id" append class="list-operation">详情</router-link>
             </div>
@@ -49,7 +49,6 @@
         </div>
       </div>
       <div class="pagination-box">
-        <!--:pageDetail="pageTotal"-->
         <base-pagination
           ref="pagination"
           :pageDetail="pageDetail"
@@ -59,7 +58,7 @@
         </base-pagination>
       </div>
     </div>
-    <popup-confirm ref="popupModal" @confirm="_PIConfirm"></popup-confirm>
+    <popup-confirm ref="popupModal" :count="orderInfo.count" :total="orderInfo.total" @confirm="_PIConfirm"></popup-confirm>
   </div>
 </template>
 
@@ -72,13 +71,13 @@
   const TITLE = '订单管理'
   const LIST_TITLE = [{name:'订单号',class:'width-3'}, {name:'会员名称',class:'width-3'}, {name:'订单总价',class:'width-2'}, {name:'实付金额',class:'width-2'}, {name:'所属社区',class:'width-3'}, {name:'状态',class:'width-1'}, {name:'操作',class:''}]
   const STATUS_TAB = [
-    {name: '全部', value: '', key: 'all', num: 0},
-    {name: '待推送', key: 'wait_release', num: 0},
-    {name: '待结算', key: 'wait_pay', num: 0},
-    {name: '待发货', key: 'wait_release', num: 0},
-    {name: '配送中', key: 'wait_release', num: 0},
-    {name: '已完成', key: 'wait_release', num: 0},
-    {name: '已关闭', key: 'wait_purchase', num: 0}
+    {name: '全部', key: '', num: 0},
+    {name: '待推送', key: '0', num: 0},
+    {name: '待结算', key: '1', num: 0},
+    {name: '待发货', key: '3', num: 0},
+    {name: '配送中', key: '4', num: 0},
+    {name: '已完成', key: '5', num: 0},
+    {name: '已关闭', key: '6', num: 0}
   ]
 
   export default {
@@ -92,10 +91,12 @@
     data() {
       return {
         dispatchSelect: STATUS_TAB,
-        tabType: 'all',
+        tabType: '',// 列表订单状态，用于判断是否是待结算
         listTitle: LIST_TITLE,
         orderList: [],
-        allChecked: false
+        allChecked: false,
+        payUrl: '',
+        orderInfo: {count: 0, total: 0}
       }
     },
     computed: {
@@ -110,17 +111,27 @@
     },
     methods: {
       ...fsOrderMethods,
+      async _getOrderList() {
+        await this.getOrderList()
+        this._setOrderData()
+      },
       _setOrderData(first=false) {
         this.allChecked = false
-        this.orderList = this.list.map((item) => {
-          return {checked: false, ...item}
-        })
-        this._getTradeOrderType()
+        // 待结算状态增加订单勾选
+        if (this.list.length > 0 && this.tabType === '1') {
+          this.orderList = this.list.map((item) => {
+            return {checked: false, ...item}
+          })
+        } else {
+          this.orderList = this.list
+        }
+        // this._getOrderType()
         if (!first) {
           this.$refs.pagination.beginPage()
         }
       },
-      async _getTradeOrderType() {
+      // 获取订单状态统计
+      async _getOrderType() {
         let res = await API.Trade.getTradeOrderType({
           keyword: this.keyword,
           date: this.date[0] && this.date[1] ? this.date.join(',') : ''
@@ -139,31 +150,63 @@
           item.num = selectData[0].statistic
         })
       },
-      changeTradeType(select) {
+      changeOrderType(select) {
         this.tabType = select.key
-        this.setTradeType(select)
-        this._setOrderData()
+        this.setOrderType(select.key)
+        this._getOrderList()
       },
       changeDate(date) {
         this.setDate(date)
-        this._setOrderData()
+        this._getOrderList()
       },
       changeKeyword(keyword) {
         this.setKeyword(keyword)
-        this._setOrderData()
+        this._getOrderList()
       },
+      // 获取支付链接
       _orderPay() {
-        // 付款按钮，发起获取支付信息
-        console.log('获取支付信息！')
-        this.$refs.popupModal.show()
+        let payArr = []
+        this.orderList.forEach((item) => {
+          if(item.checked) {
+            payArr.push(item.order_id)
+          }
+        })
+        if(payArr.length<=0) {
+          this.$toast.show('请选择要支付的订单')
+          return
+        }
+        // 付款按钮，获取支付信息
+        API.FreeShipping.getOutOrderPayUrl({order_ids: payArr})
+          .then((res) => {
+            if (res.error !== this.$ERR_OK) {
+              this.$toast.show(res.message)
+              return
+            }
+            this.payUrl = res.data.pay_url
+            this.$refs.popupModal.show()
+          })
+      },
+      // 获取订单详情
+      _getOrderInfo() {
+        API.FreeShipping.getOrderInfo()
+          .then((res) => {
+            if (res.error !== this.$ERR_OK) {
+              return
+            }
+            this.orderInfo = res.data
+            this.$refs.popupModal.show()
+          })
+          .finally((e) => {
+            this.$loading.hide()
+          })
       },
       _PIConfirm() {
         // 弹窗点击支付，跳转支付链接
-        console.log('支付成功！')
         this.$refs.popupModal.hide()
+        this.payUrl&&window.open(this.payUrl)
       },
+      // 单选
       _radioChecked(item) {
-        // 单选
         item.checked = !item.checked
         let allChecked = 0
         this.orderList.forEach((item)=>{
@@ -171,10 +214,11 @@
             allChecked++
           }
         })
+        // 当前列表全部都选中了就把全选勾上
         this.allChecked = allChecked === this.orderList.length
       },
+      // 全选
       _radioAllChecked() {
-        // 全选
         this.allChecked = !this.allChecked
         this.orderList.forEach((item) => {
           item.checked = this.allChecked
