@@ -85,8 +85,11 @@
           </div>
         </div>
         <div v-else class="content-article-detail-video" @click.self="videoClick">
-          <video v-if="data.videoContent.url" :src="data.videoContent.url" class="full-screen-video" @click="videoClick">
+          <video v-if="data.videoContent.url" ref="articleVideo" :src="data.videoContent.url" class="full-screen-video"
+                 @click="videoClick" @play="videoPause = false" @pause="videoPause = true"
+          >
           </video>
+          <img v-if="data.videoContent.url && videoPause" src="./icon-play_big@2x.png" alt="" class="pause-icon" @click="videoClick">
           <div class="info-wrap" @click="videoClick">
             <div class="auth-wrap">
               <div v-if="data.authPhoto.url" class="auth-photo-wrap">
@@ -145,16 +148,17 @@
     data() {
       return {
         goodsStatus: false,
-        goodsListVisible: false
+        goodsListVisible: false,
+        videoPause:true
       }
     },
     computed: {},
     methods: {
       videoClick() {
+        if(!this.data.videoContent || !this.data.videoContent.url)  return
+        console.log()
+        this.videoPause ? this.$refs.articleVideo.play() : this.$refs.articleVideo.pause()
         this.goodsListVisible = false
-      },
-      showGoodsListBtn() {
-        this.goodsListVisible = true
       }
     }
   }
@@ -416,7 +420,14 @@
       bottom 0
       overflow hidden
       background #000
-
+      .pause-icon
+        position:absolute
+        top:50%
+        left: 50%
+        transform translate(-50%,-50%)
+        width:80px
+        height:@width
+        z-index:200
       .bottom-emty-20
         height: 20px
 
@@ -474,9 +485,9 @@
           align-items center
 
           .operate-icon
-            width: 36px
-            height: 36px
-            margin-right: 20px
+            width: 30px
+            height: 30px
+            margin-right: 10px
 
           .like-operate
             display inline-block
@@ -498,10 +509,10 @@
 
           .goods-btn
             flex-shrink 0s
-            height: 36px
-            line-height 36px
-            padding: 0px 15px
-            border-radius: 20px
+            height: 30px
+            line-height 30px
+            padding: 0px 10px
+            border-radius: 15px
             color: #fff
             background #73C200
             font-size $font-size-16
