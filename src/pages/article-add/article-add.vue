@@ -61,11 +61,12 @@
             {{name}}封面
           </div>
           <div class="edit-input-box flex-box">
+            <!--currentType!=='video' ?'image-video' :'-->
             <base-upload :videoUrl="addData.coverVideo.url"
                          :imageUrl="addData.coverImage.url"
                          :videoSize="10"
                          :disabled="isDisabled"
-                         :fileType="currentType!=='video' ?'image-video' :'image'"
+                         fileType="image"
                          @failFile="failFile"
                          @getPic="getPic"
                          @delPic="delPic"
@@ -76,7 +77,8 @@
                 请添加不大于10M的清晰图片
               </template>
               <template v-else>
-                请添加不大于10M的清晰图片或视频(格式:mp4、3gp、m3u8、webm)
+                请添加不大于10M的清晰图片
+                <!--请添加不大于10M的清晰图片或视频(格式:mp4、3gp、m3u8、webm)-->
                 <br>
                 {{name}}封面是{{name}}首图
               </template>
