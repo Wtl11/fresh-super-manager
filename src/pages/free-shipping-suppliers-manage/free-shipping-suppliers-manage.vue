@@ -3,7 +3,7 @@
     <div class="down-content">
       <span class="down-tip">搜索</span>
       <div class="down-item">
-        <base-search placeHolder="供应商名称" :infoText="keyword" @search="changeKeyword"></base-search>
+        <base-search placeHolder="供应商名称" :infoText="requestParams.keyword" @search="changeKeyword"></base-search>
       </div>
     </div>
     <div class="table-content">
@@ -54,7 +54,6 @@
     },
     data() {
       return {
-        keyword: '',
         listTitle: LIST_TITLE,
         suppliersList: [],
         pageDetail: {
@@ -63,6 +62,7 @@
           total_page: 1
         },
         requestParams: {
+          keyword: '',
           page: 1,
           limit: 10
         },
@@ -91,7 +91,8 @@
         this.requestParams.page = page
         this._getListData()
       },
-      changeKeyword() {
+      changeKeyword(keyword) {
+        this.requestParams.keyword = keyword
         this._getListData()
       },
     }
