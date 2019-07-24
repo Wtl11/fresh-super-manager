@@ -65,19 +65,12 @@
 
 <script type="text/ecmascript-6">
   import API from '@api'
-  import {authComputed, tradeComputed, tradeMethods} from '@state/helpers'
+  import {authComputed, fsOrderComputed, fsOrderMethods} from '@state/helpers'
   import PopupConfirm from './popup-confirm/popup-confirm'
 
   const PAGE_NAME = 'FREE_SHIPPING_ORDER_MANAGE'
   const TITLE = '订单管理'
   const LIST_TITLE = [{name:'订单号',class:'width-3'}, {name:'会员名称',class:'width-3'}, {name:'订单总价',class:'width-2'}, {name:'实付金额',class:'width-2'}, {name:'所属社区',class:'width-3'}, {name:'状态',class:'width-1'}, {name:'操作',class:''}]
-  const TRADE_SELECT = {
-    check: false,
-    show: false,
-    content: '全部类型',
-    type: 'default',
-    data: []
-  }
   const STATUS_TAB = [
     {name: '全部', value: '', key: 'all', num: 0},
     {name: '待推送', key: 'wait_release', num: 0},
@@ -101,14 +94,13 @@
         dispatchSelect: STATUS_TAB,
         tabType: 'all',
         listTitle: LIST_TITLE,
-        tradeSelect: TRADE_SELECT,
         orderList: [],
         allChecked: false
       }
     },
     computed: {
       ...authComputed,
-      ...tradeComputed,
+      ...fsOrderComputed,
       dateInfo() {
         return this.date[0] && this.date[1] ? [this.date[0], this.date[1]] : []
       }
@@ -117,10 +109,10 @@
       this._setOrderData(true)
     },
     methods: {
-      ...tradeMethods,
+      ...fsOrderMethods,
       _setOrderData(first=false) {
         this.allChecked = false
-        this.orderList = this.trades.map((item) => {
+        this.orderList = this.list.map((item) => {
           return {checked: false, ...item}
         })
         this._getTradeOrderType()

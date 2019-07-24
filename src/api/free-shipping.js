@@ -22,7 +22,7 @@ export default {
   // 商品编辑（完善资料）
   goodsModify(data, id, loading = true) {
     let url = `/market/api/backend/goods/${id}`
-    return request.put(url, data, loading)
+    return request.post(url, data, loading)
   },
   // 删除商品
   goodsDelete(id, loading = false) {

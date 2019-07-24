@@ -107,7 +107,14 @@ export const productMethods = {
 export const fsGoodsComputed = {
   ...mapGetters('freeShippingGoodsManage', ['goodsList', 'statePageTotal'])
 }
-
 export const fsGoodsMethods = {
   ...mapActions('freeShippingGoodsManage', ['getGoodsList', 'getGoodsDetailData'])
+}
+
+// 全国包邮-订单
+export const fsOrderComputed = {
+  ...mapGetters('fsOrder', ['trades', 'pageDetail', 'page', 'date', 'keyword', 'type', 'orderType'])
+}
+export const fsOrderMethods = {
+  ...mapActions('fsOrder', ['setPage', 'setTradeType', 'setDate', 'setKeyword', 'setOrderType'])
 }

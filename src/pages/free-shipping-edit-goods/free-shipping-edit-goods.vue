@@ -170,7 +170,7 @@
           供应商
         </div>
         <div class="edit-input-box">
-          <base-drop-down :height="40" :width="400" :radius="2" :select="supplierSelect" @setValue="setSupliersVal"></base-drop-down>
+          <base-drop-down :height="40" :width="400" :radius="2" :select="supplierSelect" @setValue="setSuppliersVal"></base-drop-down>
         </div>
       </div>
       <div class="edit-item edit-val">
@@ -251,7 +251,8 @@
     },
     created() {
       this.getGoodsInfo()
-      this.getCategoriesData()
+      this.getCategoryData()
+      this._getSuppliersList()
     },
     methods: {
       getGoodsInfo() {
@@ -261,6 +262,9 @@
               return
             }
             this.msg = res.data
+            if (this.msg.sale_name.length <= 0) {
+              this.msg.sale_name = res.data.name
+            }
             this._setData()
           })
           .finally((e) => {
@@ -281,11 +285,10 @@
           }
         }
         this.goods_skus = this.msg.goods_skus[this.selectedIdx]
-        this.supplierSelect.content = this.msg.supplier_id
         // }
       },
       // 获取类目列表
-      getCategoriesData() {
+      getCategoryData() {
         API.FreeShipping.getGoodsCategory({parent_id: -1, goods_id: this.id}, false).then((res) => {
           if (res.error === this.$ERR_OK) {
             this.stairSelect.data = res.data
@@ -310,6 +313,19 @@
             this.$toast.show(res.message)
           }
         })
+      },
+      // 获取供应商列表
+      _getSuppliersList() {
+        API.FreeShipping.getSuppliersList()
+          .then((res) => {
+            if (res.error !== this.$ERR_OK) {
+              return
+            }
+            if (res.data.length>0&&res.data[0].name) {
+              this.supplierSelect.content = res.data[0].name
+              this.supplierSelect.data = res.data
+            }
+          })
       },
       // 选择一级类目
       setStairValue(data) {
@@ -359,8 +375,8 @@
         })
       },
       // 选择供应商
-      setSupliersVal(data) {
-        this.goods_skus.base_unit = data.name
+      setSuppliersVal(data) {
+        this.msg.supplier_id = data.id
       },
       // 删除商品图片
       delPic(index) {

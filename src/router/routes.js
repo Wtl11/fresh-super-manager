@@ -1,4 +1,6 @@
 import store from '@state/store'
+// import API from '@api'
+// import {ERR_OK} from '@utils/config'
 
 export default [
   // 登录界面
@@ -318,22 +320,22 @@ export default [
         component: () => lazyLoadView(import('@pages/free-shipping-goods-manage/free-shipping-goods-manage')),
         meta: {
           titles: ['商品', '商品市集'],
-          beforeResolve(routeTo, routeFrom, next) {
-            store
-              .dispatch('freeShippingGoodsManage/getGoodsList', {})
-              .then((res) => {
-                if (!res) {
-                  return next({name: '404'})
-                }
-                return next()
-              })
-              .catch(() => {
-                return next({name: '404'})
-              })
-          }
+          // beforeResolve(routeTo, routeFrom, next) {
+          //   store
+          //     .dispatch('freeShippingGoodsManage/getGoodsList', {goods_category_id: '', complete_status: 0, source_type: 2, keyword: ''})
+          //     .then((res) => {
+          //       if (!res) {
+          //         return next({name: '404'})
+          //       }
+          //       return next()
+          //     })
+          //     .catch(() => {
+          //       return next({name: '404'})
+          //     })
+          // }
         }
       },
-      // 全国包邮-新建商品
+      // 全国包邮-编辑商品
       {
         path: 'free-shipping-goods-manage/free-shipping-edit-goods',
         name: 'free-shipping-edit-goods',
@@ -346,21 +348,20 @@ export default [
             if (!routeTo.query.id) {
               return next()
             }
-            store
-              .dispatch('product/getGoodsDetailData', routeTo.query.id)
-              .then((response) => {
-                if (!response) {
-                  return next({name: '404'})
-                }
-                routeTo.params.detail = response
-                next()
-              })
-              .catch(() => {
-                next({name: '404'})
-              })
+            return next()
+            // API.FreeShipping.getGoodsInfo(routeTo.query.id)
+            //   .then((res) => {
+            //     if (res.error !== ERR_OK) {
+            //       return next({name: '404'})
+            //     }
+            //     let dataInfo = res.data
+            //     next({params: {dataInfo}})
+            //   })
+            //   .catch((e) => {
+            //     next({name: '404'})
+            //   })
           }
-        },
-        props: (route) => ({detail: route.params.detail})
+        }
       },
       // 全国包邮-订单管理
       {
@@ -371,7 +372,7 @@ export default [
           titles: ['订单', '订单', '订单管理'],
           beforeResolve(routeTo, routeFrom, next) {
             store
-              .dispatch('trade/getTradeList')
+              .dispatch('fsOrder/getOrderList')
               .then((res) => {
                 if (!res) {
                   return next({name: '404'})

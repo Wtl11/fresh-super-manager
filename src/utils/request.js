@@ -3,7 +3,7 @@
 import axios from 'axios'
 import * as Utils from './request-utils'
 
-const TIME_OUT = 10000
+const TIME_OUT = 60000
 const ERR_OK = 0
 const ERR_NO = -404
 const COMMON_HEADER = {}
@@ -16,10 +16,10 @@ const http = axios.create({
 http.interceptors.request.use(
   (config) => {
     // 请求数据前的拦截
-    // if (process.env.VUE_APP_ENV === 'release') {
-    //   let version = 'v5/'
-    //   config.url = config.url.split('api/').join(`${version}api/`)
-    // }
+    if (process.env.VUE_APP_ENV === 'release') {
+      let version = 'v2/'
+      config.url = config.url.split('api/').join(`${version}api/`)
+    }
     return config
   },
   (error) => {
@@ -38,6 +38,11 @@ http.interceptors.response.use(
 
 function checkStatus(response) {
   // _loading
+  // 全国包邮1688授权
+  if(response && response.code === 14001) {
+    window.open("https://auth.1688.com/oauth/authorize?client_id=6699805&site=1688&redirect_uri=https%3A%2F%2Fmarket-api.jkweixin.net%2Fmarket%2Fapi%2Fauthorized")
+    return
+  }
   // 如果http状态码正常，则直接返回数据
   if (
     response &&
@@ -80,7 +85,7 @@ function requestException(res) {
 }
 
 export default {
-  post(url, data, loading = false, timeout = 10000) {
+  post(url, data, loading = false, timeout = 60000) {
     Utils.showLoading(loading)
     return http({
       method: 'post',
