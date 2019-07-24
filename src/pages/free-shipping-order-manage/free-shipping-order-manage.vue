@@ -18,19 +18,19 @@
           <base-status-tab :statusList="dispatchSelect" @setStatus="changeOrderType"></base-status-tab>
         </div>
         <div class="function-btn">
-          <div v-if="tabType === '1' && orderList.length > 0" class="btn-main btn-main-end" @click="_orderPay">付款</div>
+          <div v-if="tabType*1 === 1 && orderList.length > 0" class="btn-main btn-main-end" @click="_orderPay">付款</div>
         </div>
       </div>
       <div class="big-list">
         <div class="list-header list-box">
-          <div v-if="tabType === '1'" class="list-item small-item">
+          <div v-if="tabType*1 === 1" class="list-item small-item">
             <div :class="[allChecked?'checked':'']" class="list-radio" @click="_radioAllChecked"></div>
           </div>
           <div v-for="(item,index) in listTitle" :key="index" :class="item.class" class="list-item">{{item.name}}</div>
         </div>
         <div v-if="orderList.length" class="list">
           <div v-for="(item, index) in orderList" :key="index" class="list-content list-box">
-            <div v-if="tabType === '1'" class="list-item small-item">
+            <div v-if="tabType*1 === 1" class="list-item small-item">
               <div :class="[item.checked?'checked':'']" class="list-radio" @click="_radioChecked(item)"></div>
             </div>
             <div class="list-item list-double-row width-3">
@@ -58,7 +58,7 @@
         </base-pagination>
       </div>
     </div>
-    <popup-confirm ref="popupModal" :count="orderInfo.count" :total="orderInfo.total" @confirm="_PIConfirm"></popup-confirm>
+    <popup-confirm ref="popupModal" :count="payData.order_count" :total="payData.total" @confirm="_PIConfirm"></popup-confirm>
   </div>
 </template>
 
@@ -95,8 +95,7 @@
         listTitle: LIST_TITLE,
         orderList: [],
         allChecked: false,
-        payUrl: '',
-        orderInfo: {count: 0, total: 0}
+        payData: {}
       }
     },
     computed: {
@@ -118,7 +117,7 @@
       _setOrderData(first=false) {
         this.allChecked = false
         // 待结算状态增加订单勾选
-        if (this.list.length > 0 && this.tabType === '1') {
+        if (this.list.length > 0 && this.tabType*1 === 1) {
           this.orderList = this.list.map((item) => {
             return {checked: false, ...item}
           })
@@ -182,30 +181,16 @@
               this.$toast.show(res.message)
               return
             }
-            this.payUrl = res.data.pay_url
+            this.payData = res.data
             this.$refs.popupModal.show()
           }).finally((e) => {
-            this.$loading.hide()
-          })
-      },
-      // 获取订单详情
-      _getOrderInfo() {
-        API.FreeShipping.getOrderInfo()
-          .then((res) => {
-            if (res.error !== this.$ERR_OK) {
-              return
-            }
-            this.orderInfo = res.data
-            this.$refs.popupModal.show()
-          })
-          .finally((e) => {
             this.$loading.hide()
           })
       },
       _PIConfirm() {
         // 弹窗点击支付，跳转支付链接
         this.$refs.popupModal.hide()
-        this.payUrl&&window.open(this.payUrl)
+        this.payData.pay_url&&window.open(this.payData.pay_url)
       },
       // 单选
       _radioChecked(item) {
