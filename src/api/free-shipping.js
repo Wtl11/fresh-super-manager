@@ -39,6 +39,11 @@ export default {
     let url = `/market/api/backend/goods-online-statistic`
     return request.get(url, data, loading)
   },
+  // 商品分类
+  getGoodsCategory(data, loading = false) {
+    let url = `/market/api/backend/goods-categories`
+    return request.get(url, data, loading)
+  },
   /**
    * 1688相关
    * **/

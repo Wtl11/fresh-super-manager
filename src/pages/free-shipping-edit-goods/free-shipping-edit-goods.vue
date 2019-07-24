@@ -286,7 +286,7 @@
       },
       // 获取类目列表
       getCategoriesData() {
-        API.Product.getCategoryList({parent_id: -1, goods_material_id: this.id}, false).then((res) => {
+        API.FreeShipping.getGoodsCategory({parent_id: -1, goods_id: this.id}, false).then((res) => {
           if (res.error === this.$ERR_OK) {
             this.stairSelect.data = res.data
             res.data.forEach((item) => {
