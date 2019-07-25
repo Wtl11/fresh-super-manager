@@ -102,7 +102,7 @@
         stairSelect: {check: false, show: false, content: '一级类目', type: 'default', data: []},
         secondSelect: {check: false, show: false, content: '二级类目', type: 'default', data: []},
         thirdlySelect: {check: false, show: false, content: '三级类目', type: 'default', data: []},
-        infoStateSelect: {check: false, show: false, content: '待完善', type: 'default', data: [{name:'待完善',id:0},{name:'已完善',id:1}]},
+        infoStateSelect: {check: false, show: false, content: '全部', type: 'default', data: [{name:'全部',id:''},{name:'待完善',id:0},{name:'已完善',id:1}]},
         sourceSelect: {check: false, show: false, content: '1688市场', type: 'default', data: [{name:'1688市场',id:2},{name:'自建',id:1}]},
         showIndex: false,
         oneBtn: false,
@@ -124,7 +124,7 @@
     created() {
       this.getGoodsOnlineStatus()
       this.getCategoryData()
-      this.getGoodsList(this.requestParams)
+      // this.getGoodsList(this.requestParams)
     },
     methods: {
       ...fsGoodsMethods,
@@ -259,12 +259,16 @@
       &:nth-child(1)
         max-width: 100px
         flex: 0.5
-      &:nth-child(2),&:nth-child(6),&:nth-child(7)
-        max-width: 240px
-        flex: 1.5
+      &:nth-child(2)
+        max-width: 300px
+        flex: 3
+      &:nth-child(6),&:nth-child(7)
+        max-width: 180px
+        flex: 1.3
       &:last-child
-        flex: 1.1
+        flex: 1.2
         padding: 5px
+        min-width: 140px
         max-width: 140px
       &.list-popup
         &:hover .popup-tip

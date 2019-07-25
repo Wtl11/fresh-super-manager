@@ -24,6 +24,11 @@ export default {
     let url = `/market/api/backend/goods/${id}`
     return request.post(url, data, loading)
   },
+  // 商品编辑（同步）
+  goodsUpdate(data, id, loading = true) {
+    let url = `/market/api/backend/alibaba-goods/${id}`
+    return request.post(url, data, loading)
+  },
   // 删除商品
   goodsDelete(id, loading = false) {
     let url = `/market/api/backend/goods/${id}`

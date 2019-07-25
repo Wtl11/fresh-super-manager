@@ -189,7 +189,7 @@
     <div class="back">
       <div class="back-cancel back-btn hand" @click="_back">返回</div>
       <div class="back-btn back-submit hand" @click="_submit">保存</div>
-      <div v-if="updateInfo*1===1" class="back-btn back-submit hand" @click="_updateGoodsInfo">同步</div>
+      <div v-if="updateInfo*1===1" class="back-btn back-submit hand" @click="_updateGoodsInfo">更新</div>
     </div>
   </div>
 </template>
@@ -197,7 +197,6 @@
 <script type="text/ecmascript-6">
   import Draggable from 'vuedraggable'
   import API from '@api'
-  // import _ from 'lodash'
 
   const PAGE_NAME = 'EDIT_GOODS'
   const TITLE = '编辑商品'
@@ -247,7 +246,7 @@
         id: this.$route.query.id || '',
         isComplete: this.$route.query.complete || false,
         isSubmit: false,
-        selectedIdx: 0,
+        skuSelect: 0,
         updateInfo: this.$route.query.updateInfo || false
       }
     },
@@ -256,6 +255,7 @@
       this.getCategoryData()
     },
     methods: {
+      // 获取商品详情
       getGoodsInfo() {
         API.FreeShipping.getGoodsInfo(this.id)
           .then((res) => {
@@ -264,9 +264,6 @@
               return
             }
             this.msg = res.data
-            if (this.msg.sale_name.length <= 0) {
-              this.msg.sale_name = res.data.name
-            }
             this._setData()
             this._getSuppliersList()
           })
@@ -275,16 +272,19 @@
           })
       },
       _setData() {
-        // if (!_.isEmpty(this.detail)) {
-        // this.msg = _.cloneDeep(this.detail)
+        // 如果没有销售标题，用商品名称赋值
+        if (this.msg.sale_name.length <= 0) {
+          this.msg.sale_name = this.msg.name
+        }
+        // 设置默认的规格
         for (let i = 0; i < this.msg.goods_skus.length; i++) {
-          if (this.msg.goods_skus[i].is_default === 1) {
-            this.selectedIdx = i
+          const skuItem = this.msg.goods_skus[i]
+          if (skuItem.is_default === 1) {
+            this.skuSelect = i
+            this.goods_skus = skuItem
             break
           }
         }
-        this.goods_skus = this.msg.goods_skus[this.selectedIdx]
-        // }
       },
       // 获取类目列表
       getCategoryData() {
@@ -377,10 +377,6 @@
           this.$set(this.msg, type, this.msg[type].concat(imagesArr))
         })
       },
-      // 选择供应商
-      setSuppliersVal(data) {
-        this.msg.supplier_id = data.id
-      },
       // 删除商品图片
       delPic(index) {
         this.msg.goods_banner_images.splice(index, 1)
@@ -392,57 +388,20 @@
       // 商品规格选择
       selectStock(item, index) {
         if (item.is_default === 1) return
-        this.msg.goods_skus[this.selectedIdx].is_default = 0
+        this.msg.goods_skus[this.skuSelect].is_default = 0
         item.is_default = 1
-        this.selectedIdx = index
+        this.skuSelect = index
       },
-      // 提交信息
+      // 选择供应商
+      setSuppliersVal(data) {
+        this.msg.supplier_id = data.id
+      },
+      // 保存编辑
       _submit() {
-        if (this.isSubmit) {
-          return
-        }
-        if (this.msg.name.length === 0 || this.msg.name.length >= 30) {
-          this.$toast.show('请输入商品名称且小于30字')
-          return
-        } else if (this.msg.goods_category_id <= 0) {
-          this.$toast.show('请选择商品类目')
-          return
-        } else if (this.msg.goods_banner_images.length === 0) {
-          this.$toast.show('请上传商品图片')
-          return
-        } else if (this.msg.goods_detail_images.length === 0) {
-          this.$toast.show('请上传商品详情图')
-          return
-        }
-        let skuCheck = false
-        // 遍历数组检查是否有选择规格和输入商品编码
-        for(let i = 0; i < this.msg.goods_skus.length; i++) {
-          const item = this.msg.goods_skus[i]
-          if(item.is_default===1) {
-            skuCheck = true
-          }
-          if (item.goods_sku_encoding.length === 0) {
-            this.$toast.show('请输入商品编码')
-            return
-          }
-        }
-        if (!skuCheck) {
-          this.$toast.show('请选择销售规格')
-          return
-        }
-        if (this.goods_skus.original_price.length === 0) {
-          this.$toast.show('请输入划线价')
-          return
-        } else if (this.goods_skus.trade_price.length === 0) {
-          this.$toast.show('请输入销售单价')
-          return
-        } else if (+this.goods_skus.original_price < +this.goods_skus.trade_price) {
-          this.$toast.show('划线价请大于销售单价')
-          return
-        }
+        if (!this._submitCheck()) return;
         // 把输入的划线价、单价填入选择的规格
-        this.msg.goods_skus[this.selectedIdx].original_price = this.goods_skus.original_price
-        this.msg.goods_skus[this.selectedIdx].trade_price = this.goods_skus.trade_price
+        this.msg.goods_skus[this.skuSelect].original_price = this.goods_skus.original_price
+        this.msg.goods_skus[this.skuSelect].trade_price = this.goods_skus.trade_price
         this.isSubmit = true
         API.FreeShipping.goodsModify(this.msg, this.id).then((res) => {
           if (res.error === this.$ERR_OK) {
@@ -457,14 +416,105 @@
           this.$loading.hide()
         })
       },
+      // 表单检查
+      _submitCheck() {
+        if (this.isSubmit) {
+          return false
+        }
+        if (this.msg.name.length === 0 || this.msg.name.length >= 30) {
+          this.$toast.show('请输入商品名称且小于30字')
+          return false
+        } else if (this.msg.goods_category_id <= 0) {
+          this.$toast.show('请选择商品类目')
+          return false
+        } else if (this.msg.goods_banner_images.length === 0) {
+          this.$toast.show('请上传商品图片')
+          return false
+        } else if (this.msg.goods_detail_images.length === 0) {
+          this.$toast.show('请上传商品详情图')
+          return false
+        }
+        let skuCheck = false
+        // 遍历数组检查是否有选择规格和输入商品编码
+        for(let i = 0; i < this.msg.goods_skus.length; i++) {
+          const item = this.msg.goods_skus[i]
+          if(item.is_default===1) {
+            skuCheck = true
+          }
+          if (item.goods_sku_encoding.length === 0) {
+            this.$toast.show('请输入商品编码')
+            return false
+          }
+        }
+        if (!skuCheck) {
+          this.$toast.show('请选择销售规格')
+          return false
+        }
+        if (this.goods_skus.original_price.length === 0) {
+          this.$toast.show('请输入划线价')
+          return false
+        } else if (this.goods_skus.trade_price.length === 0) {
+          this.$toast.show('请输入销售单价')
+          return false
+        } else if (+this.goods_skus.original_price < +this.goods_skus.trade_price) {
+          this.$toast.show('划线价请大于销售单价')
+          return false
+        }
+        return true
+      },
       // 回退上一页
       _back() {
         this.$router.back()
       },
       // 更新商品信息
-      _updateGoodsInfo() {
-
-      },
+      async _updateGoodsInfo() {
+        if (this.isSubmit) {
+          return
+        }
+        this.isSubmit = true
+        /**
+         * 更新商品信息的同步
+         * 一，拿详情里面的链接，调用查询1688的商品，
+         * 二，拿到的商品，请求编辑商品（同步）接口，参数跟新建一样，接口多了/id
+         * 三，重新请求商品详情接口
+         **/
+        API.FreeShipping.goodsSearch({domin: this.msg.source_url}).then((res) => {
+          if (res.error === this.$ERR_OK) {
+            API.FreeShipping.goodsUpdate(res.data, res.data.product_id, false).then((res) => {
+              if (res.error === this.$ERR_OK) {
+                API.FreeShipping.getGoodsInfo(this.id)
+                  .then((res) => {
+                    if (res.error !== this.$ERR_OK) {
+                      this.$toast.show(res.message)
+                      return
+                    }
+                    this.msg = res.data
+                    this._setData()
+                    this.$toast.show('商品更新成功！')
+                  })
+                  .finally((e) => {
+                    this.isSubmit = false
+                    this.$loading.hide()
+                  })
+              } else {
+                this.isSubmit = false
+                this.$loading.hide()
+                this.$toast.show(res.message)
+              }
+            }).catch(() => {
+              this.isSubmit = false
+              this.$loading.hide()
+            })
+          } else {
+            this.isSubmit = false
+            this.$loading.hide()
+            this.$toast.show(res.message)
+          }
+        }).catch(()=>{
+          this.isSubmit = false
+          this.$loading.hide()
+        })
+      }
     }
   }
 </script>
