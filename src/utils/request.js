@@ -41,6 +41,7 @@ function resetUrl(url) {
     return url
   }
   return url
+  // return url.split('api/').join(`/v1/api/`)
 }
 
 http.interceptors.response.use(

@@ -190,13 +190,23 @@
         </div>
         <!--文章/菜谱 内容详情-->
         <div v-if="currentType!=='video'" class="edit-item">
-          <div class="edit-title">
+          <div class="edit-title cont-detail-tilte">
             <span class="start">*</span>
             内容详情
           </div>
           <div class=" edit-input-box flex-1">
+            <draggable v-if="currentType!=='video' && addData.details.length" ref="detailsContent" v-model="addData.details" :options="{disabled:isDisabled}" class="content-details">
+              <transition-group>
+                <div v-for="(item, idx) in addData.details" :key="idx" class="content-item">
+                  <div v-if="!isDisabled" class="close-icon hand" @click="deleteContentItem(idx,item)"></div>
+                  <img v-if="item.type==='image'" :src="item.value" class="content-image">
+                  <video v-else-if="item.type==='video'" :src="item.value" class="content-video"></video>
+                  <div v-else class="text-item">{{item.value}}</div>
+                </div>
+              </transition-group>
+            </draggable>
             <div v-if="!isDisabled" class="add-cont-type-box">
-              <div class="add-cont-type-item hand" @click="addTextItem">
+              <div class="add-cont-type-item hand" @click="showTextDialog">
                 <div class="icon icon-text"></div>
                 <div>文本</div>
               </div>
@@ -217,17 +227,6 @@
                 </base-upload>
               </div>
             </div>
-            <draggable v-if="currentType!=='video' && addData.details.length" ref="detailsContent" v-model="addData.details" :options="{disabled:isDisabled}" class="content-details">
-              <transition-group>
-                <div v-for="(item, idx) in addData.details" :key="idx" class="content-item">
-                  <div v-if="!isDisabled" class="close-icon hand" @click="deleteContentItem(idx,item)"></div>
-                  <img v-if="item.type==='image'" :src="item.value" class="content-image">
-                  <video v-else-if="item.type==='video'" :src="item.value" class="content-video"></video>
-                  <textarea v-else v-model="item.value" :disabled="isDisabled" class="edit-textarea edit-input" placeholder="输入文字">
-              </textarea>
-                </div>
-              </transition-group>
-            </draggable>
           </div>
         </div>
 
@@ -293,6 +292,23 @@
         </div>
       </div>
     </default-modal>
+    <default-modal ref="addText">
+      <div slot="content" class="shade-box add-text-dialog">
+        <div class="title-box">
+          <div class="title">
+            增加详情文本
+          </div>
+          <span class="close hand" @click="$refs.addText.hideModal()"></span>
+        </div>
+        <div class="dialog-body">
+          <textarea v-model="addText" class="edit-textarea edit-input" placeholder="输入文字"></textarea>
+        </div>
+        <div class="back">
+          <div class="back-cancel back-btn hand" @click="$refs.addText.hideModal()">取消</div>
+          <div class="back-btn back-submit hand" @click="addTextItem()">确定</div>
+        </div>
+      </div>
+    </default-modal>
   </div>
 </template>
 
@@ -339,6 +355,7 @@
         }, // 三种创作
         currentType: 'common', // 现在创作类型
         addCategoryText: "",
+        addText: '',
         addData: {
           likes: [],
           category: '',
@@ -403,6 +420,10 @@
       this._getLikes()
     },
     methods: {
+      showTextDialog() {
+        this.addText = ''
+        this.$refs.addText.showModal()
+      },
       _getLikes() {
         let limit = this.addData.goodCount < 10 ? this.addData.goodCount : 10
         let params = {article_id: this.articleId || 0, preview: 1, limit, page: 1}
@@ -573,8 +594,9 @@
       addTextItem() {
         this.addDetailContentItem({
           type: 'text',
-          value: ''
+          value: this.addText
         })
+        this.$refs.addText.hideModal()
       },
       addImageItem(image) {
         this.addDetailContentItem({
@@ -789,7 +811,8 @@
       white-space: nowrap
       min-width: 64px
       text-align: right
-
+      &.cont-detail-tilte
+        margin-top:12px
     .start
       display: inline-block
       margin-right: -2px
@@ -918,9 +941,8 @@
       .add-cont-type-box
         display flex
         flex: 1
-        border-1px()
+        border-1px(#e9ecee,0 0 2px 2px)
         background-color #fdfdfd
-        margin-bottom: 20px
 
         .add-cont-type-item
           height 46px
@@ -967,14 +989,11 @@
         background: #F5F7FA
         border-radius: 2px
         padding: 20px
-        max-height: 500px;
-        overflow: auto
         scroll-opacity(5px, 100px)
         .content-item
           border-1px(#D3D8DC)
           border-radius: 2px
           background: #fff
-          height: 140px
           position relative
           margin-bottom: 20px
 
@@ -986,14 +1005,10 @@
             background-color $color-np-content
             object-fit: cover
             margin: 14px
-
-          .edit-textarea
-            border-width: 0px
-            padding: 14px
-            scroll-opacity(5px, 100px)
-            height: 100%
-            width: 100%
-            resize: none
+          .text-item
+            padding:14px
+            white-space: pre-wrap
+            word-wrap: break-word
 
           &:last-child
             margin-bottom: 0px
@@ -1061,5 +1076,20 @@
       align-items: center
       display: flex
 
-
+  .add-text-dialog
+    height:300px
+    width:600px
+    display flex
+    flex-direction column
+    .title-box
+    .back
+      flex-shrink 0
+      position: static
+    .dialog-body
+      flex:1
+    .edit-textarea
+      padding: 14px
+      width: 100%
+      height:100%
+      resize none
 </style>
