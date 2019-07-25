@@ -743,6 +743,7 @@
         background-size: @width
         icon-image(icon-single_election)
     .goods-select-con
+      flex: 1
       box-sizing: border-box
       padding: 0 20px
       margin-bottom: 10px
@@ -767,6 +768,8 @@
         color: $color-text-main
         margin-right: 10px
         no-wrap()
+        &:nth-child(1)
+          flex: 1
     .goods-select-input
       height: 100%
       layout(row)

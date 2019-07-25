@@ -320,19 +320,19 @@ export default [
         component: () => lazyLoadView(import('@pages/free-shipping-goods-manage/free-shipping-goods-manage')),
         meta: {
           titles: ['商品', '商品市集'],
-          // beforeResolve(routeTo, routeFrom, next) {
-          //   store
-          //     .dispatch('freeShippingGoodsManage/getGoodsList', {goods_category_id: '', complete_status: 0, source_type: 2, keyword: ''})
-          //     .then((res) => {
-          //       if (!res) {
-          //         return next({name: '404'})
-          //       }
-          //       return next()
-          //     })
-          //     .catch(() => {
-          //       return next({name: '404'})
-          //     })
-          // }
+          beforeResolve(routeTo, routeFrom, next) {
+            store
+              .dispatch('freeShippingGoodsManage/getGoodsList', {source_type: 2, page: 1})
+              .then((res) => {
+                if (!res) {
+                  return next({name: '404'})
+                }
+                return next()
+              })
+              .catch(() => {
+                return next({name: '404'})
+              })
+          }
         }
       },
       // 全国包邮-编辑商品
@@ -343,24 +343,7 @@ export default [
         meta: {
           titles: ['商品', '商品管理', '商品'],
           variableIndex: 2,
-          marginBottom: 80,
-          beforeResolve(routeTo, routeFrom, next) {
-            if (!routeTo.query.id) {
-              return next()
-            }
-            return next()
-            // API.FreeShipping.getGoodsInfo(routeTo.query.id)
-            //   .then((res) => {
-            //     if (res.error !== ERR_OK) {
-            //       return next({name: '404'})
-            //     }
-            //     let dataInfo = res.data
-            //     next({params: {dataInfo}})
-            //   })
-            //   .catch((e) => {
-            //     next({name: '404'})
-            //   })
-          }
+          marginBottom: 80
         }
       },
       // 全国包邮-订单管理
