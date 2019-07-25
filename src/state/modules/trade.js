@@ -12,7 +12,8 @@ export const state = {
   type: '',
   startDate: '',
   endDate: '',
-  keyword: ''
+  keyword: '',
+  sourceType: ''
 }
 
 export const getters = {
@@ -33,6 +34,9 @@ export const getters = {
   },
   type(state) {
     return state.type
+  },
+  sourceType(state) {
+    return state.sourceType
   }
 }
 
@@ -55,17 +59,21 @@ export const mutations = {
   },
   SET_KEYWORD(state, keyword) {
     state.keyword = keyword
+  },
+  SET_SOURCE_TYPE(state, sourceType) {
+    state.sourceType = sourceType
   }
 }
 
 export const actions = {
   getTradeList({commit, state}) {
-    const {type, keyword, page, startDate, endDate} = state
+    const {type, keyword, page, startDate, endDate, sourceType} = state
     let data = {
       status: type,
       keyword,
       page,
-      date: startDate && endDate ? `${startDate},${endDate}` : ''
+      date: startDate && endDate ? `${startDate},${endDate}` : '',
+      source_type: sourceType
     }
     return API.Trade.getTradeList(data)
       .then((res) => {
@@ -106,6 +114,11 @@ export const actions = {
   },
   setKeyword({commit, dispatch}, keyword) {
     commit('SET_KEYWORD', keyword)
+    commit('SET_PAGE', 1)
+    dispatch('getTradeList')
+  },
+  setSourceType({commit, dispatch}, select) {
+    commit('SET_SOURCE_TYPE', select)
     commit('SET_PAGE', 1)
     dispatch('getTradeList')
   }

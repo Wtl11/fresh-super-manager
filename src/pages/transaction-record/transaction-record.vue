@@ -16,6 +16,10 @@
       <div class="down-item">
         <base-date-select placeHolder="选择支付日期" :dateInfo="dateInfo" @getTime="changeDate"></base-date-select>
       </div>
+      <span class="down-tip">订单类型</span>
+      <div class="down-item-small">
+        <base-drop-down :select="tradeSelect" :radius="2" @setValue="setSelectValue"></base-drop-down>
+      </div>
       <span class="down-tip">搜索</span>
       <div class="down-item">
         <base-search placeHolder="订单号或交易号" :infoText="keyword" @search="changeKeyword"></base-search>
@@ -75,7 +79,7 @@
     show: false,
     content: '全部类型',
     type: 'default',
-    data: []
+    data: [{name: '全部', status: ''}, {name: '自提订单', status: 1}, {name: '全国包邮', status: 2}]
   }
   const EXCEL_URL = '/social-shopping/api/platform/trade-excel'
 
@@ -106,7 +110,8 @@
           access_token: this.currentUser.access_token,
           status: this.type,
           keyword: this.keyword,
-          date: this.date[0] && this.date[1] ? `${this.date[0]},${this.date[1]}` : ''
+          date: this.date[0] && this.date[1] ? `${this.date[0]},${this.date[1]}` : '',
+          source_type: this.sourceType
         }
         let search = []
         for (let key in data) {
@@ -127,7 +132,8 @@
       async _getTradeOrderType() {
         let res = await API.Trade.getTradeOrderType({
           keyword: this.keyword,
-          date: this.date[0] && this.date[1] ? this.date.join(',') : ''
+          date: this.date[0] && this.date[1] ? this.date.join(',') : '',
+          source_type: this.sourceType
         })
         if (res.error !== this.$ERR_OK) {
           console.warn('获取交易状态类型失败')
@@ -160,6 +166,11 @@
       },
       changeKeyword(keyword) {
         this.setKeyword(keyword)
+        this._getTradeOrderType()
+        this.$refs.pagination.beginPage()
+      },
+      setSelectValue(select) {
+        this.setSourceType(select.status)
         this._getTradeOrderType()
         this.$refs.pagination.beginPage()
       },

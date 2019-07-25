@@ -18,10 +18,10 @@ export const globalComputed = {
 
 // 交易记录
 export const tradeComputed = {
-  ...mapGetters('trade', ['trades', 'pageDetail', 'page', 'date', 'keyword', 'type', 'orderType'])
+  ...mapGetters('trade', ['trades', 'pageDetail', 'page', 'date', 'keyword', 'type', 'orderType', 'sourceType'])
 }
 export const tradeMethods = {
-  ...mapActions('trade', ['setPage', 'setTradeType', 'setDate', 'setKeyword', 'setOrderType'])
+  ...mapActions('trade', ['setPage', 'setTradeType', 'setDate', 'setKeyword', 'setOrderType', 'setSourceType'])
 }
 
 
