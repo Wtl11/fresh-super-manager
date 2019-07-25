@@ -127,8 +127,8 @@
   const FIRST_MENU = [
     {
       name: '商品',
-      icon: require('./icon-content1@2x.png'),
-      activeIcon: require('./icon-content2@2x.png'),
+      icon: require('./icon-commodity_white@2x.png'),
+      activeIcon: require('./icon-commodity@2x.png'),
       isLight: true,
       second: GOODS,
       url: '/home/product-list'
