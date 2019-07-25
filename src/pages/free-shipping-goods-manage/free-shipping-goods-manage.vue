@@ -60,7 +60,7 @@
             </div>
             <div class="list-item list-operation-box">
               <router-link v-if="item.complete_status===0" tag="span" :to="'free-shipping-edit-goods?complete=1&id=' + item.id" append class="list-operation list-operation-all">完善资料</router-link>
-              <router-link v-else tag="span" :to="'free-shipping-edit-goods?id=' + item.id" append class="list-operation">编辑</router-link>
+              <router-link v-else tag="span" :to="'free-shipping-edit-goods?id=' + item.id+'&updateInfo='+(item.goods_update_notice?1:0)" append class="list-operation">编辑</router-link>
               <span class="list-operation" @click="delGoods(item)">删除</span>
             </div>
           </div>

@@ -189,6 +189,7 @@
     <div class="back">
       <div class="back-cancel back-btn hand" @click="_back">返回</div>
       <div class="back-btn back-submit hand" @click="_submit">保存</div>
+      <div v-if="updateInfo*1===1" class="back-btn back-submit hand" @click="_updateGoodsInfo">同步</div>
     </div>
   </div>
 </template>
@@ -246,7 +247,8 @@
         id: this.$route.query.id || '',
         isComplete: this.$route.query.complete || false,
         isSubmit: false,
-        selectedIdx: 0
+        selectedIdx: 0,
+        updateInfo: this.$route.query.updateInfo || false
       }
     },
     created() {
@@ -459,6 +461,10 @@
       _back() {
         this.$router.back()
       },
+      // 更新商品信息
+      _updateGoodsInfo() {
+
+      },
     }
   }
 </script>
@@ -473,6 +479,8 @@
     background: $color-white
     padding: 0 20px 80px
     box-sizing: border-box
+    .back
+      padding-left: 0
   .goods-box
     padding: 0 20px
     box-sizing: border-box

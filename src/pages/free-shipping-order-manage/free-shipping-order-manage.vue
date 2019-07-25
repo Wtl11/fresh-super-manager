@@ -69,7 +69,7 @@
 
   const PAGE_NAME = 'FREE_SHIPPING_ORDER_MANAGE'
   const TITLE = '订单管理'
-  const LIST_TITLE = [{name:'订单号',class:'width-3'}, {name:'会员名称',class:'width-3'}, {name:'订单总价',class:'width-2'}, {name:'实付金额',class:'width-2'}, {name:'供应商',class:'width-3'}, {name:'状态',class:'width-1'}, {name:'操作',class:''}]
+  const LIST_TITLE = [{name:'订单号',class:'width-3'}, {name:'会员名称',class:'width-3'}, {name:'订单总价',class:'width-2'}, {name:'实付金额',class:'width-2'}, {name:'所属社区',class:'width-3'}, {name:'状态',class:'width-1'}, {name:'操作',class:''}]
   const STATUS_TAB = [
     {name: '全部', status: '', num: 0},
     {name: '待推送', status: 0, num: 0},
