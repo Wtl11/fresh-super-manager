@@ -360,7 +360,7 @@
           arr = arr.slice(0, length)
         }
         this.showLoading = true
-        this.$cos.uploadFiles(this.$cosFileType.IMAGE_TYPE, arr).then((resArr) => {
+        this.$cos.uploadFiles(this.$cosFileType.IMAGE_TYPE, arr, '/market').then((resArr) => {
           this.showLoading = false
           let imagesArr = []
           resArr.forEach((item) => {

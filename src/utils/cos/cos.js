@@ -4,27 +4,28 @@ import {getCorpId} from '@utils/tool'
 /**
  * 数据入库
  * @param data
+ * @param path
  * @returns {Promise.<*>}
  */
-function _saveFile(data) {
-  const url = `/social-shopping/api/cos/save-file`
+function _saveFile(data, path='/social-shopping') {
+  let url = path+'/api/cos/save-file'
   return request.post(url, data)
 }
 
 /**
  * 获取cos签名
  * @param options
+ * @param path
  * @param callback
  * @private
  */
-function _getAuthorization(options, callback) {
+function _getAuthorization(options, path='/social-shopping', callback) {
   const method = (options.Method || 'get').toLowerCase()
   const key = options.Key || ''
   // const pathname = key.indexOf('/') === 0 ? key : '/' + key
   const pathname = key
   const Authorization = storage.get('auth.currentUser').access_token
-  const url =
-    '/social-shopping/api/cos/h5-upload-image-sign?method=' + method + '&image=' + encodeURIComponent(pathname)
+  const url = path + '/api/cos/h5-upload-image-sign?method=' + method + '&image=' + encodeURIComponent(pathname)
   const xhr = new XMLHttpRequest()
   xhr.open('GET', url, true)
   xhr.setRequestHeader('Authorization', Authorization)
@@ -56,7 +57,7 @@ function _getAuthorization(options, callback) {
  * @param processCallBack 进度条回调方法let
  * @returns {Promise<any>}
  */
-export function uploadFiles(fileType, files, showProcess, processCallBack) {
+export function uploadFiles(fileType, files, path, showProcess, processCallBack) {
   if (!files.map) {
     throw new Error('please use Array')
   }
@@ -65,7 +66,7 @@ export function uploadFiles(fileType, files, showProcess, processCallBack) {
     let requests = files.map((file) => {
       let Key = Date.now() + '-' + Math.random().toString().split('.')[1].substr(0,6)
       return new Promise((resolve, reject) => {
-        _getAuthorization({Method: 'PUT', Key: Key}, (err, info) => {
+        _getAuthorization({Method: 'PUT', Key: Key}, path, (err, info) => {
           if (err) {
             console.error(err)
             return
@@ -87,7 +88,7 @@ export function uploadFiles(fileType, files, showProcess, processCallBack) {
           }
           xhr.onload = function() {
             if (xhr.status === 200 || xhr.status === 206) {
-              _saveFile({path: '/' + encodeURIComponent(info.pathname), type: 'image'}).then((resp) => {
+              _saveFile({path: '/' + encodeURIComponent(info.pathname), type: 'image'}, path).then((resp) => {
                 resolve(resp)
               })
             } else {
