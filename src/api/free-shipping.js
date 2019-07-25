@@ -49,6 +49,11 @@ export default {
     let url = `/market/api/backend/goods-categories`
     return request.get(url, data, loading)
   },
+  // 商品绑定供应商
+  bindSupplier(data, id, loading = false) {
+    let url = `/market/api/backend/goods-bind-supplier/${id}`
+    return request.post(url, data, loading)
+  },
   /**
    * 1688相关
    * **/

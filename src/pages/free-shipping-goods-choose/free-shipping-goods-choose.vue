@@ -38,7 +38,7 @@
     <div class="bottom-btn">
       <div :class="[goodsList.goods_skus?'':'disabled']" class="button hand" @click="syncGoodsList">同步</div>
     </div>
-    <popup-input ref="popupModal" @confirm="_PIConfirm"></popup-input>
+    <popup-input ref="popupModal" @confirm="getSuppliersMsg"></popup-input>
   </div>
 </template>
 
@@ -62,7 +62,9 @@
       return {
         listTitle: LIST_TITLE,
         goodsList: {},
-        searchText: ''
+        searchText: '',
+        goodsId: '',
+        onSync: false
       }
     },
     methods: {
@@ -71,8 +73,11 @@
           this.$toast.show('请输入商品链接')
           return
         }
+        if (this.onSync) return
+        this.onSync = true
         this.getGoodsList()
       },
+      // 获取商品列表
       getGoodsList() {
         API.FreeShipping.goodsSearch({domin: this.searchText}).then((res) => {
           if (res.error === this.$ERR_OK) {
@@ -81,27 +86,39 @@
             this.$toast.show(res.message)
           }
         }).finally(()=>{
+          this.onSync = false
           this.$loading.hide()
         })
       },
       // 同步商品
       syncGoodsList() {
         if (!this.goodsList.goods_skus) return
-        // 同步商品逻辑，点击就同步，然后弹窗提示绑定供应商，可暂时不绑定
+        if (this.onSync) return
+        this.onSync = true
+        /**
+         * 同步商品逻辑：
+         * 点击就同步，然后弹窗提示绑定供应商，可暂时不绑定
+         **/
         API.FreeShipping.goodsCreate(this.goodsList).then((res) => {
           if (res.error === this.$ERR_OK) {
+            this.goodsId = res.data.goods_id
             this.$refs.popupModal.show()
           } else {
             this.$toast.show(res.message)
           }
         }).finally(()=>{
           this.$loading.hide()
+          this.onSync = false
         })
       },
-      _PIConfirm(searchText) {
-        this.getSuppliersMsg(searchText)
-      },
+      // 弹窗确认绑定按钮,获取供应商信息
       getSuppliersMsg(searchText) {
+        if (this.onSync) return
+        this.onSync = true
+        /**
+         * 绑定步骤：
+         * 先同步到供应商列表，再把商品绑定到该供应商
+         * **/
         this.$loading.show()
         API.FreeShipping.suppliersSearch({domin: searchText}).then((res) => {
           if (res.error === this.$ERR_OK) {
@@ -109,22 +126,45 @@
           } else {
             this.$toast.show(res.message)
             this.$loading.hide()
+            this.onSync = false
           }
         }).catch(()=>{
           this.$loading.hide()
+          this.onSync = false
         })
       },
+      // 同步供应商信息
       _syncSuppliersList(suppliersMsg) {
-        API.FreeShipping.suppliersCreate(suppliersMsg).then((res) => {
+        API.FreeShipping.suppliersCreate(suppliersMsg,false).then((res) => {
           if (res.error === this.$ERR_OK) {
-            this.$toast.show('绑定成功！')
-            this.$refs.popupModal.hide()
+            // 同步成功，绑定
+            this._bindSupplier(res.data.supplier_id)
           } else {
             this.$toast.show(res.message)
+            this.$loading.hide()
+            this.onSync = false
           }
-        }).finally(()=>{
+        }).catch(()=>{
           this.$loading.hide()
+          this.onSync = false
         })
+      },
+      // 绑定供应商
+      _bindSupplier(supplierId) {
+        API.FreeShipping.bindSupplier({supplier_id: supplierId}, this.goodsId)
+          .then((res) => {
+            if (res.error !== this.$ERR_OK) {
+              this.$toast.show('绑定失败！可在 商品管理-完善资料 再次绑定。')
+              return
+            }
+            this.$toast.show('绑定成功！')
+          }).catch(() => {
+            this.$toast.show('绑定失败！可在 商品管理-完善资料 再次绑定。')
+          }).finally(() => {
+            this.$loading.hide()
+            this.$refs.popupModal.hide()
+            this.onSync = false
+          })
       },
     }
   }
