@@ -56,7 +56,7 @@
         <base-blank v-else></base-blank>
       </div>
       <div class="pagination-box">
-        <base-pagination ref="pages" :pageDetail="workPage" @addPage="addPage"></base-pagination>
+        <base-pagination ref="pages" :pageDetail="workPage" :pagination="contentWorkPage" @addPage="addPage"></base-pagination>
       </div>
     </div>
     <default-confirm ref="confirm" @confirm="freeze"></default-confirm>
