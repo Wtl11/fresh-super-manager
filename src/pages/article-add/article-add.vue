@@ -201,7 +201,7 @@
                 <div>文本</div>
               </div>
               <div class="add-cont-type-item  hand">
-                <base-upload fileType="image-custom" @getPic="addImageItem">
+                <base-upload multiple="multiple" fileType="image-custom" @getPic="addImageItem">
                   <div class="add-cont-type-item">
                     <div class="icon icon-img"></div>
                     <div>图片</div>
@@ -967,7 +967,9 @@
         background: #F5F7FA
         border-radius: 2px
         padding: 20px
-
+        max-height: 500px;
+        overflow: auto
+        scroll-opacity(5px, 100px)
         .content-item
           border-1px(#D3D8DC)
           border-radius: 2px
