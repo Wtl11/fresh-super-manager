@@ -71,7 +71,6 @@
           this.$toast.show('请输入商品链接')
           return
         }
-        console.log('搜索商品！')
         this.getGoodsList()
       },
       getGoodsList() {
