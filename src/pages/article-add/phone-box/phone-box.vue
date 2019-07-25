@@ -5,7 +5,7 @@
       </div>
       <div v-else class="content-box">
         <div v-if="type !== 'video'" class="content-article-detail">
-          <video v-if="data.coverVideo.url" :src="data.coverVideo.url" class="cover-photo"></video>
+          <video v-if="data.coverVideo.url" :src="data.coverVideo.url" controls class="cover-photo"></video>
           <img v-else :src="data.coverImage.url" class="cover-photo">
           <div v-if="type === 'cookbook'" class="cookbook-title">{{data.title}}</div>
           <div :class="['auth-wrap',{cookbook: type === 'cookbook' }]">
