@@ -481,7 +481,7 @@ export default [
                   return false
                 }
                 next({
-                  params: res.data
+                  params: res
                 })
               })
               .catch(() => {

@@ -31,7 +31,6 @@
         <base-pagination
           ref="pagination"
           :pageDetail="pageDetail"
-          :pagination="requestParams.page"
           @addPage="_addPage"
         >
         </base-pagination>
@@ -66,19 +65,26 @@
           page: 1,
           limit: 10
         },
+        page: 1
       }
     },
     created() {
-      if (this.$route.meta.params && this.$route.meta.params.length) {
-        this.suppliersList = this.$route.meta.params
+      const listRes = this.$route.meta.params
+      if (listRes && listRes.data.length) {
+        this.suppliersList = listRes.data
+        this.pageDetail = {
+          total: listRes.meta.total,
+          per_page: listRes.meta.per_page,
+          total_page: listRes.meta.last_page
+        }
       } else {
-        this._getListData(true)
+        this._getListData()
       }
     },
     methods: {
-      _getListData(first=false) {
+      _getListData(resPage=false) {
         this.getSuppliersList()
-        if (!first) {
+        if (resPage) {
           this.$refs.pagination.beginPage()
         }
       },
@@ -86,18 +92,24 @@
         API.FreeShipping.getSuppliersList(this.requestParams,false).then((res) => {
           if (res.error === this.$ERR_OK) {
             this.suppliersList = res.data
+            this.pageDetail = {
+              total: res.meta.total,
+              per_page: res.meta.per_page,
+              total_page: res.meta.last_page
+            }
           } else {
             this.$toast.show(res.message)
           }
         })
       },
       _addPage(page) {
+        this.page = page
         this.requestParams.page = page
         this._getListData()
       },
       changeKeyword(keyword) {
         this.requestParams.keyword = keyword
-        this._getListData()
+        this._getListData(true)
       },
     }
   }

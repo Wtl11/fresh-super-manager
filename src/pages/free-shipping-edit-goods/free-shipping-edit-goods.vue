@@ -440,10 +440,10 @@
           const item = this.msg.goods_skus[i]
           if(item.is_default===1) {
             skuCheck = true
-          }
-          if (item.goods_sku_encoding.length === 0) {
-            this.$toast.show('请输入商品编码')
-            return false
+            if (item.goods_sku_encoding.length === 0) {
+              this.$toast.show('请输入商品编码')
+              return false
+            }
           }
         }
         if (!skuCheck) {
@@ -728,6 +728,7 @@
   .goods-box .edit-item .goods-select-box
     layout()
     .edit-input-box
+      margin-bottom: 10px
       layout(row)
       align-items: center
     .goods-select-icon
@@ -746,7 +747,6 @@
       flex: 1
       box-sizing: border-box
       padding: 0 20px
-      margin-bottom: 10px
       min-width: 590px
       max-width: 900px
       height: 52px
@@ -766,7 +766,7 @@
         font-size: $font-size-14
         font-family: $font-family-regular
         color: $color-text-main
-        margin-right: 10px
+        margin-right: 40px
         no-wrap()
         &:nth-child(1)
           flex: 1
@@ -774,6 +774,8 @@
       height: 100%
       layout(row)
       align-items: center
+      .goods-select-text
+        margin-right: 10px
     .edit-input
       width: 200px
       height: 32px
