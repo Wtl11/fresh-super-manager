@@ -400,7 +400,7 @@ export default [
         name: 'free-shipping-goods-manage',
         component: () => lazyLoadView(import('@pages/free-shipping-goods-manage/free-shipping-goods-manage')),
         meta: {
-          titles: ['商品', '商品市集'],
+          titles: ['商品', '商品集市'],
           beforeResolve(routeTo, routeFrom, next) {
             store
               .dispatch('freeShippingGoodsManage/getGoodsList', {source_type: 2, page: 1})
@@ -474,6 +474,20 @@ export default [
         component: () => lazyLoadView(import('@pages/free-shipping-suppliers-manage/free-shipping-suppliers-manage')),
         meta: {
           titles: ['商品', '供应商管理'],
+          beforeResolve(routeTo, routeFrom, next) {
+            API.FreeShipping.getSuppliersList({keyword: '', page: 1, limit: 10}, false)
+              .then((res) => {
+                if (res.error !== ERR_OK) {
+                  return false
+                }
+                next({
+                  params: res.data
+                })
+              })
+              .catch(() => {
+                next({name: '404'})
+              })
+          }
         }
       },
       // 全国包邮-同步供应商

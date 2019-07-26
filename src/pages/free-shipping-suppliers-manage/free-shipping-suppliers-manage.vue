@@ -69,7 +69,11 @@
       }
     },
     created() {
-      this._getListData(true)
+      if (this.$route.meta.params && this.$route.meta.params.length) {
+        this.suppliersList = this.$route.meta.params
+      } else {
+        this._getListData(true)
+      }
     },
     methods: {
       _getListData(first=false) {
