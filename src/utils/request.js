@@ -15,6 +15,7 @@ const http = axios.create({
 
 http.interceptors.request.use(
   (config) => {
+    config.url = resetUrl(config.url)
     // 请求数据前的拦截
     // if (process.env.VUE_APP_ENV === 'release') {
     //   let version = 'v2/'
@@ -26,6 +27,22 @@ http.interceptors.request.use(
     return Promise.reject(error)
   }
 )
+
+function resetUrl(url) {
+  const IS_PRODUCTION = process.env.NODE_ENV === 'production'
+  if (IS_PRODUCTION) {
+    return url
+  }
+  // todo
+  let pathname = window.location.pathname
+  if (pathname && pathname.indexOf('/v') > -1) {
+    let version = pathname.substr(1)
+    url = url.split('api/').join(`${version}api/`)
+    return url
+  }
+  return url
+  // return url.split('api/').join(`/v1/api/`)
+}
 
 http.interceptors.response.use(
   (response) => {

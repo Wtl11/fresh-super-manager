@@ -42,17 +42,36 @@
     watch: {
       infoTabIndex(newVal) {
         this.statusIndex = newVal
+        this.el = document.querySelectorAll('.status-tab-item')
+        this.style = `left: ${this.el[this.statusIndex].offsetLeft}px; width: ${this.el[this.statusIndex].offsetWidth}px`
+      },
+      el: {
+        handler(news) {
+          this.style = `left: ${news[this.statusIndex].offsetLeft}px; width: ${news[this.statusIndex].offsetWidth}px`
+        },
+        deep: true
+      },
+      statusList: {
+        handler(news) {
+          setTimeout(() => {
+            this.el = document.querySelectorAll('.status-tab-item')
+          }, 100)
+        },
+        deep: true
       }
     },
     mounted() {
       this.el = document.querySelectorAll('.status-tab-item')
-      this.style = `left: ${this.el[this.statusIndex].offsetLeft}px; width: ${this.el[this.statusIndex].offsetWidth}px`
     },
     methods: {
       checkStatus(index, item) {
         this.statusIndex = index
         this.style = `left: ${this.el[index].offsetLeft}px; width: ${this.el[this.statusIndex].offsetWidth}px`
         this.$emit('setStatus', item, index)
+      },
+      infoStatus(news) {
+        this.statusIndex = this.statusList.findIndex(item => item.status === news)
+        this.checkStatus(this.statusIndex, this.statusList[this.statusIndex])
       }
     }
   }
@@ -72,7 +91,7 @@
     .status-tab-item
       user-select: none
       border-radius: 100px
-      width: 106px
+      padding: 0 22px
       color: $color-text-main
       line-height: 30px
       text-align: center
@@ -92,6 +111,6 @@
     left: 0
     height: 30px
     border-radius: 100px
-    transition: left 0.2s
+    transition: all 0.2s
     background: $color-main
 </style>

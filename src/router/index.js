@@ -14,7 +14,7 @@ Vue.use(VueMeta, {
 
 const router = new VueRouter({
   routes,
-  mode: 'history',
+  mode: process.env.NODE_ENV === 'production' ? 'history' : '',
   scrollBehavior(to, from, savedPosition) {
     if (savedPosition) {
       return savedPosition
@@ -64,6 +64,9 @@ router.beforeResolve(async (routeTo, routeFrom, next) => {
             if (args.length) {
               if (routeFrom.name === args[0].name) {
                 NProgress.done()
+              }
+              if (args[0].params) {
+                Object.assign(route.meta, args[0])
               }
               next(...args)
               reject(new Error('Redirected'))
