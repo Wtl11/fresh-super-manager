@@ -204,12 +204,12 @@
                     <video :src="item.value" class="content-video"></video>
                     <img src="./phone-box/icon-play_big@2x.png" alt="" class="play-icon">
                   </template>
-                  <div v-else class="text-item">{{item.value}}</div>
+                  <div v-else class="text-item hand" @click.stop="showTextDialog(idx, item.value)">{{item.value}}</div>
                 </div>
               </transition-group>
             </draggable>
             <div v-if="!isDisabled" class="add-cont-type-box">
-              <div class="add-cont-type-item hand" @click="showTextDialog">
+              <div class="add-cont-type-item hand" @click="showTextDialog(false)">
                 <div class="icon icon-text"></div>
                 <div>文本</div>
               </div>
@@ -423,8 +423,9 @@
       this._getLikes()
     },
     methods: {
-      showTextDialog() {
-        this.addText = ''
+      showTextDialog(index, text = '') {
+        this.detailIndex = index
+        this.addText = text
         this.$refs.addText.showModal()
       },
       _getLikes() {
@@ -595,10 +596,22 @@
         }
       },
       addTextItem() {
-        this.addDetailContentItem({
+        if(!this.addText.trim()){
+          this.$toast.show('请输入内容')
+          return
+        }
+        let obj = {
           type: 'text',
           value: this.addText
-        })
+        }
+        if(this.detailIndex === false){
+          this.addDetailContentItem({
+            type: 'text',
+            value: this.addText
+          })
+        }else{
+          this.$set(this.addData.details,this.detailIndex, obj)
+        }
         this.$refs.addText.hideModal()
       },
       addImageItem(image) {
