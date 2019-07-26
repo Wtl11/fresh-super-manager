@@ -88,7 +88,7 @@ function requestException(res) {
 }
 
 export default {
-  post(url, data, loading = false, timeout = 60000) {
+  post(url, data, loading = false, timeout = 30000) {
     Utils.showLoading(loading)
     return http({
       method: 'post',
