@@ -108,6 +108,9 @@
     created() {
       this._setOrderData(true)
     },
+    beforeDestroy() {
+      this.resetParams()
+    },
     methods: {
       ...fsOrderMethods,
       async _getOrderList() {

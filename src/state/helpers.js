@@ -116,7 +116,7 @@ export const fsOrderComputed = {
   ...mapGetters('fsOrder', ['list', 'pageDetail', 'page', 'date', 'keyword', 'type'])
 }
 export const fsOrderMethods = {
-  ...mapActions('fsOrder', ['setPage', 'setOrderType', 'setDate', 'setKeyword', 'getOrderList'])
+  ...mapActions('fsOrder', ['setPage', 'setOrderType', 'setDate', 'setKeyword', 'getOrderList', 'resetParams'])
 }
 
 // 内容

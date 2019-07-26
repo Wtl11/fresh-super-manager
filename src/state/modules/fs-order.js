@@ -106,5 +106,11 @@ export const actions = {
   setKeyword({commit, dispatch}, keyword) {
     commit('SET_KEYWORD', keyword)
     commit('SET_PAGE', 1)
+  },
+  resetParams({commit, dispatch}) {
+    commit('SET_PAGE', 1)
+    commit('SET_DATE', '')
+    commit('SET_KEYWORD', '')
+    commit('SET_TYPE', '')
   }
 }
