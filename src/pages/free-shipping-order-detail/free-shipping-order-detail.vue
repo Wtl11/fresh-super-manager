@@ -124,16 +124,23 @@
   .ro-order-list-item
     &:nth-child(1)
       flex: 1.5
+      max-width: 250px
       no-wrap()
       padding-right: 30px
     &:nth-child(2), &:nth-child(3), &:nth-child(4)
       flex: 1
+      max-width: 150px
       white-space: normal !important
       word-break: break-all
-    &:nth-child(5), &:nth-child(6), &:nth-child(7)
+    &:nth-child(5), &:nth-child(6)
       flex: 1
+      max-width: 150px
+    &:nth-child(7)
+      flex: 1.3
+      max-width: 200px
     &:last-child
-      flex: 0.3
+      flex: 1.5
+      max-width: 250px
 
   .block
     font-family: $font-family-medium
