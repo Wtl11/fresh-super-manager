@@ -53,7 +53,7 @@
           ref="pagination"
           :pageDetail="pageDetail"
           :pagination="page"
-          @addPage="setPage"
+          @addPage="changePage"
         >
         </base-pagination>
       </div>
@@ -113,11 +113,11 @@
     },
     methods: {
       ...fsOrderMethods,
-      async _getOrderList() {
+      async _getOrderList(resetPage=false) {
         await this.getOrderList()
-        this._setOrderData()
+        this._setOrderData(resetPage)
       },
-      _setOrderData(first=false) {
+      _setOrderData(resetPage=false) {
         this.allChecked = false
         // 待结算状态增加订单勾选
         if (this.list.length > 0 && this.tabType*1 === 1) {
@@ -128,7 +128,7 @@
           this.orderList = this.list
         }
         this._getOrderType()
-        if (!first) {
+        if (!resetPage) {
           this.$refs.pagination.beginPage()
         }
       },
@@ -164,6 +164,10 @@
       changeKeyword(keyword) {
         this.setKeyword(keyword)
         this._getOrderList()
+      },
+      changePage(page) {
+        this.setPage(page)
+        this._getOrderList(true)
       },
       // 获取支付链接
       _orderPay() {

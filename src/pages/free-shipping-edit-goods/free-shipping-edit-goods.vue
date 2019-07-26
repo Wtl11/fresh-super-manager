@@ -18,7 +18,7 @@
           商品名称
         </div>
         <div class="edit-input-box">
-          <input v-model="msg.name" type="text" class="edit-input" maxlength="29" @mousewheel.native.prevent>
+          <input v-model="msg.name" type="text" class="edit-input" @mousewheel.native.prevent>
         </div>
         <a :href="msg.source_url" target="_blank" class="edit-pla link hand">查看1688商品</a>
       </div>
@@ -421,8 +421,11 @@
         if (this.isSubmit) {
           return false
         }
-        if (this.msg.name.length === 0 || this.msg.name.length >= 30) {
-          this.$toast.show('请输入商品名称且小于30字')
+        if (this.msg.name.length === 0) {
+          this.$toast.show('请输入商品名称')
+          return false
+        } else if (this.msg.sale_name.length === 0 || this.msg.sale_name.length >= 30) {
+          this.$toast.show('请输入销售标题且字数小于30')
           return false
         } else if (this.msg.goods_category_id <= 0) {
           this.$toast.show('请选择商品类目')
