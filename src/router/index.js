@@ -96,7 +96,11 @@ router.afterEach((routeTo, routeFrom) => {
   let titles = routeTo.meta.titles ? [...routeTo.meta.titles] : []
   // 判断该页面是否是变动的标题
   if (variableIndex || variableIndex === 0) {
-    titles[variableIndex] = (routeTo.query.id || routeTo.params.id ? EDIT_TEXT : ADD_TEXT) + titles[variableIndex]
+    if (routeTo.query.complete) {
+      titles[variableIndex] = '完善资料'
+    } else {
+      titles[variableIndex] = (routeTo.query.id || routeTo.params.id ? EDIT_TEXT : ADD_TEXT) + titles[variableIndex]
+    }
   }
   titles[titles.length - 1] = name || titles[titles.length - 1]
   if (titles) {

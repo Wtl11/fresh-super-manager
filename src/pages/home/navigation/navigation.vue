@@ -391,7 +391,7 @@
     .second-title
       transition: all 0.2s
       margin: 30px 0 10px
-      color: #666
+      color: #888888
       font-size: $font-size-14
       line-height: 1
 

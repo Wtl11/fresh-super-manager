@@ -400,7 +400,7 @@ export default [
         name: 'free-shipping-goods-manage',
         component: () => lazyLoadView(import('@pages/free-shipping-goods-manage/free-shipping-goods-manage')),
         meta: {
-          titles: ['商品', '商品集市'],
+          titles: ['商品', '商品管理'],
           beforeResolve(routeTo, routeFrom, next) {
             store
               .dispatch('freeShippingGoodsManage/getGoodsList', {source_type: 2, page: 1})

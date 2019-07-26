@@ -18,7 +18,7 @@
           商品名称
         </div>
         <div class="edit-input-box">
-          <input v-model="msg.name" type="text" class="edit-input" @mousewheel.native.prevent>
+          <input v-model="msg.name" type="text" class="edit-input" disabled>
         </div>
         <a :href="msg.source_url" target="_blank" class="edit-pla link hand">查看1688商品</a>
       </div>
@@ -52,6 +52,7 @@
             <base-drop-down :height="40" :width="190" :radius="2" :select="secondSelect" @setValue="setSecondValue"></base-drop-down>
           </div>
           <base-drop-down :height="40" :width="190" :radius="2" :select="thirdlySelect" @setValue="setThirdlyValue"></base-drop-down>
+          <div class="disabled-mask"></div>
         </div>
       </div>
       <div class="edit-item  edit-image-box">
@@ -795,4 +796,10 @@
       padding-left: 0
       .stock-color
         color: $color-negative
+  .disabled-mask
+    position: absolute
+    width: 100%
+    height: 100%
+    top: 0
+    left: 0
 </style>
