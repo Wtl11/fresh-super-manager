@@ -255,7 +255,7 @@
         white-space: normal
         position: absolute
         left: -75px
-        top: 24.5px
+        top: 27px
         transition: background .3s
         visibility: hidden
         opacity: 0.8
