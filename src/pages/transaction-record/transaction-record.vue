@@ -48,6 +48,7 @@
             <div class="list-item">{{item.created_at}}</div>
             <div class="list-item">{{item.order_sn}}</div>
             <div class="list-item">{{item.out_trade_sn}}</div>
+            <div class="list-item">{{item.source_type_str}}</div>
             <div class="list-item">{{item.total}}</div>
             <div class="list-item">{{item.trade_type}}</div>
           </div>
@@ -73,7 +74,7 @@
 
   const PAGE_NAME = 'TRANSACTION_RECORD'
   const TITLE = '交易记录'
-  const LIST_TITLE = ['支付时间', '订单号', '交易号', '交易金额', '交易类型']
+  const LIST_TITLE = ['支付时间', '订单号', '交易号', '订单类型', '交易金额', '交易类型']
   const TRADE_SELECT = {
     check: false,
     show: false,
