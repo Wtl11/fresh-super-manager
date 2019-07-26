@@ -83,10 +83,12 @@
     },
     methods: {
       _getListData(resPage=false) {
-        this.getSuppliersList()
         if (resPage) {
+          this.page = 1
+          this.requestParams.page = 1
           this.$refs.pagination.beginPage()
         }
+        this.getSuppliersList()
       },
       getSuppliersList() {
         API.FreeShipping.getSuppliersList(this.requestParams,false).then((res) => {
