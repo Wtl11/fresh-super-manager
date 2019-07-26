@@ -82,8 +82,13 @@
           }
         }).finally(()=>{
           this.$loading.hide()
+          this.restoreData()
         })
       },
+      restoreData() {
+        this.suppliersList = []
+        this.searchText = ''
+      }
     }
   }
 </script>

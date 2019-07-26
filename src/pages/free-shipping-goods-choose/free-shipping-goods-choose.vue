@@ -38,7 +38,7 @@
     <div class="bottom-btn">
       <div :class="[goodsList.goods_skus?'':'disabled']" class="button hand" @click="syncGoodsList">同步</div>
     </div>
-    <popup-input ref="popupModal" @confirm="getSuppliersMsg"></popup-input>
+    <popup-input ref="popupModal" @confirm="getSuppliersMsg" @cancel="restoreData"></popup-input>
   </div>
 </template>
 
@@ -164,8 +164,14 @@
             this.$loading.hide()
             this.$refs.popupModal.hide()
             this.onSync = false
+            this.restoreData()
           })
       },
+      restoreData() {
+        this.goodsList = []
+        this.searchText = ''
+        this.goodsId = ''
+      }
     }
   }
 </script>
