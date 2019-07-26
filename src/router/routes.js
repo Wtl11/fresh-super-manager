@@ -464,7 +464,7 @@ export default [
         name: 'free-shipping-goods-choose',
         component: () => lazyLoadView(import('@pages/free-shipping-goods-choose/free-shipping-goods-choose')),
         meta: {
-          titles: ['商品', '1688商品', '商品选品'],
+          titles: ['商品', '商品选品'],
         }
       },
       // 全国包邮-供应商列表
