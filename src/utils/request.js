@@ -16,10 +16,10 @@ const http = axios.create({
 http.interceptors.request.use(
   (config) => {
     // 请求数据前的拦截
-    if (process.env.VUE_APP_ENV === 'release') {
-      let version = 'v2/'
-      config.url = config.url.split('api/').join(`${version}api/`)
-    }
+    // if (process.env.VUE_APP_ENV === 'release') {
+    //   let version = 'v2/'
+    //   config.url = config.url.split('api/').join(`${version}api/`)
+    // }
     return config
   },
   (error) => {
