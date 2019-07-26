@@ -152,8 +152,8 @@
     },
     {
       name: '订单',
-      icon: require('./icon-content1@2x.png'),
-      activeIcon: require('./icon-content2@2x.png'),
+      icon: require('./icon-order_white@2x.png'),
+      activeIcon: require('./icon-order@2x.png'),
       isLight: true,
       second: ORDER,
       url: '/home/free-shipping-order-manage'
