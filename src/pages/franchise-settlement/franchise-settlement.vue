@@ -274,6 +274,8 @@
     .list-item
       &:nth-child(1), &:nth-child(5)
         flex: 1.5
+      &:nth-child(4)
+        flex: 2.5
       &:last-child
         padding: 0
         max-width: 50px

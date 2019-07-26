@@ -265,6 +265,7 @@
     width: 245px
   .order-manage
     .order-date
+      margin-top: 6px
       font-family: $font-family-regular
       color: #acacac
 </style>

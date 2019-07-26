@@ -553,8 +553,8 @@
         font-size: $font-size-14
         font-family: $font-family-regular
         white-space: nowrap
-        text-align: left
-        width: 64px
+        text-align: right
+        width: 80px
       .start
         display: inline-block
         margin-right: -2px
@@ -710,7 +710,7 @@
       color: $color-text-assist
       font-family: $font-family-regular
   .procurement-top
-    margin-top: 24px
+    margin-top: 30px
   .image-box
     margin-left: 40.9px
   .edit-msg
