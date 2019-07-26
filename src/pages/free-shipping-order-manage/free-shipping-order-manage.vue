@@ -40,8 +40,8 @@
             <div class="list-item width-3">{{item.buyer_name}}</div>
             <div class="list-item width-2">{{item.total}}</div>
             <div class="list-item width-2">{{item.real_pay}}</div>
-            <div class="list-item width-3">{{item.distributor_name}}</div>
-            <div class="list-item width-1">{{item.status_str}}</div>
+            <div class="list-item width-3">{{item.source_order_id}}</div>
+            <div class="list-item width-2">{{item.status_str}}</div>
             <div class="list-item list-operation-box">
               <router-link tag="span" :to="'free-shipping-order-detail?id=' + item.order_id" append class="list-operation">详情</router-link>
             </div>
@@ -69,7 +69,7 @@
 
   const PAGE_NAME = 'FREE_SHIPPING_ORDER_MANAGE'
   const TITLE = '订单管理'
-  const LIST_TITLE = [{name:'订单号',class:'width-3'}, {name:'会员名称',class:'width-3'}, {name:'订单总价',class:'width-2'}, {name:'实付金额',class:'width-2'}, {name:'所属社区',class:'width-3'}, {name:'状态',class:'width-1'}, {name:'操作',class:''}]
+  const LIST_TITLE = [{name:'订单号',class:'width-3'}, {name:'会员名称',class:'width-3'}, {name:'订单总价',class:'width-2'}, {name:'实付金额',class:'width-2'}, {name:'关联订单号',class:'width-3'}, {name:'状态',class:'width-2'}, {name:'操作',class:''}]
   const STATUS_TAB = [
     {name: '全部', status: '', num: 0},
     {name: '待推送', status: 0, num: 0},
