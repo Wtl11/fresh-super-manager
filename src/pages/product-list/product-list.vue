@@ -3,13 +3,13 @@
     <div class="down-content">
       <span class="down-tip">类目筛选</span>
       <div class="down-item-small">
-        <base-drop-down :select="stairSelect" :radius="2" @setValue="setStairValue"></base-drop-down>
+        <base-drop-down :select="stairSelect" @setValue="setStairValue"></base-drop-down>
       </div>
       <div class="down-item-small">
-        <base-drop-down :select="secondSelect" :radius="2" @setValue="setSecondValue"></base-drop-down>
+        <base-drop-down :select="secondSelect" @setValue="setSecondValue"></base-drop-down>
       </div>
       <div class="down-item-small">
-        <base-drop-down :select="thirdlySelect" :radius="2" @setValue="setThirdlyValue"></base-drop-down>
+        <base-drop-down :select="thirdlySelect" @setValue="setThirdlyValue"></base-drop-down>
       </div>
       <span class="down-tip">搜索</span>
       <div class="down-item">

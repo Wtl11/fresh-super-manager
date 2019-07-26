@@ -18,7 +18,7 @@
       </div>
       <span class="down-tip">订单类型</span>
       <div class="down-item-small">
-        <base-drop-down :select="tradeSelect" :radius="2" @setValue="setSelectValue"></base-drop-down>
+        <base-drop-down :select="tradeSelect" @setValue="setSelectValue"></base-drop-down>
       </div>
       <span class="down-tip">搜索</span>
       <div class="down-item">
