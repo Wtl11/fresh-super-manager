@@ -148,7 +148,7 @@
       activeIcon: require('./icon-commodity@2x.png'),
       isLight: true,
       second: GOODS,
-      url: '/home/product-list'
+      url: '/home/free-shipping-goods-manage'
     },
     {
       name: '订单',
