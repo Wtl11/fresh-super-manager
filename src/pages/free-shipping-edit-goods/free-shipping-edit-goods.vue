@@ -463,6 +463,9 @@
         } else if (+this.goods_skus.original_price < +this.goods_skus.trade_price) {
           this.$toast.show('划线价请大于销售单价')
           return false
+        } else if (!this.msg.supplier_id) {
+          this.$toast.show('请选择供应商')
+          return false
         }
         return true
       },
