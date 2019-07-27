@@ -50,8 +50,8 @@
             <div class="ro-order-list-item ro-order-list-text">{{item.trade_price && `¥ ${item.trade_price}`}}</div>
             <div class="ro-order-list-item ro-order-list-text">{{item.total && `¥ ${item.total}`}}</div>
             <div class="ro-order-list-item ro-order-list-text">{{item.after_sale_status_str}}</div>
-            <div class="ro-order-list-item ro-order-list-text">{{item.express_company}}</div>
-            <div class="ro-order-list-item ro-order-list-text">{{item.express_sn}}</div>
+            <div class="ro-order-list-item ro-order-list-text">{{item.express_company?item.express_company:'——'}}</div>
+            <div class="ro-order-list-item ro-order-list-text">{{item.express_sn?item.express_sn:'——'}}</div>
           </div>
         </div>
       </div>
@@ -123,24 +123,24 @@
 
   .ro-order-list-item
     &:nth-child(1)
-      flex: 1.5
-      max-width: 250px
+      flex: 2
+      max-width: 300px
       no-wrap()
       padding-right: 30px
     &:nth-child(2), &:nth-child(3), &:nth-child(4)
       flex: 1
-      max-width: 150px
+      max-width: 140px
       white-space: normal !important
       word-break: break-all
     &:nth-child(5), &:nth-child(6)
       flex: 1
-      max-width: 150px
+      max-width: 140px
     &:nth-child(7)
-      flex: 1.3
-      max-width: 200px
+      flex: 1.1
+      max-width: 150px
     &:last-child
       flex: 1.5
-      max-width: 250px
+      max-width: 200px
 
   .block
     font-family: $font-family-medium
