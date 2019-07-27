@@ -41,8 +41,8 @@
             <div class="list-item">
               <img class="pic-box" :src="item.image_url" alt="">
             </div>
-            <div class="list-item">{{item.name}}</div>
-            <div class="list-item">￥{{item.trade_price}}</div>
+            <div class="list-item">{{item.name?item.name:'——'}}</div>
+            <div class="list-item">{{item.trade_price==='0.00'?'——':'￥'+item.trade_price}}</div>
             <div class="list-item">{{item.usable_stock}}</div>
             <div class="list-item">{{item.source_type_str}}</div>
             <div class="list-item">{{item.created_at}}</div>
@@ -51,7 +51,7 @@
                 描述信息变更！
                 <div class="popup-tip">具体更新内容：图文信息变更</div>
               </template>
-              <template v-else>--</template>
+              <template v-else>——</template>
             </div>
             <div class="list-item">
               <div class="list-item-btn" @click="switchBtn(item, index)">

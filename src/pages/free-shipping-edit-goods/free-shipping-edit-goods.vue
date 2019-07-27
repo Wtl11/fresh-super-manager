@@ -184,7 +184,7 @@
       </div>
       <div class="edit-item edit-val">
         <div class="edit-title">采购邮费</div>
-        <div class="edit-val-box">全国包邮</div>
+        <div class="edit-val-box">以实际下单为准</div>
       </div>
     </div>
     <div class="back">
