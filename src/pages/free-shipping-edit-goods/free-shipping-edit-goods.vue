@@ -316,7 +316,7 @@
       },
       // 获取供应商列表
       _getSuppliersList() {
-        API.FreeShipping.getSuppliersList()
+        API.FreeShipping.getSuppliersList({limit: 100})
           .then((res) => {
             if (res.error !== this.$ERR_OK) {
               return
