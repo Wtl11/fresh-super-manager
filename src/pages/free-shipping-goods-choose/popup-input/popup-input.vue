@@ -38,6 +38,7 @@
         this.$refs.modal && this.$refs.modal.showModal()
       },
       hide() {
+        this.popupTxt = ''
         this.isSubmit = false
         this.$refs.modal && this.$refs.modal.hideModal()
       },
