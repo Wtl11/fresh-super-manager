@@ -271,7 +271,7 @@
         transition: all 0.3s
         &:hover
           transition: all 0.3s
-          icon-image('pic-paging_left2')
+          icon-image('pic-page_left')
       .page-icon-disable
         &:hover
           transition: all 0.3s
@@ -281,7 +281,7 @@
         icon-image('icon-later')
         &:hover
           transition: all 0.3s
-          icon-image('pic-paging_right2')
+          icon-image('pic-page_right')
       .page-icon-two-disable
         &:hover
           transition: all 0.3s

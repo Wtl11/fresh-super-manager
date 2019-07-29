@@ -188,7 +188,7 @@ export default [
         name: 'transaction-record',
         component: () => lazyLoadView(import('@pages/transaction-record/transaction-record')),
         meta: {
-          titles: ['财务', '结算', '交易记录'],
+          titles: ['财务', '交易记录'],
           beforeResolve(routeTo, routeFrom, next) {
             store
               .dispatch('trade/getTradeList')
