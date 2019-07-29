@@ -102,6 +102,14 @@
           <div class="tip">建议图片的尺寸：750*750，支持png，jpeg，jpg格式，最多可上传15张。</div>
         </div>
       </div>
+      <div class="edit-item">
+        <div class="edit-title">
+          商品说明
+        </div>
+        <div class="edit-input-box">
+          <textarea v-model="msg.description" class="edit-textarea edit-input" disabled></textarea>
+        </div>
+      </div>
     </div>
     <div class="content-header">
       <div class="content-title">商品规格</div>
@@ -286,6 +294,9 @@
             this.goods_skus = skuItem
             break
           }
+        }
+        if (this.msg.description) {
+          this.msg.description = this.msg.description.replace(/&nbsp;/g,' ')
         }
       },
       // 获取类目列表
@@ -594,6 +605,7 @@
         &:focus
           border-color: $color-main !important
       .edit-textarea
+        width: 400px
         padding: 5px 14px
         height: 94px
         resize: none
