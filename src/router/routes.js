@@ -60,7 +60,7 @@ export default [
         name: 'intent-list',
         component: () => lazyLoadView(import('@pages/intent-list/intent-list')),
         meta: {
-          titles: ['客户', '意向单','加盟商'],
+          titles: ['客户', '意向单'],
           beforeResolve(routeTo, routeFrom, next) {
             store
               .dispatch('intent/getIntentList', routeTo.params.id)
@@ -118,7 +118,7 @@ export default [
         name: 'franchise-settlement',
         component: () => lazyLoadView(import('@pages/franchise-settlement/franchise-settlement')),
         meta: {
-          titles: ['财务', '结算', '加盟商结算'],
+          titles: ['财务', '加盟商结算'],
           beforeResolve(routeTo, routeFrom, next) {
             //  订单列表
             store
@@ -141,7 +141,7 @@ export default [
         name: 'leader-withdrawal',
         component: () => lazyLoadView(import('@pages/leader-withdrawal/leader-withdrawal')),
         meta: {
-          titles: ['财务', '结算', '团长提现'],
+          titles: ['财务', '团长提现'],
           beforeResolve(routeTo, routeFrom, next) {
             //  订单列表
             store
@@ -164,7 +164,7 @@ export default [
         name: 'budget-detail',
         component: () => lazyLoadView(import('@pages/budget-detail/budget-detail')),
         meta: {
-          titles: ['财务', '结算', '团长提现', '收支明细', ''],
+          titles: ['财务', '团长提现', '收支明细', ''],
           beforeResolve(routeTo, routeFrom, next) {
             //    commit('SET_BILL_PAGE', page)
             store.dispatch('leader/setInfoPage')
@@ -322,7 +322,7 @@ export default [
         name: 'content-center-article-add',
         component: () => lazyLoadView(import('@pages/article-add/article-add')),
         meta: {
-          titles: ['商城', '内容', '我的作品', '创作作品'],
+          titles: ['商城', '内容', '创作作品'],
           marginBottom: 80,
           beforeResolve(routeTo, routeFrom, next) {
             let id = routeTo.query.id
