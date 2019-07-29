@@ -57,7 +57,6 @@
       </div>
       <div class="ro-order-list-footer">
         <div class="ro-order-list-foot-box">
-          <div class="foot-item">订单总价：<span class="block">{{detail.total && `¥ ${detail.total}`}}</span></div>
           <div class="foot-item">实付金额：<span class="block">{{detail.real_pay && `¥ ${detail.real_pay}`}}</span></div>
         </div>
       </div>

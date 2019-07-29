@@ -433,7 +433,7 @@ export default [
         name: 'free-shipping-order-manage',
         component: () => lazyLoadView(import('@pages/free-shipping-order-manage/free-shipping-order-manage')),
         meta: {
-          titles: ['订单', '订单', '订单管理'],
+          titles: ['订单', '订单管理'],
           beforeResolve(routeTo, routeFrom, next) {
             store
               .dispatch('fsOrder/getOrderList')
@@ -455,7 +455,7 @@ export default [
         name: 'free-shipping-order-detail',
         component: () => lazyLoadView(import('@pages/free-shipping-order-detail/free-shipping-order-detail')),
         meta: {
-          titles: ['订单', '订单', '订单管理', '详情'],
+          titles: ['订单', '订单管理', '订单详情'],
         }
       },
       // 全国包邮-商品选品

@@ -487,7 +487,7 @@
          **/
         API.FreeShipping.goodsSearch({domin: this.msg.source_url}).then((res) => {
           if (res.error === this.$ERR_OK) {
-            API.FreeShipping.goodsUpdate(res.data, res.data.product_id, false).then((res) => {
+            API.FreeShipping.goodsUpdate(res.data, this.id, false).then((res) => {
               if (res.error === this.$ERR_OK) {
                 API.FreeShipping.getGoodsInfo(this.id)
                   .then((res) => {
