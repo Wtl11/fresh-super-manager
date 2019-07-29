@@ -61,6 +61,29 @@
         </div>
       </div>
     </div>
+    <div class="detail-item">
+      <div class="top">
+        <div class="title">采购清单</div>
+        <div class="line"></div>
+      </div>
+      <div v-if="detail.order_details" class="bot goods-list purchase-list">
+        <div class="ro-order-list-header">
+          <div v-for="(item, index) in purchaseTitle" :key="index" class="ro-order-list-item">
+            {{item}}
+          </div>
+        </div>
+        <div class="ro-order-list">
+          <div v-for="(item, index) in detail.order_details" :key="index" class="ro-order-list-box">
+            <div class="ro-order-list-item ro-order-list-text ro-order-list-item-double">{{item.name}}</div>
+            <div class="ro-order-list-item ro-order-list-text">{{item.minimum}}</div>
+            <div class="ro-order-list-item ro-order-list-text">{{item.purchase_num}}</div>
+            <div class="ro-order-list-item ro-order-list-text">{{item.purchase_price && `¥ ${item.purchase_price}`}}</div>
+            <div class="ro-order-list-item ro-order-list-text">{{item.purchase_total && `¥ ${item.purchase_total}`}}</div>
+            <div class="ro-order-list-item ro-order-list-text">{{item.supplier_order_sn?item.supplier_order_sn:'——'}}</div>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -70,6 +93,7 @@
   const PAGE_NAME = 'ORDER_DETAIL'
   const TITLE = '订单详情'
   const TITLELIST = ['商品名称', '下单单位', '下单数量', '下单单价', '下单金额', '退款状态', '快递公司', '快递单号']
+  const PURCHASE_TITLE = ['商品名称', '最低采购量', '采购数量', '采购单价', '采购总价', '1688订单号']
 
   export default {
     name: PAGE_NAME,
@@ -79,6 +103,7 @@
     data() {
       return {
         titleList: TITLELIST,
+        purchaseTitle: PURCHASE_TITLE,
         detail: {}
       }
     },
@@ -140,6 +165,17 @@
     &:last-child
       flex: 1.5
       max-width: 200px
+  .purchase-list
+    .ro-order-list-item
+      flex: 1
+      max-width: 200px
+      &:nth-child(1)
+        flex: 2.3
+        max-width: 460px
+        padding-right: 30px
+      &:last-child
+        flex: 1.5
+        max-width: 300px
 
   .block
     font-family: $font-family-medium
