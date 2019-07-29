@@ -132,8 +132,8 @@
   .table .table-content
     padding-bottom: 40px
     .search-con
-      height: 30px
-      line-height: 30px
+      height: 40px
+      line-height: 40px
       margin: 10px 0 40px 0
       padding: 0 20px
       layout(row)
@@ -142,15 +142,15 @@
       color: $color-text-main
       align-items: center
       .search-input
-        width: 360px
-        height: 30px
+        width: 450px
+        height: 40px
         padding: 0 20px
         margin: 0 10px
         border: 1px solid #d3d8dc
         border-radius: 20px
       .search-btn
         padding: 0 12px
-        height: 30px
+        height: 40px
         background: $color-main
         color: #fff
         text-align: center
