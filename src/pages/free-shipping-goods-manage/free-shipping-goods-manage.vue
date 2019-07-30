@@ -34,34 +34,41 @@
       </div>
       <div class="big-list">
         <div class="list-header list-box">
-          <div v-for="(item,index) in listTitle" :key="index" class="list-item">{{item}}</div>
+          <div v-for="(title,index) in listTitle" :key="index" :class="title.class" class="list-item">{{title.name}}</div>
         </div>
         <div class="list">
           <div v-for="(item, index) in goodsList" :key="index" class="list-content list-box">
-            <div class="list-item">
-              <img class="pic-box" :src="item.image_url" alt="">
-            </div>
-            <div class="list-item">{{item.name?item.name:'——'}}</div>
-            <div class="list-item">{{item.trade_price==='0.00'?'——':'￥'+item.trade_price}}</div>
-            <div class="list-item">{{item.usable_stock}}</div>
-            <div class="list-item">{{item.source_type_str}}</div>
-            <div class="list-item">{{item.created_at}}</div>
-            <div class="list-item list-popup">
-              <template v-if="item.goods_update_notice">
-                描述信息变更！
-                <div class="popup-tip">具体更新内容：图文信息变更</div>
+            <div v-for="(title) in listTitle" :key="title.key" :class="title.class" class="list-item">
+              <img v-if="title.type==='img'" class="pic-box" :src="item[title.key]" alt="">
+              <template v-else-if="title.type==='empty'">{{item[title.key]?item[title.key]:'——'}}</template>
+              <template v-else-if="title.type==='price'">{{item[title.key]==='0.00'?'——':'￥'+item[title.key]}}
               </template>
-              <template v-else>——</template>
-            </div>
-            <div class="list-item">
-              <div class="list-item-btn" @click="switchBtn(item, index)">
-                <base-switch :status="item.is_online" confirmText="上架" cancelText="下架" switchColor="#922C88"></base-switch>
+              <template v-else-if="title.type==='update'">
+                <div v-if="item[title.key]">
+                  描述信息变更！
+                  <div class="popup-tip">具体更新内容：图文信息变更</div>
+                </div>
+                <div v-else>——</div>
+              </template>
+              <div v-else-if="title.type==='online'" class="list-item-btn" @click="switchBtn(item, index)">
+                <base-switch :status="item[title.key]" confirmText="上架" cancelText="下架"
+                             switchColor="#922C88"
+                ></base-switch>
               </div>
-            </div>
-            <div class="list-item list-operation-box">
-              <router-link v-if="item.complete_status===0" tag="span" :to="'free-shipping-edit-goods?complete=1&id=' + item.id" append class="list-operation">完善资料</router-link>
-              <router-link v-else tag="span" :to="'free-shipping-edit-goods?id=' + item.id+'&updateInfo='+(item.goods_update_notice?1:0)" append class="list-operation">编辑</router-link>
-              <span class="list-operation" @click="delGoods(item)">删除</span>
+              <template v-else-if="title.type==='option'">
+                <router-link v-if="item[title.key]===0" tag="span"
+                             :to="'free-shipping-edit-goods?complete=1&id=' + item.id" append class="list-operation"
+                >
+                  完善资料
+                </router-link>
+                <router-link v-else tag="span"
+                             :to="'free-shipping-edit-goods?id=' + item.id+'&updateInfo='+(item.goods_update_notice?1:0)"
+                             append class="list-operation"
+                >编辑
+                </router-link>
+                <span class="list-operation" @click="delGoods(item)">删除</span>
+              </template>
+              <template v-else>{{item[title.key]}}</template>
             </div>
           </div>
         </div>
@@ -85,7 +92,17 @@
   import API from '@api'
   const PAGE_NAME = 'FREE_SHIPPING_GOODS_MANAGE'
   const TITLE = '商品管理'
-  const LIST_TITLE = ['图片', '商品名称', '价格', '库存', '来源', '创建时间', '更新情况', '状态', '操作']
+  const LIST_CONFIG = [
+    {name: '图片', class: 'w-img', type: 'img', key: 'image_url'},
+    {name: '商品名称', class: 'w-3', type: 'empty', key: 'name'},
+    {name: '价格', type: 'price', key: 'trade_price'},
+    {name: '库存', key: 'usable_stock'},
+    {name: '来源', key: 'source_type_str'},
+    {name: '创建时间', class: 'w-2', key: 'created_at'},
+    {name: '更新情况', class: 'w-2 list-popup', type: 'update', key: 'goods_update_notice'},
+    {name: '状态', type: 'online', key: 'is_online'},
+    {name: '操作', class: 'w-option list-operation-box', type: 'option', key: 'complete_status'}
+  ]
 
   export default {
     name: PAGE_NAME,
@@ -97,7 +114,7 @@
     },
     data() {
       return {
-        listTitle: LIST_TITLE,
+        listTitle: LIST_CONFIG,
         statusTab: [{name: '全部', num: 0}, {name: '已上架', num: 0}, {name: '已下架', num: 0}],
         stairSelect: {check: false, show: false, content: '一级类目', type: 'default', data: []},
         secondSelect: {check: false, show: false, content: '二级类目', type: 'default', data: []},
@@ -211,14 +228,10 @@
       },
       // 上下架
       switchBtn(item, index) {
-        // if (item.goods_sku_code.length === 0 && item.is_online * 1 === 0) {
-        //   this.$toast.show('请先补充商品编码再上架')
-        //   return
-        // }
-        // if (item.goods_material_category_id <= 0 && item.is_online * 1 === 0) {
-        //   this.$toast.show('请先补充类目再上架')
-        //   return
-        // }
+        if (item.is_online === 0) {
+          this.$toast.show('请先完善资料')
+          return
+        }
         let data = {
           goods_id: item.id,
           is_online: item.is_online * 1 === 1 ? 0 : 1
@@ -260,16 +273,16 @@
   @import "~@design"
   .list-box
     .list-item
-      &:nth-child(1)
+      &.w-img
         max-width: 100px
         flex: 0.5
-      &:nth-child(2)
+      &.w-3
         max-width: 300px
         flex: 3
-      &:nth-child(6),&:nth-child(7)
+      &.w-2
         max-width: 180px
         flex: 1.3
-      &:last-child
+      &.w-option
         flex: 1.2
         padding: 5px
         min-width: 140px
