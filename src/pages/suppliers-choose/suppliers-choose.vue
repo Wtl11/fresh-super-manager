@@ -37,7 +37,7 @@
 <script type="text/ecmascript-6">
   import API from '@api'
 
-  const PAGE_NAME = 'FREE_SHIPPING_SUPPLIERS_CHOOSE'
+  const PAGE_NAME = 'SUPPLIERS_CHOOSE'
   const TITLE = '同步供应商信息'
   const LIST_TITLE = ['供应商名称', '公司全名']
 

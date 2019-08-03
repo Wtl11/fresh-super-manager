@@ -13,7 +13,7 @@
           <p class="identification-name">供应商列表</p>
         </div>
         <div class="function-btn">
-          <router-link to="free-shipping-suppliers-choose" append class="btn-main btn-main-end">同步供应商</router-link>
+          <router-link to="suppliers-choose" append class="btn-main btn-main-end">同步供应商</router-link>
         </div>
       </div>
       <div class="big-list">
@@ -42,7 +42,7 @@
 <script type="text/ecmascript-6">
   import API from '@api'
 
-  const PAGE_NAME = 'FREE_SHIPPING_SUPPLIERS_MANAGE'
+  const PAGE_NAME = 'SUPPLIERS_MANAGE'
   const TITLE = '供应商列表'
   const LIST_TITLE = ['供应商名称', '公司全名']
 

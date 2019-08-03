@@ -57,12 +57,12 @@
               </div>
               <template v-else-if="title.type==='option'">
                 <router-link v-if="item[title.key]===0" tag="span"
-                             :to="'free-shipping-edit-goods?complete=1&id=' + item.id" append class="list-operation"
+                             :to="'modify-goods?complete=1&id=' + item.id" append class="list-operation"
                 >
                   完善资料
                 </router-link>
                 <router-link v-else tag="span"
-                             :to="'free-shipping-edit-goods?id=' + item.id+'&updateInfo='+(item.goods_update_notice?1:0)"
+                             :to="'modify-goods?id=' + item.id+'&updateInfo='+(item.goods_update_notice?1:0)"
                              append class="list-operation"
                 >编辑
                 </router-link>
@@ -90,7 +90,7 @@
   import {fsGoodsComputed, fsGoodsMethods} from '@state/helpers'
   import DefaultConfirm from '@components/default-confirm/default-confirm'
   import API from '@api'
-  const PAGE_NAME = 'FREE_SHIPPING_GOODS_MANAGE'
+  const PAGE_NAME = 'GOODS_MANAGE'
   const TITLE = '商品管理'
   const LIST_CONFIG = [
     {name: '图片', class: 'w-img', type: 'img', key: 'image_url'},

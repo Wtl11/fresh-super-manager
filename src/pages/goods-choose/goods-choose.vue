@@ -46,7 +46,7 @@
   import API from '@api'
   import PopupInput from './popup-input/popup-input'
 
-  const PAGE_NAME = 'FREE_SHIPPING_GOODS_CHOOSE'
+  const PAGE_NAME = 'GOODS_CHOOSE'
   const TITLE = '商品选品'
   const LIST_TITLE = ['图片', '商品', '类目', '价格', '库存', '规格']
 

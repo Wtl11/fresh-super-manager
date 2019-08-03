@@ -12,7 +12,7 @@ export default [
       beforeResolve(routeTo, routeFrom, next) {
         // 判断用户是否已经登录
         if (store.getters['auth/loggedIn']) {
-          next({name: 'product-list'})
+          next({name: 'goods-manage'})
         } else {
           next()
         }
@@ -396,9 +396,9 @@ export default [
       },
       // 全国包邮-商品管理
       {
-        path: 'free-shipping-goods-manage',
-        name: 'free-shipping-goods-manage',
-        component: () => lazyLoadView(import('@pages/free-shipping-goods-manage/free-shipping-goods-manage')),
+        path: 'goods-manage',
+        name: 'goods-manage',
+        component: () => lazyLoadView(import('@pages/goods-manage/goods-manage')),
         meta: {
           titles: ['商品', '商品管理'],
           beforeResolve(routeTo, routeFrom, next) {
@@ -418,9 +418,9 @@ export default [
       },
       // 全国包邮-编辑商品
       {
-        path: 'free-shipping-goods-manage/free-shipping-edit-goods',
-        name: 'free-shipping-edit-goods',
-        component: () => lazyLoadView(import('@pages/free-shipping-edit-goods/free-shipping-edit-goods')),
+        path: 'goods-manage/modify-goods',
+        name: 'modify-goods',
+        component: () => lazyLoadView(import('@pages/modify-goods/modify-goods')),
         meta: {
           titles: ['商品', '商品管理', '商品'],
           variableIndex: 2,
@@ -429,9 +429,9 @@ export default [
       },
       // 全国包邮-订单管理
       {
-        path: 'free-shipping-order-manage',
-        name: 'free-shipping-order-manage',
-        component: () => lazyLoadView(import('@pages/free-shipping-order-manage/free-shipping-order-manage')),
+        path: 'order-manage',
+        name: 'order-manage',
+        component: () => lazyLoadView(import('@pages/order-manage/order-manage')),
         meta: {
           titles: ['订单', '订单管理'],
           beforeResolve(routeTo, routeFrom, next) {
@@ -451,27 +451,27 @@ export default [
       },
       // 全国包邮-订单详情
       {
-        path: 'free-shipping-order-manage/free-shipping-order-detail',
-        name: 'free-shipping-order-detail',
-        component: () => lazyLoadView(import('@pages/free-shipping-order-detail/free-shipping-order-detail')),
+        path: 'order-manage/order-detail',
+        name: 'order-detail',
+        component: () => lazyLoadView(import('@pages/order-detail/order-detail')),
         meta: {
           titles: ['订单', '订单管理', '订单详情'],
         }
       },
       // 全国包邮-商品选品
       {
-        path: 'free-shipping-goods-choose',
-        name: 'free-shipping-goods-choose',
-        component: () => lazyLoadView(import('@pages/free-shipping-goods-choose/free-shipping-goods-choose')),
+        path: 'goods-choose',
+        name: 'goods-choose',
+        component: () => lazyLoadView(import('@pages/goods-choose/goods-choose')),
         meta: {
           titles: ['商品', '商品选品'],
         }
       },
       // 全国包邮-供应商列表
       {
-        path: 'free-shipping-suppliers-manage',
-        name: 'free-shipping-suppliers-manage',
-        component: () => lazyLoadView(import('@pages/free-shipping-suppliers-manage/free-shipping-suppliers-manage')),
+        path: 'suppliers-manage',
+        name: 'suppliers-manage',
+        component: () => lazyLoadView(import('@pages/suppliers-manage/suppliers-manage')),
         meta: {
           titles: ['商品', '供应商管理'],
           beforeResolve(routeTo, routeFrom, next) {
@@ -492,9 +492,9 @@ export default [
       },
       // 全国包邮-同步供应商
       {
-        path: 'free-shipping-suppliers-manage/free-shipping-suppliers-choose',
-        name: 'free-shipping-suppliers-choose',
-        component: () => lazyLoadView(import('@pages/free-shipping-suppliers-choose/free-shipping-suppliers-choose')),
+        path: 'suppliers-manage/suppliers-choose',
+        name: 'suppliers-choose',
+        component: () => lazyLoadView(import('@pages/suppliers-choose/suppliers-choose')),
         meta: {
           titles: ['商品', '供应商管理', '同步供应商信息'],
         }

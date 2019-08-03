@@ -44,7 +44,7 @@
             <div class="list-item width-3">{{item.source_order_id}}</div>
             <div class="list-item width-2">{{item.status_str}}</div>
             <div class="list-item list-operation-box">
-              <router-link tag="span" :to="'free-shipping-order-detail?id=' + item.order_id" append class="list-operation">详情</router-link>
+              <router-link tag="span" :to="'order-detail?id=' + item.order_id" append class="list-operation">详情</router-link>
             </div>
           </div>
         </div>
@@ -68,7 +68,7 @@
   import {authComputed, fsOrderComputed, fsOrderMethods} from '@state/helpers'
   import PopupConfirm from './popup-confirm/popup-confirm'
 
-  const PAGE_NAME = 'FREE_SHIPPING_ORDER_MANAGE'
+  const PAGE_NAME = 'ORDER_MANAGE'
   const TITLE = '订单管理'
   const LIST_TITLE = [{name:'订单号',class:'width-3'}, {name:'会员名称',class:'width-3'}, {name:'采购金额',class:'width-2'}, {name:'采购运费',class:'width-2'}, {name:'销售金额',class:'width-2'}, {name:'关联订单号',class:'width-3'}, {name:'状态',class:'width-2'}, {name:'操作',class:''}]
   const STATUS_TAB = [

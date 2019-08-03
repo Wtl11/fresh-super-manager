@@ -32,17 +32,17 @@
       children: [
         {
           title: '商品管理',
-          url: '/home/free-shipping-goods-manage',
+          url: '/home/goods-manage',
           isLight: false
         },
         {
           title: '商品选品',
-          url: '/home/free-shipping-goods-choose',
+          url: '/home/goods-choose',
           isLight: false
         },
         {
           title: '供应商管理',
-          url: '/home/free-shipping-suppliers-manage',
+          url: '/home/suppliers-manage',
           isLight: false
         }
       ]
@@ -74,7 +74,7 @@
       children: [
         {
           title: '订单管理',
-          url: '/home/free-shipping-order-manage',
+          url: '/home/order-manage',
           isLight: false
         }
       ]
@@ -148,7 +148,7 @@
       activeIcon: require('./icon-commodity@2x.png'),
       isLight: true,
       second: GOODS,
-      url: '/home/free-shipping-goods-manage'
+      url: '/home/goods-manage'
     },
     {
       name: '订单',
@@ -156,7 +156,7 @@
       activeIcon: require('./icon-order@2x.png'),
       isLight: true,
       second: ORDER,
-      url: '/home/free-shipping-order-manage'
+      url: '/home/order-manage'
     },
     {
       name: '内容',

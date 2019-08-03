@@ -208,7 +208,7 @@
   import Draggable from 'vuedraggable'
   import API from '@api'
 
-  const PAGE_NAME = 'EDIT_GOODS'
+  const PAGE_NAME = 'MODIFY_GOODS'
   const TITLE = '编辑商品'
 
   export default {
