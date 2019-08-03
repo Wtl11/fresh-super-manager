@@ -228,10 +228,6 @@
       },
       // 上下架
       switchBtn(item, index) {
-        if (item.is_online === 0) {
-          this.$toast.show('请先完善资料')
-          return
-        }
         let data = {
           goods_id: item.id,
           is_online: item.is_online * 1 === 1 ? 0 : 1
