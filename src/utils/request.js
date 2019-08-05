@@ -62,7 +62,7 @@ function checkStatus(response) {
   ) {
     // 全国包邮1688授权
     if(response && response.data.code === 14001) {
-      window.open("https://auth.1688.com/oauth/authorize?client_id=6699805&site=1688&redirect_uri=https%3A%2F%2Fmarket-api.jkweixin.net%2Fmarket%2Fapi%2Fauthorized")
+      response.data.authorized_url && window.open(response.data.authorized_url)
       return {
         status: ERR_NO,
         msg: '请重新登录1688账号'
