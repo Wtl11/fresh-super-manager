@@ -466,10 +466,10 @@
           this.$toast.show('请选择销售规格')
           return false
         }
-        if (this.goods_skus.original_price.length === 0) {
+        if (this.goods_skus.original_price.length === 0 || this.goods_skus.original_price*1 === 0 || this.goods_skus.original_price === '0.00') {
           this.$toast.show('请输入划线价')
           return false
-        } else if (this.goods_skus.trade_price.length === 0) {
+        } else if (this.goods_skus.trade_price.length === 0 || this.goods_skus.trade_price*1 === 0 || this.goods_skus.trade_price === '0.00') {
           this.$toast.show('请输入销售单价')
           return false
         } else if (+this.goods_skus.original_price < +this.goods_skus.trade_price) {
