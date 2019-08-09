@@ -30,7 +30,7 @@
         <div class="edit-input-box">
           <input v-model="msg.sale_name" type="text" class="edit-input" maxlength="29" @mousewheel.native.prevent>
         </div>
-        <div class="edit-pla">需根据最小起订量进行销售</div>
+        <div class="edit-pla">最小起订量：{{msg.minimum}}</div>
       </div>
       <div class="edit-item">
         <div class="edit-title">
