@@ -29,40 +29,48 @@
   const GOODS = [
     {
       title: '1688商品',
+      key: 'goods-1688',
       children: [
         {
           title: '商品管理',
           url: '/home/goods-manage',
+          key: 'goods-manage',
           isLight: false
         },
         {
           title: '商品选品',
           url: '/home/goods-choose',
+          key: 'goods-choose',
           isLight: false
         },
         {
           title: '供应商管理',
           url: '/home/suppliers-manage',
+          key: 'suppliers-manage',
           isLight: false
         }
       ]
     },
     {
       title: '商品',
+      key: 'goods-goods',
       children: [
         {
           title: '商品素材',
           url: '/home/product-list',
+          key: 'product-list',
           isLight: false
         },
         {
           title: '商品类目',
           url: '/home/product-categories',
+          key: 'product-categories',
           isLight: false
         },
         {
           title: '辅助资料',
           url: '/home/auxiliary-information',
+          key: 'auxiliary-information',
           isLight: false
         }
       ]
@@ -71,10 +79,12 @@
   const ORDER = [
     {
       title: '订单',
+      key: 'order-order',
       children: [
         {
           title: '订单管理',
           url: '/home/order-manage',
+          key: 'order-manage',
           isLight: false
         }
       ]
@@ -83,15 +93,18 @@
   const CUSTOMER = [
     {
       title: '客户',
+      key: 'customer-customer',
       children: [
         {
           title: '加盟商',
           url: '/home/franchise-list',
+          key: 'franchise-list',
           isLight: false
         },
         {
           title: '意向单',
           url: '/home/intent-list',
+          key: 'intent-list',
           isLight: false
         }
       ]
@@ -100,25 +113,30 @@
   const FINANCE = [
     {
       title: '交易',
+      key: 'finance-trade',
       children: [
         {
           title: '交易记录',
           url: '/home/transaction-record',
+          key: 'transaction-record',
           isLight: false
         }
       ]
     },
     {
       title: '结算',
+      key: 'finance-balance',
       children: [
         {
           title: '加盟商结算',
           url: '/home/franchise-settlement',
+          key: 'franchise-settlement',
           isLight: false
         },
         {
           title: '团长提现',
           url: '/home/leader-withdrawal',
+          key: 'leader-withdrawal',
           isLight: false
         }
       ]
@@ -127,15 +145,18 @@
   const CONTENT = [
     {
       title: '内容',
+      key: 'content-content',
       children: [
         {
           title: '内容中心',
           url: '/home/content-center',
+          key: 'content-center',
           isLight: false
         },
         {
           title: '内容分类',
           url: '/home/content-classification',
+          key: 'content-classification',
           isLight: false
         }
       ]
@@ -148,6 +169,7 @@
       activeIcon: require('./icon-commodity@2x.png'),
       isLight: true,
       second: GOODS,
+      key: 'goods',
       url: '/home/goods-manage'
     },
     {
@@ -156,6 +178,7 @@
       activeIcon: require('./icon-order@2x.png'),
       isLight: true,
       second: ORDER,
+      key: 'order',
       url: '/home/order-manage'
     },
     {
@@ -164,6 +187,7 @@
       activeIcon: require('./icon-content@2x.png'),
       isLight: false,
       second: CONTENT,
+      key: 'content',
       url: '/home/content-center'
     },
     {
@@ -172,6 +196,7 @@
       activeIcon: require('./icon-customer2@2x.png'),
       isLight: true,
       second: CUSTOMER,
+      key: 'customer',
       url: '/home/franchise-list'
     },
     {
@@ -180,6 +205,7 @@
       activeIcon: require('./icon-money@2x.png'),
       isLight: false,
       second: FINANCE,
+      key: 'finance',
       url: '/home/transaction-record'
     }
   ]
