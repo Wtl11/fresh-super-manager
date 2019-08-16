@@ -134,7 +134,8 @@
         let currentId = this.getCurrentId()
         let token = this.$storage.get('auth.currentUser', '')
         let params = `access_token=${token.access_token}&is_online=${this.isOnline}&keyword=${
-          this.keyWord}&current_corp=${currentId}&goods_material_category_id=${this.categoryId}`
+          this.keyWord
+        }&current_corp=${currentId}&goods_material_category_id=${this.categoryId}`
         this.downUrl = process.env.VUE_APP_API + `/social-shopping/api/platform/create-goods-material-template?${params}`
       },
       // 搜索
@@ -186,10 +187,13 @@
       },
       // 获取状态列表
       getGoodsStatus() {
-        API.Product.reqGoodsStatus({
-          keyword: this.keyWord,
-          goods_material_category_id: this.categoryId
-        }, false).then((res) => {
+        API.Product.reqGoodsStatus(
+          {
+            keyword: this.keyWord,
+            goods_material_category_id: this.categoryId
+          },
+          false
+        ).then((res) => {
           if (res.error !== this.$ERR_OK) {
             this.$toast.show(res.message)
             return

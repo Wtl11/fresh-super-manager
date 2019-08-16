@@ -185,7 +185,7 @@
           this.$toast.show('请上传类目图标')
           return
         }
-        switch(this.categoryType) {
+        switch (this.categoryType) {
         case 0:
           API.Product.createCategory({name: name, sort: sort}).then((res) => {
             this.$loading.hide()
@@ -337,18 +337,20 @@
           break
         case 3:
           // 修改三级类目
-          API.Product.editCategory(this.thrItem.id, {name: name, sort: sort, parent_id: this.twoItem.id}).then((res) => {
-            this.$loading.hide()
-            if (res.error === this.$ERR_OK) {
-              this.$refs.smallModel.hide()
-              this.$toast.show('修改成功')
-              this.categoryList[this.oneIndex].list[this.twoIndex].list[this.thrIndex].name = name
-              this.categoryList[this.oneIndex].list[this.twoIndex].list[this.thrIndex].sort = sort
-              this.categoryList[this.oneIndex].list[this.twoIndex].list.sort(this._sort)
-            } else {
-              this.$toast.show(res.message)
+          API.Product.editCategory(this.thrItem.id, {name: name, sort: sort, parent_id: this.twoItem.id}).then(
+            (res) => {
+              this.$loading.hide()
+              if (res.error === this.$ERR_OK) {
+                this.$refs.smallModel.hide()
+                this.$toast.show('修改成功')
+                this.categoryList[this.oneIndex].list[this.twoIndex].list[this.thrIndex].name = name
+                this.categoryList[this.oneIndex].list[this.twoIndex].list[this.thrIndex].sort = sort
+                this.categoryList[this.oneIndex].list[this.twoIndex].list.sort(this._sort)
+              } else {
+                this.$toast.show(res.message)
+              }
             }
-          })
+          )
           break
         }
       },

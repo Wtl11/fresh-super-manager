@@ -342,7 +342,7 @@
     },
     data() {
       return {
-        id: "",
+        id: '',
         isCanSelectMore: true,
         isDisabled: false,
         typeList: {
@@ -357,7 +357,7 @@
           }
         }, // 三种创作
         currentType: 'common', // 现在创作类型
-        addCategoryText: "",
+        addCategoryText: '',
         addText: '',
         addData: {
           likes: [],
@@ -386,24 +386,28 @@
             id: '',
             name: ''
           },
-          videoIntroduce: "",
+          videoIntroduce: '',
           foodList: '',
           // 内容详情
-          details: [],
+          details: []
         },
-        articleCategoryList: [],// 内容分类列表
+        articleCategoryList: [] // 内容分类列表
       }
     },
     computed: {
       isShowEmpty() {
-        return !(this.addData.title || this.addData.coverImage.id
-          || this.addData.authPhoto.id || this.addData.authName
-          || ((this.addData.videoContent.id || this.addData.videoIntroduce) && this.currentType === 'video')
-          || (this.currentType === 'cookbook' && this.addData.foodList)
-          || (this.currentType !== 'video' && this.addData.details.length))
+        return !(
+          this.addData.title ||
+          this.addData.coverImage.id ||
+          this.addData.authPhoto.id ||
+          this.addData.authName ||
+          ((this.addData.videoContent.id || this.addData.videoIntroduce) && this.currentType === 'video') ||
+          (this.currentType === 'cookbook' && this.addData.foodList) ||
+          (this.currentType !== 'video' && this.addData.details.length)
+        )
       },
       name() {
-        return this.typeList[this.currentType] && this.typeList[this.currentType].name || '文章'
+        return (this.typeList[this.currentType] && this.typeList[this.currentType].name) || '文章'
       },
       editName() {
         return this.id ? (this.isDisabled ? '查看' : '编辑') : '创作'
@@ -431,7 +435,7 @@
       _getLikes() {
         let limit = this.addData.goodCount < 10 ? this.addData.goodCount : 10
         let params = {article_id: this.articleId || 0, preview: 1, limit, page: 1}
-        API.Content.getLikes(params).then(res => {
+        API.Content.getLikes(params).then((res) => {
           if (res.error !== this.$ERR_OK) {
             this.$toast.show(res.message)
           }
@@ -440,17 +444,19 @@
       },
       // 新增创建时获取最后一次作者信息
       _getAuth() {
-        API.Content.getAuth().then(res => {
-          if (res.error !== this.$ERR_OK) {
-            this.$toast.show(res.message)
-          }
-          this.addData.authPhoto.url = res.data.head_image_url
-          this.addData.authPhoto.id = res.data.head_image_id
-          this.addData.authName = res.data.nickname
-          this.addData.authSignature = res.data.sign
-        }).finally(() => {
-          this.$loading.hide()
-        })
+        API.Content.getAuth()
+          .then((res) => {
+            if (res.error !== this.$ERR_OK) {
+              this.$toast.show(res.message)
+            }
+            this.addData.authPhoto.url = res.data.head_image_url
+            this.addData.authPhoto.id = res.data.head_image_id
+            this.addData.authName = res.data.nickname
+            this.addData.authSignature = res.data.sign
+          })
+          .finally(() => {
+            this.$loading.hide()
+          })
       },
       // 转换详情数据
       changeDetialData(obj) {
@@ -469,302 +475,319 @@
         this.addData.authSignature = obj.author.sign
         this.addData.goodCount = obj.init_fabulous_num || 0
         this.addData.lookCount = obj.init_browse_num || 0
-        obj.assembly.forEach(item => {
+        obj.assembly.forEach((item) => {
           if (item.type === 'combination' && item.style_type === 'content') {
             let details = []
-            item.content.map(cont => {
+            item.content.map((cont) => {
               if (!(cont.content && cont.content.length)) return false
               let contItem = cont.content[0]
 
               /* eslint-disable */
-              switch (cont.type) {
-                case "image":
-                  details.push({
-                    type: 'image',
-                    value: contItem.image.source_url,
-                    id: contItem.image.id
-                  })
-                  break
-                case "video":
-                  details.push({
-                    type: 'video',
-                    value: contItem.video.full_url,
-                    id: contItem.video.id
-                  })
-                  break
-                case "text":
-                  details.push({
-                    type: 'text',
-                    value: contItem.text,
-                  })
-                  break
-              }
-            })
-            this.addData.details = details
-          }
-          if (item.type === 'text' && item.style_type === 'content_cookbook_food_list') {
-            this.addData.foodList = item.content[0].text
-          }
-          if (item.type === 'video' && item.style_type === 'content_video') {
-            this.addData.videoContent.url = item.content[0].video.full_url
-            this.addData.videoContent.name = item.content[0].video.name
-            this.addData.videoContent.id = item.content[0].video.id
-            this.addData.videoIntroduce = item.content[0].introduction
-          }
-        })
-      },
-      // 获取内容分类列表
-      _getArticleCategory() {
-        API.Content.getSortList().then(res => {
+            switch (cont.type) {
+              case 'image':
+                details.push({
+                  type: 'image',
+                  value: contItem.image.source_url,
+                  id: contItem.image.id
+                })
+                break
+              case 'video':
+                details.push({
+                  type: 'video',
+                  value: contItem.video.full_url,
+                  id: contItem.video.id
+                })
+                break
+              case 'text':
+                details.push({
+                  type: 'text',
+                  value: contItem.text
+                })
+                break
+            }
+          })
+          this.addData.details = details
+        }
+        if (item.type === 'text' && item.style_type === 'content_cookbook_food_list') {
+          this.addData.foodList = item.content[0].text
+        }
+        if (item.type === 'video' && item.style_type === 'content_video') {
+          this.addData.videoContent.url = item.content[0].video.full_url
+          this.addData.videoContent.name = item.content[0].video.name
+          this.addData.videoContent.id = item.content[0].video.id
+          this.addData.videoIntroduce = item.content[0].introduction
+        }
+      })
+    },
+    // 获取内容分类列表
+    _getArticleCategory() {
+      API.Content.getSortList()
+        .then((res) => {
           if (res.error !== this.$ERR_OK) this.$toast.show(res.message)
           this.articleCategoryList = res.data
-          if (!this.articleCategoryList.find(item => item.id === this.addData.category)) this.addData.category = ''
-        }).finally(() => {
+          if (!this.articleCategoryList.find((item) => item.id === this.addData.category)) this.addData.category = ''
+        })
+        .finally(() => {
           this.$loading.hide()
         })
-      },
-      addCategory() {
-        this.addCategoryText = ''
-        this.$refs.addCategory.showModal()
-      },
-      _submitCategory() {
-        API.Content.addSort({name: this.addCategoryText}).then(res => {
+    },
+    addCategory() {
+      this.addCategoryText = ''
+      this.$refs.addCategory.showModal()
+    },
+    _submitCategory() {
+      API.Content.addSort({name: this.addCategoryText})
+        .then((res) => {
           if (res.error !== this.$ERR_OK) {
             this.$toast.show(res.message)
           }
           this.$toast.show(res.message)
           this.$refs.addCategory.hideModal()
-        }).finally(() => {
+        })
+        .finally(() => {
           this.$loading.hide()
         })
-      },
-      // 封面
-      // getCoverVideo(video) {
-      //   this.addData.coverVideo.id = video.id
-      //   this.addData.coverVideo.file_id = video.file_id
-      //   this.addData.coverVideo.url = video.full_url
-      //   this.addData.coverImage.id = video.cover_image_id
-      //   this.addData.coverImage.url = video.full_cover_url
-      // },
-      getCoverImage(image) {
-        this.addData.coverImage.url = image.url
-        this.addData.coverImage.id = image.id
-      },
-      delCoverImage() {
-        this.addData.coverImage = {
-          url: '',
-          id: ''
-        }
-        // this.addData.coverVideo = {
-        //   url: '',
-        //   id: ''
-        // }
-      },
-      failFile(msg) {
-        this.$toast.show(msg)
-      },
-      // 作者头像
-      getAuthorPic(image) {
-        this.addData.authPhoto.url = image.url
-        this.addData.authPhoto.id = image.id
-      },
-      delAuthorPic() {
-        this.addData.authPhoto.url = ''
-        this.addData.authPhoto.id = ''
-      },
-      // 视频内容
-      getVideoContent(video) {
-        this.addData.videoContent.url = video.full_url
-        this.addData.videoContent.id = video.id
-        this.addData.videoContent.name = video.name
-      },
-      deleteVideoContent() {
-        this.addData.videoContent = {
-          url: '',
-          id: '',
-          name: ''
-        }
-      },
-      // 内容详情增加
-      addDetailContentItem(item) {
-        this.addData.details.push(item)
-        if (!this.id) {
-          this.$nextTick(function () {
-            let el = this.$refs.detailsContent.$el
-            el.scrollTop = el.scrollHeight
-          })
-        }
-      },
-      addTextItem() {
-        if(!this.addText.trim()){
-          this.$toast.show('请输入内容')
-          return
-        }
-        let obj = {
+    },
+    // 封面
+    // getCoverVideo(video) {
+    //   this.addData.coverVideo.id = video.id
+    //   this.addData.coverVideo.file_id = video.file_id
+    //   this.addData.coverVideo.url = video.full_url
+    //   this.addData.coverImage.id = video.cover_image_id
+    //   this.addData.coverImage.url = video.full_cover_url
+    // },
+    getCoverImage(image) {
+      this.addData.coverImage.url = image.url
+      this.addData.coverImage.id = image.id
+    },
+    delCoverImage() {
+      this.addData.coverImage = {
+        url: '',
+        id: ''
+      }
+      // this.addData.coverVideo = {
+      //   url: '',
+      //   id: ''
+      // }
+    },
+    failFile(msg) {
+      this.$toast.show(msg)
+    },
+    // 作者头像
+    getAuthorPic(image) {
+      this.addData.authPhoto.url = image.url
+      this.addData.authPhoto.id = image.id
+    },
+    delAuthorPic() {
+      this.addData.authPhoto.url = ''
+      this.addData.authPhoto.id = ''
+    },
+    // 视频内容
+    getVideoContent(video) {
+      this.addData.videoContent.url = video.full_url
+      this.addData.videoContent.id = video.id
+      this.addData.videoContent.name = video.name
+    },
+    deleteVideoContent() {
+      this.addData.videoContent = {
+        url: '',
+        id: '',
+        name: ''
+      }
+    },
+    // 内容详情增加
+    addDetailContentItem(item) {
+      this.addData.details.push(item)
+      if (!this.id) {
+        this.$nextTick(function() {
+          let el = this.$refs.detailsContent.$el
+          el.scrollTop = el.scrollHeight
+        })
+      }
+    },
+    addTextItem() {
+      if (!this.addText.trim()) {
+        this.$toast.show('请输入内容')
+        return
+      }
+      let obj = {
+        type: 'text',
+        value: this.addText
+      }
+      if (this.detailIndex === false) {
+        this.addDetailContentItem({
           type: 'text',
           value: this.addText
-        }
-        if(this.detailIndex === false){
-          this.addDetailContentItem({
-            type: 'text',
-            value: this.addText
-          })
-        }else{
-          this.$set(this.addData.details,this.detailIndex, obj)
-        }
-        this.$refs.addText.hideModal()
-      },
-      addImageItem(image) {
-        this.addDetailContentItem({
-          type: 'image',
-          value: image.url,
-          id: image.id
         })
-      },
-      addVideoItem(video) {
-        this.addDetailContentItem({
-          type: 'video',
-          value: video.full_url,
-          id: video.id,
-          file_id: ''
-        })
-      },
-      deleteContentItem(idx, item) {
-        this.addData.details.splice(idx, 1)
-        if (item.type === 'goods') {
-          let index = this.addData.goodsList.findIndex(goods => goods.id === item.value.id)
-          if (index !== -1) this.addData.goodsList.splice(index, 1)
-        }
-      },
-      justifyConent() {
-        let message = ''
-        if (!this.addData.category) message = '请选择内容分类'
-        else if (!this.addData.title) message = '请输入文章标题'
-        else if (this.addData.title && (this.addData.title.length < 5 || this.addData.title.length > 50)) message = '请输入文章标题最少5个最多50个字符'
-        //   !this.addData.coverVideo.id &&
-        else if (!this.addData.coverImage.id) message = '请上传封面'
-        else if (!this.addData.authPhoto.id) message = '请上传作者头像'
-        else if (!this.addData.authName) message = '请填写作者名字'
-        else if (!this.addData.authSignature) message = '请填写作者签名'
-        else if (this.currentType === 'video') {
-          if (!this.addData.videoContent.id) message = '请上传视频内容'
-          else if (!this.addData.videoIntroduce) message = '请填写视频简介'
-        } else if (this.currentType === 'cookbook' && !this.addData.foodList) message = '请填写食材清单'
-        else if (this.currentType !== 'video' && !this.addData.details.length) message = '请编辑内容详情'
-        else if (!(/^[+]{0,1}(\d+)$/.test(this.addData.goodCount))) message = '请输入正确的初始化点赞数'
-        // else if (!(/^[+]{0,1}(\d+)$/.test(this.addData.lookCount))) message = '请输入正确的初始化浏览数'
-        // else if (this.addData.goodCount > this.addData.lookCount) message = '初始化点赞数不能大于初始化浏览数'
-        if (message) {
-          this.$toast.show(message)
-          return false
-        } else {
-          return true
-        }
-      },
-      justifyDraft() {
-        let message = ''
-        if (!this.addData.title) message = '请输入文章标题'
-        if (message) {
-          this.$toast.show(message)
-          return false
-        } else {
-          return true
-        }
-      },
-      // 上线 草稿 保存
-      async _submitBtn(name, status) {
-        let res = status ? this.justifyConent() : this.justifyDraft()
-        if (res) {
-          let data = this.getSubmitData(status)
-          let res = await API.Content[name](data, true)
-          this.$toast.show(res.message)
-          this.$loading.hide()
-          if (res.error === this.$ERR_OK) this.$router.go(-1)
-        }
-      },
-      getSubmitData(status) {
-        let params = {
-          type: this.currentType,
-          title: this.addData.title.trim(),
-          category_id: this.addData.category,
-          author_image_id: this.addData.authPhoto.id,
-          author_nickname: this.addData.authName.trim(),
-          author_sign: this.addData.authSignature.trim(),
-          image_cover_id: this.addData.coverImage.id,
-          video_cover_id: this.addData.coverVideo.id,
-          init_fabulous_num: this.addData.goodCount ,
-          init_browse_num: this.addData.lookCount ,
-          assembly: [],
-          status
-        }
-        if (this.currentType === 'video' || this.currentType === 'cookbook') {
-          if (this.currentType === 'video') {
-            params.assembly.push({
-              type: "video",
-              style_type: "content_video",
-              content: [{
+      } else {
+        this.$set(this.addData.details, this.detailIndex, obj)
+      }
+      this.$refs.addText.hideModal()
+    },
+    addImageItem(image) {
+      this.addDetailContentItem({
+        type: 'image',
+        value: image.url,
+        id: image.id
+      })
+    },
+    addVideoItem(video) {
+      this.addDetailContentItem({
+        type: 'video',
+        value: video.full_url,
+        id: video.id,
+        file_id: ''
+      })
+    },
+    deleteContentItem(idx, item) {
+      this.addData.details.splice(idx, 1)
+      if (item.type === 'goods') {
+        let index = this.addData.goodsList.findIndex((goods) => goods.id === item.value.id)
+        if (index !== -1) this.addData.goodsList.splice(index, 1)
+      }
+    },
+    justifyConent() {
+      let message = ''
+      if (!this.addData.category) message = '请选择内容分类'
+      else if (!this.addData.title) message = '请输入文章标题'
+      else if (this.addData.title && (this.addData.title.length < 5 || this.addData.title.length > 50))
+        message = '请输入文章标题最少5个最多50个字符'
+      //   !this.addData.coverVideo.id &&
+      else if (!this.addData.coverImage.id) message = '请上传封面'
+      else if (!this.addData.authPhoto.id) message = '请上传作者头像'
+      else if (!this.addData.authName) message = '请填写作者名字'
+      else if (!this.addData.authSignature) message = '请填写作者签名'
+      else if (this.currentType === 'video') {
+        if (!this.addData.videoContent.id) message = '请上传视频内容'
+        else if (!this.addData.videoIntroduce) message = '请填写视频简介'
+      } else if (this.currentType === 'cookbook' && !this.addData.foodList) message = '请填写食材清单'
+      else if (this.currentType !== 'video' && !this.addData.details.length) message = '请编辑内容详情'
+      else if (!/^[+]{0,1}(\d+)$/.test(this.addData.goodCount)) message = '请输入正确的初始化点赞数'
+      // else if (!(/^[+]{0,1}(\d+)$/.test(this.addData.lookCount))) message = '请输入正确的初始化浏览数'
+      // else if (this.addData.goodCount > this.addData.lookCount) message = '初始化点赞数不能大于初始化浏览数'
+      if (message) {
+        this.$toast.show(message)
+        return false
+      } else {
+        return true
+      }
+    },
+    justifyDraft() {
+      let message = ''
+      if (!this.addData.title) message = '请输入文章标题'
+      if (message) {
+        this.$toast.show(message)
+        return false
+      } else {
+        return true
+      }
+    },
+    // 上线 草稿 保存
+    async _submitBtn(name, status) {
+      let res = status ? this.justifyConent() : this.justifyDraft()
+      if (res) {
+        let data = this.getSubmitData(status)
+        let res = await API.Content[name](data, true)
+        this.$toast.show(res.message)
+        this.$loading.hide()
+        if (res.error === this.$ERR_OK) this.$router.go(-1)
+      }
+    },
+    getSubmitData(status) {
+      let params = {
+        type: this.currentType,
+        title: this.addData.title.trim(),
+        category_id: this.addData.category,
+        author_image_id: this.addData.authPhoto.id,
+        author_nickname: this.addData.authName.trim(),
+        author_sign: this.addData.authSignature.trim(),
+        image_cover_id: this.addData.coverImage.id,
+        video_cover_id: this.addData.coverVideo.id,
+        init_fabulous_num: this.addData.goodCount,
+        init_browse_num: this.addData.lookCount,
+        assembly: [],
+        status
+      }
+      if (this.currentType === 'video' || this.currentType === 'cookbook') {
+        if (this.currentType === 'video') {
+          params.assembly.push({
+            type: 'video',
+            style_type: 'content_video',
+            content: [
+              {
                 video_id: this.addData.videoContent.id,
                 title: this.addData.videoContent.name,
                 introduction: this.addData.videoIntroduce
-              }]
-            })
-          } else if (this.currentType === 'cookbook') {
-            params.assembly.push({
-              type: "text",
-              style_type: "content_cookbook_food_list",
-              content: [{
+              }
+            ]
+          })
+        } else if (this.currentType === 'cookbook') {
+          params.assembly.push({
+            type: 'text',
+            style_type: 'content_cookbook_food_list',
+            content: [
+              {
                 text: this.addData.foodList
-              }]
-            })
-          }
+              }
+            ]
+          })
         }
-        if (this.currentType !== 'video') {
-          let contents = this.addData.details.map(item => {
-            let newItem = {
-              type: item.type,
-              style_type: 'content_' + item.type
-            }
-            /* eslint-disable */
-            switch (item.type) {
-              case 'goods':
-                newItem.content = [{
+      }
+      if (this.currentType !== 'video') {
+        let contents = this.addData.details.map((item) => {
+          let newItem = {
+            type: item.type,
+            style_type: 'content_' + item.type
+          }
+          /* eslint-disable */
+          switch (item.type) {
+            case 'goods':
+              newItem.content = [
+                {
                   goods_id: item.value.goods_id,
                   goods_sku_id: item.value.goods_sku_id
-                }]
-                break;
-              case 'image':
-                newItem.content = [{
+                }
+              ]
+              break
+            case 'image':
+              newItem.content = [
+                {
                   image_id: item.id
-                }]
-                break;
-              case 'video':
-                newItem.content = [{
+                }
+              ]
+              break
+            case 'video':
+              newItem.content = [
+                {
                   video_id: item.id,
                   title: '',
                   introduction: ''
-                }]
-                break;
-              default:
-                newItem.content = [{
+                }
+              ]
+              break
+            default:
+              newItem.content = [
+                {
                   text: item.value
-                }]
-            }
-            return newItem
-          })
-          params.assembly.push({
-            type: "combination",
-            style_type: "content",
-            content: contents
-          })
-        }
-        if (this.id) params.id = this.id
-        return params
-      },
-      goBack() {
-        this.$router.go(-1)
+                }
+              ]
+          }
+          return newItem
+        })
+        params.assembly.push({
+          type: 'combination',
+          style_type: 'content',
+          content: contents
+        })
       }
+      if (this.id) params.id = this.id
+      return params
+    },
+    goBack() {
+      this.$router.go(-1)
     }
   }
+}
 </script>
 
 <style scoped lang="stylus" rel="stylesheet/stylus">

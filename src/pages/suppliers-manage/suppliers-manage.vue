@@ -82,7 +82,7 @@
       }
     },
     methods: {
-      _getListData(resPage=false) {
+      _getListData(resPage = false) {
         if (resPage) {
           this.page = 1
           this.requestParams.page = 1
@@ -91,7 +91,7 @@
         this.getSuppliersList()
       },
       getSuppliersList() {
-        API.FreeShipping.getSuppliersList(this.requestParams,false).then((res) => {
+        API.FreeShipping.getSuppliersList(this.requestParams, false).then((res) => {
           if (res.error === this.$ERR_OK) {
             this.suppliersList = res.data
             this.pageDetail = {
@@ -112,7 +112,7 @@
       changeKeyword(keyword) {
         this.requestParams.keyword = keyword
         this._getListData(true)
-      },
+      }
     }
   }
 </script>

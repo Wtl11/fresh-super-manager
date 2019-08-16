@@ -92,7 +92,7 @@
   const PAGE_NAME = 'INTENT_LIST'
   const TITLE = '加盟商'
   const LIST_TITLE = {
-    '3' : [
+    '3': [
       {name: '意向单编号', flex: 1.5, class: 'width15'},
       {name: '姓名', flex: 1},
       {name: '手机号', flex: 1.5, class: 'width15'},
@@ -101,9 +101,9 @@
       {name: '提交时间', flex: 2, class: 'width20'},
       {name: '处理时间', flex: 2, class: 'width20'},
       {name: '处理说明', flex: 2, class: 'width20'},
-      {name: '操作', flex: 1},
+      {name: '操作', flex: 1}
     ],
-    '1' : [
+    '1': [
       {name: '意向单编号', flex: 1.5, class: 'width15'},
       {name: '姓名', flex: 1},
       {name: '手机号', flex: 1.5, class: 'width15'},
@@ -114,9 +114,9 @@
       {name: '提交时间', flex: 2, class: 'width20'},
       {name: '处理时间', flex: 2, class: 'width20'},
       {name: '处理说明', flex: 2, class: 'width20'},
-      {name: '操作', flex: 1},
+      {name: '操作', flex: 1}
     ],
-    '2' : [
+    '2': [
       {name: '意向单编号', flex: 1.5, class: 'width15'},
       {name: '姓名', flex: 1},
       {name: '手机号', flex: 1.5, class: 'width15'},
@@ -126,12 +126,16 @@
       {name: '提交时间', flex: 2, class: 'width20'},
       {name: '处理时间', flex: 2, class: 'width20'},
       {name: '处理说明', flex: 2, class: 'width20'},
-      {name: '操作', flex: 1},
-    ],
+      {name: '操作', flex: 1}
+    ]
   }
-  const TYPE_STATUS = [{text: '加盟商', type: 3}, {text: '团长', type: 1}, {text: '供应商', type: 2}]
-  const TYPE_SELECT = [{name: '全部', status: '', num: 0}, {name: '待处理', status: 0, num: 0}, {name: '已处理', status: 1, num: 0}]
-  const HANDLETAG = ['已电联客户','已添加微信','无法联系','已处理']
+  // const TYPE_STATUS = [{text: '团长', type: 1, key: 'intent-group'}, {text: '供应商', type: 2, key: 'intent-supplier'}, {text: '加盟商', type: 3, key: 'intent-franchise'}]
+  const TYPE_SELECT = [
+    {name: '全部', status: '', num: 0},
+    {name: '待处理', status: 0, num: 0},
+    {name: '已处理', status: 1, num: 0}
+  ]
+  const HANDLETAG = ['已电联客户', '已添加微信', '无法联系', '已处理']
   const EXCEL_URL = '/social-shopping/api/platform/recruit-excel'
 
   export default {
@@ -144,13 +148,13 @@
     },
     data() {
       return {
-        tabStatus: TYPE_STATUS,
-        listTitle: LIST_TITLE[3],
+        // tabStatus: TYPE_STATUS,
+        listTitle: LIST_TITLE[1],
         typeSelect: TYPE_SELECT,
         handleTagList: HANDLETAG,
         handleTag: '',
         handleRemark: '',
-        handleItem: '',
+        handleItem: ''
       }
     },
     computed: {
@@ -173,9 +177,10 @@
           search.push(`${key}=${data[key]}`)
         }
         return process.env.VUE_APP_API + EXCEL_URL + '?' + search.join('&')
-      },
+      }
     },
     created() {
+      this.listTitle = LIST_TITLE[this.type]
       this._getListStatus()
     },
     beforeDestroy() {
@@ -233,14 +238,18 @@
         this.handleTag = tag
       },
       async handleConfirm() {
-        if(!this.handleTag){
+        if (!this.handleTag) {
           this.$toast.show('请选择处理标签!')
           return
         }
-        let res = await API.Intent.handleIntent({
-          handle_tag: this.handleTag,
-          remark: this.handleRemark
-        },false,this.handleItem.id)
+        let res = await API.Intent.handleIntent(
+          {
+            handle_tag: this.handleTag,
+            remark: this.handleRemark
+          },
+          false,
+          this.handleItem.id
+        )
         if (res.error !== this.$ERR_OK) {
           console.warn('处理意向单失败！')
           return

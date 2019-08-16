@@ -180,7 +180,6 @@
           this.$refs.city.infoCity([this.detail.province, this.detail.city, this.detail.district])
           this.stores = JSON.parse(JSON.stringify(this.detail))
         }
-
       },
       changeType() {
         this.isChangePassword = true

@@ -100,7 +100,6 @@
         let res = await API.Product.checkGoodsData(param, true, 60000)
         this.$loading.hide()
         this.blankList = res.error === this.$ERR_OK ? res.data : []
-        console.log(res)
         e.target.value = ''
         if (res.error !== this.$ERR_OK) {
           this.$toast.show(res.message)

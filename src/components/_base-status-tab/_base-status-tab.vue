@@ -19,7 +19,9 @@
         type: Array,
         default: () => {
           return [
-            {name: '全部', value: '', num: 0}, {name: '待提交', value: 0, num: 0}, {name: '已完成', value: 1, num: 0}
+            {name: '全部', value: '', num: 0},
+            {name: '待提交', value: 0, num: 0},
+            {name: '已完成', value: 1, num: 0}
           ]
         }
       },
@@ -70,7 +72,7 @@
         this.$emit('setStatus', item, index)
       },
       infoStatus(news) {
-        this.statusIndex = this.statusList.findIndex(item => item.status === news)
+        this.statusIndex = this.statusList.findIndex((item) => item.status === news)
         this.checkStatus(this.statusIndex, this.statusList[this.statusIndex])
       }
     }

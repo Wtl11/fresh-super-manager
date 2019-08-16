@@ -91,11 +91,15 @@
     },
     data() {
       return {
-        dispatchSelect: [{name: '全部', value: '', key: 'all', num: 0}, {
-          name: '支付',
-          key: 'wait_release',
-          num: 0
-        }, {name: '退款', key: 'wait_purchase', num: 0}],
+        dispatchSelect: [
+          {name: '全部', value: '', key: 'all', num: 0},
+          {
+            name: '支付',
+            key: 'wait_release',
+            num: 0
+          },
+          {name: '退款', key: 'wait_purchase', num: 0}
+        ],
         listTitle: LIST_TITLE,
         tradeSelect: TRADE_SELECT,
         tradeDetail: {}

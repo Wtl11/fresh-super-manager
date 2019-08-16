@@ -70,7 +70,16 @@
 
   const PAGE_NAME = 'ORDER_MANAGE'
   const TITLE = '订单管理'
-  const LIST_TITLE = [{name:'订单号',class:'width-3'}, {name:'会员名称',class:'width-3'}, {name:'采购金额',class:'width-2'}, {name:'采购运费',class:'width-2'}, {name:'销售金额',class:'width-2'}, {name:'关联订单号',class:'width-3'}, {name:'状态',class:'width-2'}, {name:'操作',class:''}]
+  const LIST_TITLE = [
+    {name: '订单号', class: 'width-3'},
+    {name: '会员名称', class: 'width-3'},
+    {name: '采购金额', class: 'width-2'},
+    {name: '采购运费', class: 'width-2'},
+    {name: '销售金额', class: 'width-2'},
+    {name: '关联订单号', class: 'width-3'},
+    {name: '状态', class: 'width-2'},
+    {name: '操作', class: ''}
+  ]
   const STATUS_TAB = [
     {name: '全部', status: '', num: 0},
     {name: '待推送', status: 0, num: 0},
@@ -92,7 +101,7 @@
     data() {
       return {
         dispatchSelect: STATUS_TAB,
-        tabType: '',// 列表订单状态，用于判断是否是待结算
+        tabType: '', // 列表订单状态，用于判断是否是待结算
         listTitle: LIST_TITLE,
         orderList: [],
         allChecked: false,
@@ -114,14 +123,14 @@
     },
     methods: {
       ...fsOrderMethods,
-      async _getOrderList(resetPage=false) {
+      async _getOrderList(resetPage = false) {
         await this.getOrderList()
         this._setOrderData(resetPage)
       },
-      _setOrderData(resetPage=false) {
+      _setOrderData(resetPage = false) {
         this.allChecked = false
         // 待结算状态增加订单勾选
-        if (this.list.length > 0 && this.tabType*1 === 1) {
+        if (this.list.length > 0 && this.tabType * 1 === 1) {
           this.orderList = this.list.map((item) => {
             return {checked: false, ...item}
           })
@@ -139,19 +148,18 @@
           keyword: this.keyword,
           start_time: this.date[0],
           end_time: this.date[1]
-        })
-          .then((res) => {
-            if (res.error !== this.$ERR_OK) {
-              this.$toast.show(res.message)
-              // return
-            }
-            let selectData = res.data
-            this.dispatchSelect = selectData.map((item) => {
-              item.num = item.statistic
-              item.name = item.status_str
-              return item
-            })
+        }).then((res) => {
+          if (res.error !== this.$ERR_OK) {
+            this.$toast.show(res.message)
+          // return
+          }
+          let selectData = res.data
+          this.dispatchSelect = selectData.map((item) => {
+            item.num = item.statistic
+            item.name = item.status_str
+            return item
           })
+        })
       },
       changeOrderType(select) {
         this.tabType = select.status
@@ -174,11 +182,11 @@
       _orderPay() {
         let payArr = []
         this.orderList.forEach((item) => {
-          if(item.checked) {
+          if (item.checked) {
             payArr.push(item.order_id)
           }
         })
-        if(payArr.length<=0) {
+        if (payArr.length <= 0) {
           this.$toast.show('请选择要支付的订单')
           return
         }
@@ -191,20 +199,21 @@
             }
             this.payData = res.data
             this.$refs.popupModal.show()
-          }).finally((e) => {
+          })
+          .finally((e) => {
             this.$loading.hide()
           })
       },
       _PIConfirm() {
         // 弹窗点击支付，跳转支付链接
         this.$refs.popupModal.hide()
-        this.payData.pay_url&&window.open(this.payData.pay_url)
+        this.payData.pay_url && window.open(this.payData.pay_url)
       },
       // 单选
       _radioChecked(item) {
         item.checked = !item.checked
         let allChecked = 0
-        this.orderList.forEach((item)=>{
+        this.orderList.forEach((item) => {
           if (item.checked) {
             allChecked++
           }

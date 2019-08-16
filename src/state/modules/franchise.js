@@ -100,7 +100,6 @@ export const mutations = {
   SET_FRANCHISE_DETAIL(state, franchiseDetail) {
     state.franchiseDetail = franchiseDetail
   }
-
 }
 
 export const actions = {
@@ -178,7 +177,7 @@ export const actions = {
     const {franListKeyword, franListPage} = state
     let data = {
       keyword: franListKeyword,
-      page: franListPage,
+      page: franListPage
     }
     return API.Franchise.franchiseList(data)
       .then((res) => {

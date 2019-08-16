@@ -52,6 +52,6 @@ export const actions = {
       .finally(() => {
         app.$loading.hide()
       })
-  },
+  }
   // 获取商品详情
 }

@@ -243,7 +243,7 @@
                     this.secondSelect.content = twomitem.name
                     this.thirdlySelect.data = twomitem.list
                     this.thirdlySelect.data.forEach((thritem) => {
-                      if(thritem.is_selected) {
+                      if (thritem.is_selected) {
                         this.thirdlySelect.content = thritem.name
                       }
                     })

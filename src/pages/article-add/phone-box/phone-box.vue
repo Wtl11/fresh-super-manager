@@ -149,14 +149,13 @@
       return {
         goodsStatus: false,
         goodsListVisible: false,
-        videoPause:true
+        videoPause: true
       }
     },
     computed: {},
     methods: {
       videoClick() {
-        if(!this.data.videoContent || !this.data.videoContent.url)  return
-        console.log()
+        if (!this.data.videoContent || !this.data.videoContent.url) return
         this.videoPause ? this.$refs.articleVideo.play() : this.$refs.articleVideo.pause()
         this.goodsListVisible = false
       }

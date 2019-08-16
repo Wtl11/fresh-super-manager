@@ -193,11 +193,11 @@ export const actions = {
     commit('SET_WORK_TAB_INDEX', index)
   },
   getWorkListMore({commit, dispatch}, obj) {
-    typeof (obj.tabIndex) === 'number' && commit('SET_WORK_TAB_INDEX', obj.tabIndex)
-    typeof (obj.page) !== 'undefined' && commit('SET_WORK_CONTENT_PAGE', obj.page)
-    typeof (obj.status) !== 'undefined' && commit('SET_WORK_STATUS', obj.status)
-    typeof (obj.keyword) !== 'undefined' && commit('SET_WORK_KEYWORD', obj.keyword)
-    typeof (obj.workCategoryId) !== 'undefined' && commit('SET_WORK_CATEGORY_ID', obj.workCategoryId)
+    typeof obj.tabIndex === 'number' && commit('SET_WORK_TAB_INDEX', obj.tabIndex)
+    typeof obj.page !== 'undefined' && commit('SET_WORK_CONTENT_PAGE', obj.page)
+    typeof obj.status !== 'undefined' && commit('SET_WORK_STATUS', obj.status)
+    typeof obj.keyword !== 'undefined' && commit('SET_WORK_KEYWORD', obj.keyword)
+    typeof obj.workCategoryId !== 'undefined' && commit('SET_WORK_CATEGORY_ID', obj.workCategoryId)
     // console.log(state)
     dispatch('getWorkList', false)
   }

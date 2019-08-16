@@ -4,8 +4,8 @@
       <header class="logo">
         <img class="logo-img" src="./pic-logo@2x.png">
       </header>
-      <ul v-for="(item, index) in firstMenu" :key="index" class="menu">
-        <li class="nav-item hand" :class="item | isActive" @click="_setFirstMenu(index)">
+      <ul v-for="(item, index) in firstNav" :key="index" class="menu">
+        <li v-if="menuData[item.key].is_show" class="nav-item hand" :class="item | isActive" @click="_setFirstMenu(index)">
           <img :src="item.isLight ? item.activeIcon : item.icon" class="nav-item-icon">
           <p class="nav-item-name">{{item.name}}</p>
         </li>
@@ -13,7 +13,7 @@
     </div>
     <div class="second">
       <div v-for="(item, index) in navList" :key="index" class="second-item">
-        <p class="second-title">{{item.title}}</p>
+        <p v-if="menuData[item.key].is_show" class="second-title">{{item.title}}</p>
         <div v-for="(child, i) in item.children" :key="i" class="second-link hand" @click="_setChildActive(child)">
           <span :class="child | childrenActive" class="second-link-content">{{child.title}}</span>
         </div>
@@ -23,192 +23,13 @@
 </template>
 
 <script type="text/ecmascript-6">
+  import storage from 'storage-controller'
+  import {authComputed} from '@state/helpers'
+  import {objDeepCopy} from '@utils/common'
   const COMPONENT_NAME = 'NAVIGATION_BAR'
   const INFO_INDEX = 0
   // const HEIGHT = 40
-  const GOODS = [
-    {
-      title: '1688商品',
-      key: 'goods-1688',
-      children: [
-        {
-          title: '商品管理',
-          url: '/home/goods-manage',
-          key: 'goods-manage',
-          isLight: false
-        },
-        {
-          title: '商品选品',
-          url: '/home/goods-choose',
-          key: 'goods-choose',
-          isLight: false
-        },
-        {
-          title: '供应商管理',
-          url: '/home/suppliers-manage',
-          key: 'suppliers-manage',
-          isLight: false
-        }
-      ]
-    },
-    {
-      title: '商品',
-      key: 'goods-goods',
-      children: [
-        {
-          title: '商品素材',
-          url: '/home/product-list',
-          key: 'product-list',
-          isLight: false
-        },
-        {
-          title: '商品类目',
-          url: '/home/product-categories',
-          key: 'product-categories',
-          isLight: false
-        },
-        {
-          title: '辅助资料',
-          url: '/home/auxiliary-information',
-          key: 'auxiliary-information',
-          isLight: false
-        }
-      ]
-    }
-  ]
-  const ORDER = [
-    {
-      title: '订单',
-      key: 'order-order',
-      children: [
-        {
-          title: '订单管理',
-          url: '/home/order-manage',
-          key: 'order-manage',
-          isLight: false
-        }
-      ]
-    }
-  ]
-  const CUSTOMER = [
-    {
-      title: '客户',
-      key: 'customer-customer',
-      children: [
-        {
-          title: '加盟商',
-          url: '/home/franchise-list',
-          key: 'franchise-list',
-          isLight: false
-        },
-        {
-          title: '意向单',
-          url: '/home/intent-list',
-          key: 'intent-list',
-          isLight: false
-        }
-      ]
-    }
-  ]
-  const FINANCE = [
-    {
-      title: '交易',
-      key: 'finance-trade',
-      children: [
-        {
-          title: '交易记录',
-          url: '/home/transaction-record',
-          key: 'transaction-record',
-          isLight: false
-        }
-      ]
-    },
-    {
-      title: '结算',
-      key: 'finance-balance',
-      children: [
-        {
-          title: '加盟商结算',
-          url: '/home/franchise-settlement',
-          key: 'franchise-settlement',
-          isLight: false
-        },
-        {
-          title: '团长提现',
-          url: '/home/leader-withdrawal',
-          key: 'leader-withdrawal',
-          isLight: false
-        }
-      ]
-    }
-  ]
-  const CONTENT = [
-    {
-      title: '内容',
-      key: 'content-content',
-      children: [
-        {
-          title: '内容中心',
-          url: '/home/content-center',
-          key: 'content-center',
-          isLight: false
-        },
-        {
-          title: '内容分类',
-          url: '/home/content-classification',
-          key: 'content-classification',
-          isLight: false
-        }
-      ]
-    }
-  ]
-  const FIRST_MENU = [
-    {
-      name: '商品',
-      icon: require('./icon-commodity_white@2x.png'),
-      activeIcon: require('./icon-commodity@2x.png'),
-      isLight: true,
-      second: GOODS,
-      key: 'goods',
-      url: '/home/goods-manage'
-    },
-    {
-      name: '订单',
-      icon: require('./icon-order_white@2x.png'),
-      activeIcon: require('./icon-order@2x.png'),
-      isLight: true,
-      second: ORDER,
-      key: 'order',
-      url: '/home/order-manage'
-    },
-    {
-      name: '内容',
-      icon: require('./icon-content_white@2x.png'),
-      activeIcon: require('./icon-content@2x.png'),
-      isLight: false,
-      second: CONTENT,
-      key: 'content',
-      url: '/home/content-center'
-    },
-    {
-      name: '客户',
-      icon: require('./icon-customer1@2x.png'),
-      activeIcon: require('./icon-customer2@2x.png'),
-      isLight: true,
-      second: CUSTOMER,
-      key: 'customer',
-      url: '/home/franchise-list'
-    },
-    {
-      name: '财务',
-      icon: require('./icon-money_white@2x.png'),
-      activeIcon: require('./icon-money@2x.png'),
-      isLight: false,
-      second: FINANCE,
-      key: 'finance',
-      url: '/home/transaction-record'
-    }
-  ]
+
   export default {
     name: COMPONENT_NAME,
     filters: {
@@ -230,10 +51,14 @@
     data() {
       return {
         currentIndex: '',
-        firstMenu: FIRST_MENU,
         firstIndex: INFO_INDEX,
-        navList: []
+        navList: [],
+        firstNav: [],
+        menuData: {}
       }
+    },
+    computed: {
+      ...authComputed
     },
     watch: {
       $route(newVal, oldVal) {
@@ -244,16 +69,21 @@
       }
     },
     created() {
+      this.menuData = storage.get('menu', {})
+      // 深拷贝导航
+      let firstNav = objDeepCopy(this.firstMenu)
+      this.firstNav = firstNav.filter((item) => {
+        return this.menuData[item.key].is_show
+      })
       this._getMenuIndex()
       this._handleNavList()
     },
     methods: {
-      // 初始化一级菜单的高亮
       _getMenuIndex() {
         let currentPath = this.$route.fullPath
         let index = ''
         let smallIndex = -1
-        this.firstMenu = this.firstMenu.map((item, idx) => {
+        this.firstNav = this.firstNav.map((item, idx) => {
           if (item.second.length) {
             item.second.forEach((end) => {
               if (smallIndex === -1 && index === '') {
@@ -272,19 +102,27 @@
       },
       // 点击一级导航
       _setFirstMenu(i) {
-        if (this.firstMenu[i].isLight) {
+        if (this.firstNav[i].isLight) {
           return
-        } else if (!this.firstMenu[i].second.length) {
+        } else if (!this.firstNav[i].second.length) {
           this.$toast.show('该功能正在开发中')
           return
         }
-        this.firstMenu = this.firstMenu.map((item, index) => {
+        this.firstNav = this.firstNav.map((item, index) => {
           item.isLight = index === i
           return item
         })
         this.firstIndex = i
-        this.navList = JSON.parse(JSON.stringify(this.firstMenu[i].second))
-        this.$router.push(this.firstMenu[i].url)
+        let arr = []
+        this.firstNav[i].second.forEach((item) => {
+          let childArr = item.children.filter((child) => {
+            return this.menuData[child.key].is_show
+          })
+          item.children = childArr
+          this.menuData[item.key].is_show && arr.push(item)
+        })
+        this.navList = arr
+        this.$router.push(this.navList[0].children[0].url)
       },
       // 跳转二级菜单页面
       _setChildActive(child) {
@@ -294,25 +132,36 @@
       _handleNavList() {
         let currentPath = this.$route.fullPath
         let currentNav
-        this.firstMenu.forEach((item, idx) => {
+        this.firstNav.forEach((item, idx) => {
+          let arr = []
+          item.second.forEach((menu) => {
+            let childArr = menu.children.filter((child) => {
+              return this.menuData[child.key].is_show
+            })
+            menu.children = childArr
+            this.menuData[menu.key].is_show && arr.push(menu)
+          })
+          item.second = arr
           if (currentPath.includes(item.url)) {
             currentNav = item.second
-            this.firstMenu[idx].isLight = true
-            this.firstMenu[idx].second[0].children[0].isLight = true
+            this.firstNav[idx].isLight = true
+            this.firstNav[idx].second[0].children[0].isLight = true
           } else {
-            this.firstMenu[idx].isLight = false
+            this.firstNav[idx].isLight = false
           }
-          item.second && item.second.forEach((it, id) => {
-            it.children && it.children.forEach((child, i) => {
-              if (currentPath.includes(child.url)) {
-                currentNav = item.second
-                this.firstMenu[idx].isLight = true
-                this.firstMenu[idx].second[id].children[i].isLight = true
-              } else {
-                this.firstMenu[idx].second[id].children[i].isLight = false
-              }
+          item.second &&
+            item.second.forEach((it, id) => {
+              it.children &&
+                it.children.forEach((child, i) => {
+                  if (currentPath.includes(child.url)) {
+                    currentNav = item.second
+                    this.firstNav[idx].isLight = true
+                    this.firstNav[idx].second[id].children[i].isLight = true
+                  } else {
+                    this.firstNav[idx].second[id].children[i].isLight = false
+                  }
+                })
             })
-          })
         })
         this.navList = currentNav || []
       }

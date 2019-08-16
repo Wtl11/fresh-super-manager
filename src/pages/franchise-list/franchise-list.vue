@@ -57,7 +57,17 @@
 
   const PAGE_NAME = 'FRANCHISE_LIST'
   const TITLE = '加盟商'
-  const LIST_TITLE = ['加盟商名称', '加盟商账号', '收款人', '银行账号', '地区', '平台服务费率', '社区数量', '创建时间', '操作']
+  const LIST_TITLE = [
+    '加盟商名称',
+    '加盟商账号',
+    '收款人',
+    '银行账号',
+    '地区',
+    '平台服务费率',
+    '社区数量',
+    '创建时间',
+    '操作'
+  ]
 
   export default {
     name: PAGE_NAME,

@@ -8,5 +8,9 @@ export default {
   validate() {
     let url = '/social-shopping/api/platform/token-validate'
     return request.get(url)
+  },
+  getPowerMenu() {
+    let url = '/social-shopping/api/platform/permission/platform-menu'
+    return request.get(url)
   }
 }

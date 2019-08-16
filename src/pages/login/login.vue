@@ -16,6 +16,8 @@
 
 <script type="text/ecmascript-6">
   import {authMethods} from '@state/helpers'
+  // import storage from 'storage-controller'
+  // import API from '@api'
 
   const PAGE_NAME = 'LOGIN'
   const TITLE = '登录'
@@ -52,10 +54,13 @@
           password: this.password
         })
           .then((user) => {
-            if (!user) {
-              return
-            }
-            this.$router.push(this.$route.query.redirectFrom || '/home/goods-manage')
+          // if (!user) {
+          //   return
+          // }
+          // this.$router.push(this.$route.query.redirectFrom || '/home/goods-manage')
+          // setTimeout(() => {
+          //   this.getPowerData()
+          // }, 30)
           })
           .catch((error) => {
             this.$toast.show(error)

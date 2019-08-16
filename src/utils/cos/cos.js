@@ -7,8 +7,8 @@ import {getCorpId} from '@utils/tool'
  * @param path
  * @returns {Promise.<*>}
  */
-function _saveFile(data, path='/social-shopping') {
-  let url = path+'/api/cos/save-file'
+function _saveFile(data, path = '/social-shopping') {
+  let url = path + '/api/cos/save-file'
   return request.post(url, data)
 }
 
@@ -19,7 +19,7 @@ function _saveFile(data, path='/social-shopping') {
  * @param callback
  * @private
  */
-function _getAuthorization(options, path='/social-shopping', callback) {
+function _getAuthorization(options, path = '/social-shopping', callback) {
   const method = (options.Method || 'get').toLowerCase()
   const key = options.Key || ''
   // const pathname = key.indexOf('/') === 0 ? key : '/' + key
@@ -64,7 +64,13 @@ export function uploadFiles(fileType, files, path, showProcess, processCallBack)
   showProcess && showProcess()
   return new Promise((resolve, reject) => {
     let requests = files.map((file) => {
-      let Key = Date.now() + '-' + Math.random().toString().split('.')[1].substr(0,6)
+      let Key =
+        Date.now() +
+        '-' +
+        Math.random()
+          .toString()
+          .split('.')[1]
+          .substr(0, 6)
       return new Promise((resolve, reject) => {
         _getAuthorization({Method: 'PUT', Key: Key}, path, (err, info) => {
           if (err) {

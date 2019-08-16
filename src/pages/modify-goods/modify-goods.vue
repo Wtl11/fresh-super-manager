@@ -296,7 +296,7 @@
           }
         }
         if (this.msg.description) {
-          this.msg.description = this.msg.description.replace(/&nbsp;/g,' ')
+          this.msg.description = this.msg.description.replace(/&nbsp;/g, ' ')
         }
       },
       // 获取类目列表
@@ -313,7 +313,7 @@
                     this.secondSelect.content = twomitem.name
                     this.thirdlySelect.data = twomitem.list
                     this.thirdlySelect.data.forEach((thritem) => {
-                      if(thritem.is_selected) {
+                      if (thritem.is_selected) {
                         this.thirdlySelect.content = thritem.name
                       }
                     })
@@ -328,20 +328,19 @@
       },
       // 获取供应商列表
       _getSuppliersList() {
-        API.FreeShipping.getSuppliersList({limit: 100})
-          .then((res) => {
-            if (res.error !== this.$ERR_OK) {
-              return
-            }
-            if (res.data.length>0&&res.data[0].name) {
-              this.supplierSelect.data = res.data
-              res.data.forEach((item)=>{
-                if (item.id === this.msg.supplier_id) {
-                  this.supplierSelect.content = item.name
-                }
-              })
-            }
-          })
+        API.FreeShipping.getSuppliersList({limit: 100}).then((res) => {
+          if (res.error !== this.$ERR_OK) {
+            return
+          }
+          if (res.data.length > 0 && res.data[0].name) {
+            this.supplierSelect.data = res.data
+            res.data.forEach((item) => {
+              if (item.id === this.msg.supplier_id) {
+                this.supplierSelect.content = item.name
+              }
+            })
+          }
+        })
       },
       // 选择一级类目
       setStairValue(data) {
@@ -411,7 +410,7 @@
       },
       // 保存编辑
       _submit() {
-        if (!this._submitCheck()) return;
+        if (!this._submitCheck()) return
         // 把输入的划线价、单价填入选择的规格
         this.msg.goods_skus[this.skuSelect].original_price = this.goods_skus.original_price
         this.msg.goods_skus[this.skuSelect].trade_price = this.goods_skus.trade_price
@@ -452,9 +451,9 @@
         }
         let skuCheck = false
         // 遍历数组检查是否有选择规格和输入商品编码
-        for(let i = 0; i < this.msg.goods_skus.length; i++) {
+        for (let i = 0; i < this.msg.goods_skus.length; i++) {
           const item = this.msg.goods_skus[i]
-          if(item.is_default===1) {
+          if (item.is_default === 1) {
             skuCheck = true
             if (item.goods_sku_encoding.length === 0) {
               this.$toast.show('请输入商品编码')
@@ -472,10 +471,10 @@
         } else if (this.goods_skus.trade_price.length === 0) {
           this.$toast.show('请输入销售单价')
           return false
-        } else if (this.goods_skus.original_price*1 <= 0) {
+        } else if (this.goods_skus.original_price * 1 <= 0) {
           this.$toast.show('划线价必须大于0')
           return false
-        } else if (this.goods_skus.trade_price*1 <= 0) {
+        } else if (this.goods_skus.trade_price * 1 <= 0) {
           this.$toast.show('销售单价必须大于0')
           return false
         } else if (+this.goods_skus.original_price < +this.goods_skus.trade_price) {
@@ -503,42 +502,46 @@
          * 二，拿到的商品，请求编辑商品（同步）接口，参数跟新建一样，接口多了/id
          * 三，重新请求商品详情接口
          **/
-        API.FreeShipping.goodsSearch({domin: this.msg.source_url}).then((res) => {
-          if (res.error === this.$ERR_OK) {
-            API.FreeShipping.goodsUpdate(res.data, this.id, false).then((res) => {
-              if (res.error === this.$ERR_OK) {
-                API.FreeShipping.getGoodsInfo(this.id)
-                  .then((res) => {
-                    if (res.error !== this.$ERR_OK) {
-                      this.$toast.show(res.message)
-                      return
-                    }
-                    this.msg = res.data
-                    this._setData()
-                    this.$toast.show('商品更新成功！')
-                  })
-                  .finally((e) => {
+        API.FreeShipping.goodsSearch({domin: this.msg.source_url})
+          .then((res) => {
+            if (res.error === this.$ERR_OK) {
+              API.FreeShipping.goodsUpdate(res.data, this.id, false)
+                .then((res) => {
+                  if (res.error === this.$ERR_OK) {
+                    API.FreeShipping.getGoodsInfo(this.id)
+                      .then((res) => {
+                        if (res.error !== this.$ERR_OK) {
+                          this.$toast.show(res.message)
+                          return
+                        }
+                        this.msg = res.data
+                        this._setData()
+                        this.$toast.show('商品更新成功！')
+                      })
+                      .finally((e) => {
+                        this.isSubmit = false
+                        this.$loading.hide()
+                      })
+                  } else {
                     this.isSubmit = false
                     this.$loading.hide()
-                  })
-              } else {
-                this.isSubmit = false
-                this.$loading.hide()
-                this.$toast.show(res.message)
-              }
-            }).catch(() => {
+                    this.$toast.show(res.message)
+                  }
+                })
+                .catch(() => {
+                  this.isSubmit = false
+                  this.$loading.hide()
+                })
+            } else {
               this.isSubmit = false
               this.$loading.hide()
-            })
-          } else {
+              this.$toast.show(res.message)
+            }
+          })
+          .catch(() => {
             this.isSubmit = false
             this.$loading.hide()
-            this.$toast.show(res.message)
-          }
-        }).catch(()=>{
-          this.isSubmit = false
-          this.$loading.hide()
-        })
+          })
       }
     }
   }

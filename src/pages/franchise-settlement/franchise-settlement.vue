@@ -134,7 +134,8 @@
         dispatchSelect: [
           {name: '全部', value: '', key: 'all', num: 0},
           {name: '待结算', id: 1, key: 'wait_release', num: 0},
-          {name: '已结算', id: 2, key: 'wait_purchase', num: 0}],
+          {name: '已结算', id: 2, key: 'wait_purchase', num: 0}
+        ],
         listTitle: LIST_TITLE,
         settlementImg: '',
         payoffLogId: '',
@@ -164,7 +165,6 @@
       ...franchiseMethods,
       async addImg(e) {
         let param = this._infoImage(e.target.files[0])
-        console.log(param)
         e.target.value = ''
         await this._upImage(param)
       },

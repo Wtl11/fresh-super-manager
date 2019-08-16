@@ -4,7 +4,7 @@ export const authComputed = {
   ...mapState('auth', {
     currentUser: (state) => state.currentUser
   }),
-  ...mapGetters('auth', ['loggedIn'])
+  ...mapGetters('auth', ['loggedIn', 'firstMenu'])
 }
 export const authMethods = mapActions('auth', ['logIn', 'logOut'])
 
@@ -23,7 +23,6 @@ export const tradeComputed = {
 export const tradeMethods = {
   ...mapActions('trade', ['setPage', 'setTradeType', 'setDate', 'setKeyword', 'setOrderType', 'setSourceType'])
 }
-
 
 // 团长
 export const leaderComputed = {
@@ -70,7 +69,7 @@ export const franchiseComputed = {
     'franchiseList',
     'franListKeyword',
     'franListPageTotal',
-    'franListPage',
+    'franListPage'
   ])
 }
 
@@ -84,14 +83,33 @@ export const franchiseMethods = mapActions('franchise', [
   'setfranListPage'
 ])
 
-
 // 意向单
 export const intentComputed = {
-  ...mapGetters('intent', ['list', 'pageDetail', 'searchNum', 'status', 'page', 'startTime', 'endTime', 'type', 'limit', 'pageName'])
+  ...mapGetters('intent', [
+    'list',
+    'pageDetail',
+    'searchNum',
+    'tabStatus',
+    'status',
+    'page',
+    'startTime',
+    'endTime',
+    'type',
+    'limit',
+    'pageName'
+  ])
 }
 
 export const intentMethods = {
-  ...mapActions('intent', ['getIntentList', 'setSearchNum', 'setIntentStatus', 'setIntentType', 'setPage', 'initData', 'initType'])
+  ...mapActions('intent', [
+    'getIntentList',
+    'setSearchNum',
+    'setIntentStatus',
+    'setIntentType',
+    'setPage',
+    'initData',
+    'initType'
+  ])
 }
 
 // 商品
@@ -121,8 +139,32 @@ export const fsOrderMethods = {
 
 // 内容
 export const contentComputed = {
-  ...mapGetters('content', ['workCategoryId', 'contentPage', 'workType', 'contentWorkPage', 'workStatus', 'workKeyword', 'contentClassList', 'workTabIndex', 'contentClassPage', 'workList', 'workPage', 'centerList', 'centerPage'])
+  ...mapGetters('content', [
+    'workCategoryId',
+    'contentPage',
+    'workType',
+    'contentWorkPage',
+    'workStatus',
+    'workKeyword',
+    'contentClassList',
+    'workTabIndex',
+    'contentClassPage',
+    'workList',
+    'workPage',
+    'centerList',
+    'centerPage'
+  ])
 }
 export const contentMethods = {
-  ...mapActions('content', ['infoContent', 'contentAddPage', 'setWorkIndex', 'infoWork', 'getWorkListMore', 'getContentClassList', 'getWorkList', 'selectWork', 'getCenterList'])
+  ...mapActions('content', [
+    'infoContent',
+    'contentAddPage',
+    'setWorkIndex',
+    'infoWork',
+    'getWorkListMore',
+    'getContentClassList',
+    'getWorkList',
+    'selectWork',
+    'getCenterList'
+  ])
 }

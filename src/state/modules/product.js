@@ -81,14 +81,20 @@ export const actions = {
       })
   },
   // 商品列表
-  getProductList({state, commit}, {keyword = '', page = 1, categoryId = '', isOnline = '', limit = 10, loading = true}) {
-    return API.Product.reqGoodsList({
-      keyword,
-      page,
-      goods_material_category_id: categoryId,
-      is_online: isOnline,
-      limit
-    }, loading)
+  getProductList(
+    {state, commit},
+    {keyword = '', page = 1, categoryId = '', isOnline = '', limit = 10, loading = true}
+  ) {
+    return API.Product.reqGoodsList(
+      {
+        keyword,
+        page,
+        goods_material_category_id: categoryId,
+        is_online: isOnline,
+        limit
+      },
+      loading
+    )
       .then((res) => {
         if (res.error !== app.$ERR_OK) {
           return false

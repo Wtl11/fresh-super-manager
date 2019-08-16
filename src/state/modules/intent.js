@@ -1,6 +1,11 @@
 import API from '@api'
 import app from '@src/main'
-
+import storage from 'storage-controller'
+const TYPE_STATUS = [
+  {text: '团长', type: 1, key: 'intent-group'},
+  {text: '供应商', type: 2, key: 'intent-supplier'},
+  {text: '加盟商', type: 3, key: 'intent-franchise'}
+]
 export const state = {
   list: [],
   pageDetail: {
@@ -11,11 +16,12 @@ export const state = {
   page: 1,
   searchNum: '',
   status: '',
-  type: 3,
+  tabStatus: getType(),
+  type: (getType()[0] && getType()[0].type) || 1,
   startTime: '',
   endTime: '',
   limit: 10,
-  pageName: '加盟商'
+  pageName: (getType()[0] && getType()[0].text) || '团长'
 }
 
 export const getters = {
@@ -31,6 +37,9 @@ export const getters = {
   searchNum(state) {
     return state.searchNum
   },
+  tabStatus(state) {
+    return state.tabStatus
+  },
   status(state) {
     return state.status
   },
@@ -39,7 +48,7 @@ export const getters = {
   },
   pageName(state) {
     return state.pageName
-  },
+  }
 }
 
 export const mutations = {
@@ -64,11 +73,19 @@ export const mutations = {
   SET_PAGE_NAME(state, pageName) {
     state.pageName = pageName
   },
+  INIT_TYPE(state) {
+    state.tabStatus = getType()
+    state.type = (state.tabStatus[0] && state.tabStatus[0].type) || 1
+    state.status = ''
+    state.page = 1
+    state.searchNum = ''
+    state.pageName = (state.tabStatus[0] && state.tabStatus[0].text) || '团长'
+  }
 }
 
 export const actions = {
-  initData({commit, dispatch}) {
-    commit('SET_TYPE', 3)
+  initData({commit, dispatch, state}) {
+    commit('SET_TYPE', state.tabStatus[0].type)
     // commit('SET_STATUS', '')
     commit('SET_PAGE', 1)
     commit('SET_SEARCH_NUM', '')
@@ -127,11 +144,15 @@ export const actions = {
     commit('SET_PAGE', page)
     dispatch('getIntentList')
   },
-  initType({commit, dispatch}) {
-    commit('SET_TYPE', 3)
-    commit('SET_STATUS', '')
-    commit('SET_PAGE', 1)
-    commit('SET_SEARCH_NUM', '')
-    commit('SET_PAGE_NAME', '加盟商')
-  },
+  initType({commit, dispatch, state}) {
+    commit('INIT_TYPE')
+  }
+}
+
+function getType() {
+  let menuData = storage.get('menu')
+  let arr = TYPE_STATUS.filter((item) => {
+    return menuData[item.key].is_show
+  })
+  return arr
 }

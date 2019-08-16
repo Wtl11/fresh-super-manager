@@ -119,8 +119,20 @@
         stairSelect: {check: false, show: false, content: '一级类目', type: 'default', data: []},
         secondSelect: {check: false, show: false, content: '二级类目', type: 'default', data: []},
         thirdlySelect: {check: false, show: false, content: '三级类目', type: 'default', data: []},
-        infoStateSelect: {check: false, show: false, content: '全部', type: 'default', data: [{name:'全部',id:''},{name:'待完善',id:0},{name:'已完善',id:1}]},
-        sourceSelect: {check: false, show: false, content: '1688市场', type: 'default', data: [{name:'1688市场',id:2},{name:'自建',id:1}]},
+        infoStateSelect: {
+          check: false,
+          show: false,
+          content: '全部',
+          type: 'default',
+          data: [{name: '全部', id: ''}, {name: '待完善', id: 0}, {name: '已完善', id: 1}]
+        },
+        sourceSelect: {
+          check: false,
+          show: false,
+          content: '1688市场',
+          type: 'default',
+          data: [{name: '1688市场', id: 2}, {name: '自建', id: 1}]
+        },
         showIndex: false,
         oneBtn: false,
         requestParams: {
@@ -141,7 +153,7 @@
     created() {
       this.getGoodsOnlineStatus()
       this.getCategoryData()
-      // this.getGoodsList(this.requestParams)
+    // this.getGoodsList(this.requestParams)
     },
     methods: {
       ...fsGoodsMethods,
@@ -177,7 +189,7 @@
         })
       },
       // 获取商品列表
-      _getGoodsList(resPage=true) {
+      _getGoodsList(resPage = true) {
         if (resPage) {
           this.requestParams.page = 1
           this.$refs.pagination.beginPage()

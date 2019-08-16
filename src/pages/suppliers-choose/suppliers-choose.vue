@@ -62,28 +62,32 @@
         this.getSuppliersList()
       },
       getSuppliersList() {
-        API.FreeShipping.suppliersSearch({domin: this.searchText}).then((res) => {
-          if (res.error === this.$ERR_OK) {
-            this.suppliersList = res.data
-          } else {
-            this.$toast.show(res.message)
-          }
-        }).finally(()=>{
-          this.$loading.hide()
-        })
+        API.FreeShipping.suppliersSearch({domin: this.searchText})
+          .then((res) => {
+            if (res.error === this.$ERR_OK) {
+              this.suppliersList = res.data
+            } else {
+              this.$toast.show(res.message)
+            }
+          })
+          .finally(() => {
+            this.$loading.hide()
+          })
       },
       _syncSuppliersList() {
         if (!this.suppliersList.name) return
-        API.FreeShipping.suppliersCreate(this.suppliersList).then((res) => {
-          if (res.error === this.$ERR_OK) {
-            this.$toast.show('同步成功！')
-          } else {
-            this.$toast.show(res.message)
-          }
-        }).finally(()=>{
-          this.$loading.hide()
-          this.restoreData()
-        })
+        API.FreeShipping.suppliersCreate(this.suppliersList)
+          .then((res) => {
+            if (res.error === this.$ERR_OK) {
+              this.$toast.show('同步成功！')
+            } else {
+              this.$toast.show(res.message)
+            }
+          })
+          .finally(() => {
+            this.$loading.hide()
+            this.restoreData()
+          })
       },
       restoreData() {
         this.suppliersList = []

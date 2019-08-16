@@ -28,7 +28,7 @@ export default {
    * @returns {AxiosPromise<any> | * | IDBRequest<IDBValidKey> | Promise<void>}
    */
   handleIntent(data, loading = false, id = '') {
-    let url = `/social-shopping/api/platform/recruit/`+id
+    let url = `/social-shopping/api/platform/recruit/` + id
     return request.post(url, data, loading)
-  },
+  }
 }

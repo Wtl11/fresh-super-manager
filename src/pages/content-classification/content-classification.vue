@@ -85,7 +85,7 @@
         let res = await API.Content.changeClassify(item.id, {status})
         this.$toast.show(res.message)
         res.error === this.$ERR_OK && this.contentAddPage({})
-        // this.contentClassList[index].status = this.contentClassList[index].status === 0 ? 1 : 0
+      // this.contentClassList[index].status = this.contentClassList[index].status === 0 ? 1 : 0
       },
       addPage(page) {
         this.contentAddPage({page})
@@ -101,7 +101,6 @@
         res.error === this.$ERR_OK && this.contentAddPage({})
       },
       async confirmInput(text) {
-        console.log(text)
         if (text.length === 0) {
           this.$toast.show('分类名字不能为空')
           return
@@ -118,8 +117,6 @@
         this.$refs.modalBox.hide()
         this.editId = null
         this.contentAddPage({})
-
-        console.log(res)
       },
       editClassify(item) {
         this.methodsName = 'editClassify'

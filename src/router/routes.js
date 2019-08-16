@@ -1,6 +1,7 @@
 import store from '@state/store'
 import API from '@api'
 import {ERR_OK} from '@utils/config'
+import storage from 'storage-controller'
 
 export default [
   // 登录界面
@@ -12,7 +13,8 @@ export default [
       beforeResolve(routeTo, routeFrom, next) {
         // 判断用户是否已经登录
         if (store.getters['auth/loggedIn']) {
-          next({name: 'goods-manage'})
+          let firstPage = storage.get('firstPage')
+          firstPage ? next({name: firstPage.replace('/home/', '')}) : next()
         } else {
           next()
         }
@@ -62,6 +64,7 @@ export default [
         meta: {
           titles: ['客户', '意向单'],
           beforeResolve(routeTo, routeFrom, next) {
+            store.commit('intent/INIT_TYPE')
             store
               .dispatch('intent/getIntentList', routeTo.params.id)
               .then((res) => {
@@ -280,7 +283,6 @@ export default [
                 if (!response) {
                   return next({name: '404'})
                 }
-                console.log(response)
                 routeTo.params.detail = response
                 next()
               })
@@ -330,17 +332,16 @@ export default [
             if (id) {
               API.Content.getArticleDetail({id}, false)
                 .then((res) => {
-                  console.log(res, ERR_OK)
                   if (res.error !== ERR_OK) {
                     return false
                   }
                   next({
-                    params:res.data
+                    params: res.data
                   })
                 })
-              .catch(() => {
-                next({name: '404'})
-              })
+                .catch(() => {
+                  next({name: '404'})
+                })
             } else {
               next()
             }
@@ -455,7 +456,7 @@ export default [
         name: 'order-detail',
         component: () => lazyLoadView(import('@pages/order-detail/order-detail')),
         meta: {
-          titles: ['订单', '订单管理', '订单详情'],
+          titles: ['订单', '订单管理', '订单详情']
         }
       },
       // 全国包邮-商品选品
@@ -464,7 +465,7 @@ export default [
         name: 'goods-choose',
         component: () => lazyLoadView(import('@pages/goods-choose/goods-choose')),
         meta: {
-          titles: ['商品', '商品选品'],
+          titles: ['商品', '商品选品']
         }
       },
       // 全国包邮-供应商列表
@@ -496,9 +497,9 @@ export default [
         name: 'suppliers-choose',
         component: () => lazyLoadView(import('@pages/suppliers-choose/suppliers-choose')),
         meta: {
-          titles: ['商品', '供应商管理', '同步供应商信息'],
+          titles: ['商品', '供应商管理', '同步供应商信息']
         }
-      },
+      }
     ]
   },
   {
@@ -526,7 +527,7 @@ export default [
 
 function lazyLoadView(AsyncView) {
   const AsyncHandler = () => ({
-    component: AsyncView,
+    component: AsyncView
   })
   // loading: require('@pages/_loading/_loading').default,
   // delay: 400,
