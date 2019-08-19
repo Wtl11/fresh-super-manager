@@ -150,9 +150,9 @@ export const actions = {
 }
 
 function getType() {
-  let menuData = storage.get('menu')
+  let menuData = storage.get('menu') || {}
   let arr = TYPE_STATUS.filter((item) => {
-    return menuData[item.key].is_show
+    return menuData[item.key] && menuData[item.key].is_show
   })
   return arr
 }
