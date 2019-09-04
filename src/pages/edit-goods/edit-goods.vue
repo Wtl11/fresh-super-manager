@@ -1,17 +1,10 @@
 <template>
   <div class="edit-goods">
-    <div class="identification">
-      <div class="identification-page">
-        <img src="./icon-new_commodity@2x.png" class="identification-icon">
-        <p class="identification-name">{{id ? '编辑商品' : '新建商品'}}</p>
-      </div>
-      <div class="function-btn">
-      </div>
-    </div>
+    <div style="height: 25px"></div>
     <div class="content-header">
-      <div class="content-title">商品信息</div>
+      <div class="content-title">商品素材</div>
     </div>
-    <div class="goods-box">
+    <section class="goods-box">
       <div class="edit-item">
         <div class="edit-title">
           <span class="start">*</span>
@@ -19,6 +12,14 @@
         </div>
         <div class="edit-input-box">
           <input v-model="msg.name" type="text" class="edit-input" maxlength="29" @mousewheel.native.prevent>
+        </div>
+      </div>
+      <div class="edit-item">
+        <div class="edit-title">
+          推荐语
+        </div>
+        <div class="edit-input-box">
+          <textarea v-model="msg.describe" class="edit-textarea edit-input" maxlength="50"></textarea>
         </div>
       </div>
       <div class="edit-item">
@@ -33,13 +34,24 @@
           <div class="mini-mr20">
             <base-drop-down :height="40" :width="190" :radius="2" :select="secondSelect" @setValue="setSecondValue"></base-drop-down>
           </div>
-          <base-drop-down :height="40" :width="190" :radius="2" :select="thirdlySelect" @setValue="setThirdlyValue"></base-drop-down>
         </div>
+      </div>
+      <div class="edit-item">
+        <div class="edit-title">
+          <span class="start">*</span>
+          基本单位
+        </div>
+        <div class="edit-input-box">
+          <base-drop-down :height="40" :width="400" :radius="2" :select="dispatchSelect"
+                          @setValue="setBaseValue"
+          ></base-drop-down>
+        </div>
+        <p class="edit-explain">商品在仓库存放时的最小单位 <span class="see-sample" @click="showSampleHandle">查看示例</span></p>
       </div>
       <div class="edit-item  edit-image-box">
         <div class="edit-title">
           <span class="start">*</span>
-          商品图片
+          封面图
         </div>
         <div class="image-box">
           <div class="edit-image">
@@ -51,13 +63,35 @@
             </draggable>
             <div v-if="msg.goods_main_images.length < picNum" class="add-image hand">
               <input type="file" class="sendImage hand" multiple="multiple" accept="image/*" @change="_addPic('goods_main_images', picNum, $event)">
-              <div v-if="showLoading && uploadImg === 'goods_banner_images'" class="loading-mask">
+              <div v-if="showLoading && uploadImg === 'goods_main_images'" class="loading-mask">
                 <img src="./loading.gif" class="loading">
               </div>
             </div>
           </div>
-          <!--<base-edit-image :picList.sync="msg.goods_banner_images" @failFile="failFile" @getPic="getPic" @delPic="delPic"></base-edit-image>-->
           <div class="tip">建议图片的尺寸：750*750，支持png，jpeg，jpg格式，最多可上传5张，首张为封面。</div>
+        </div>
+      </div>
+      <div class="edit-item  edit-image-box">
+        <div class="edit-title">
+          主图视频
+        </div>
+        <div class="image-box">
+          <div class="edit-image">
+            <draggable v-model="msg.goods_videos" class="draggable">
+              <div v-for="(item, index) in msg.goods_videos" :key="index" class="show-image hand">
+                <video class="img" :src="item.full_url" alt=""></video>
+                <span class="close" @click="delPic(index, 'goods_videos')"></span>
+                <img src="./icon-play_upload.png" alt="" class="icon-video-button">
+              </div>
+            </draggable>
+            <div v-if="msg.goods_videos.length < videoNum" class="add-image hand">
+              <input type="file" class="sendImage hand" accept="video/*" @change="_addVideo('goods_videos', videoNum, $event)">
+              <div v-if="showLoading && uploadImg === 'goods_videos'" class="loading-mask">
+                <img src="./loading.gif" class="loading">
+              </div>
+            </div>
+          </div>
+          <div class="tip">建议上传50M以内的清晰视频，内容突出商品1-2个核心卖点。</div>
         </div>
       </div>
       <div class="edit-item  edit-image-box">
@@ -75,88 +109,38 @@
             </draggable>
             <div v-if="msg.goods_detail_images.length < 15" class="add-image hand">
               <input type="file" class="sendImage hand" multiple="multiple" accept="image/*" @change="_addPic('goods_detail_images', 15, $event)">
-              <div v-if="showLoading && uploadImg === 'goods_banner_images'" class="loading-mask">
+              <div v-if="showLoading && uploadImg === 'goods_detail_images'" class="loading-mask">
                 <img src="./loading.gif" class="loading">
               </div>
             </div>
           </div>
-          <!--<base-edit-image :picList.sync="msg.goods_banner_images" @failFile="failFile" @getPic="getPic" @delPic="delPic"></base-edit-image>-->
           <div class="tip">建议图片的尺寸：750*750，支持png，jpeg，jpg格式，最多可上传15张。</div>
         </div>
       </div>
-    </div>
-    <div class="content-header">
-      <div class="content-title">商品规格</div>
-    </div>
-    <div class="goods-box">
-      <div class="edit-item">
-        <div class="edit-title">
-          <span class="start">*</span>
-          基本单位
-        </div>
-        <div class="edit-input-box">
-          <base-drop-down :height="40" :width="400" :radius="2" :select="dispatchSelect"
-                          @setValue="setBaseValue"
-          ></base-drop-down>
-        </div>
-      </div>
-      <div class="edit-item">
-        <div class="edit-title">
-          <span class="start">*</span>
-          销售规格
-        </div>
-        <div class="edit-input-box mini-edit-input-box">
-          <input v-model="goods_skus.base_sale_rate" type="number" class="edit-input mini-edit-input" maxlength="10">
-          <div class="edit-input-unit"><span>{{goods_skus.base_unit}}</span>/</div>
-          <base-drop-down :height="40" :width="133" :radius="2" :select="saleSelect"
-                          @setValue="setValueList"
-          ></base-drop-down>
-        </div>
-        <div class="edit-pla">例如：基本单位是kg，销售单位是份，则销售规格可输入0.5，即0.5kg/份</div>
-      </div>
-      <div class="edit-item">
-        <div class="edit-title">
-          <span class="start">*</span>
-          商品编码
-        </div>
-        <div class="edit-input-box">
-          <input v-model="goods_skus.goods_sku_code" type="text" class="edit-input" maxlength="20">
-        </div>
-      </div>
-    </div>
-    <div class="content-header procurement-top">
-      <div class="content-title">销售信息</div>
-    </div>
-    <div class="goods-box">
-      <div class="edit-item">
-        <div class="edit-title">
-          <span class="start">*</span>
-          划线价
-        </div>
-        <div class="edit-input-box">
-          <input v-model="goods_skus.original_price" type="text" class="edit-input" maxlength="20">
-        </div>
-        <div v-if="goods_skus.sale_unit" class="edit-pla">元/{{goods_skus.sale_unit}}</div>
-      </div>
-      <div class="edit-item">
-        <div class="edit-title">
-          <span class="start">*</span>
-          销售单价
-        </div>
-        <div class="edit-input-box">
-          <input v-model="goods_skus.trade_price" type="text" class="edit-input" maxlength="20">
-        </div>
-        <div v-if="goods_skus.sale_unit" class="edit-pla">元/{{goods_skus.sale_unit}}</div>
-      </div>
-    </div>
+    </section>
     <div class="back">
       <div class="back-cancel back-btn hand" @click="_back">返回</div>
       <div class="back-btn back-submit hand" @click="_submit">{{id ? '编辑' : '创建'}}</div>
     </div>
+    <default-confirm ref="modal">
+      <div slot="content" class="tip-wrapper">
+        <img src="./icon-close@2x.png" alt="" class="icon-close hand" @click="hideExampleHandle">
+        <header class="header">{{tipInfo.title}}</header>
+        <ul class="example-wrapper">
+          <li v-for="(item, index) in tipInfo.list" :key="index" class="example">
+            <p class="tip-icon">{{item.title}}</p>
+            <p class="tip-text">
+              <span v-for="(ct, cIdx) in item.content" :key="cIdx" :class="ct.cname || ''">{{ct.text}}</span>
+            </p>
+          </li>
+        </ul>
+      </div>
+    </default-confirm>
   </div>
 </template>
 
 <script type="text/ecmascript-6">
+  import DefaultConfirm from '@components/default-modal/default-modal'
   import Draggable from 'vuedraggable'
   import API from '@api'
   import _ from 'lodash'
@@ -170,7 +154,8 @@
       title: TITLE
     },
     components: {
-      Draggable
+      Draggable,
+      DefaultConfirm
     },
     props: {
       detail: {
@@ -183,6 +168,7 @@
     data() {
       return {
         picNum: 5,
+        videoNum: 1,
         showLoading: false,
         uploadImg: '',
         msg: {
@@ -190,7 +176,9 @@
           goods_material_category_id: 0,
           goods_main_images: [],
           goods_detail_images: [],
-          goods_material_skus: []
+          goods_material_skus: [],
+          goods_videos: [],
+          describe: ''
         },
         goods_skus: {
           base_sale_rate: '',
@@ -208,7 +196,69 @@
         saleSelect: {check: false, show: false, content: '销售单位', type: 'default', data: []},
         categoryId: '',
         id: this.$route.query.id || '',
-        isSubmit: false
+        isSubmit: false,
+        tipInfo: {
+          title: '基本单位示例',
+          list: [
+            {
+              title: '示例1',
+              content: [
+                {
+                  text: '苹果: 采购散装后自己包装，按“kg”存放在仓库，则',
+                },
+                {
+                  text: '基本单位',
+                  cname: 'mark'
+                },
+                {
+                  text: '建议设置为',
+                },
+                {
+                  text: 'kg',
+                  cname: 'mark'
+                }
+              ]
+            },
+            {
+              title: '示例2',
+              content: [
+                {
+                  text: '苹果: 采购供应商已包装好的，按“份”存放在仓库，则',
+                },
+                {
+                  text: '基本单位',
+                  cname: 'mark'
+                },
+                {
+                  text: '建议设置为',
+                },
+                {
+                  text: '份',
+                  cname: 'mark'
+                }
+              ]
+            },
+            {
+              title: '示例3',
+              content: [
+                {
+                  text: '酸奶: 采购1件30盒，按“盒”存放在仓库，则',
+                },
+                {
+                  text: '基本单位',
+                  cname: 'mark'
+                },
+                {
+                  text: '建议设置为',
+                },
+                {
+                  text: '盒',
+                  cname: 'mark'
+                }
+              ]
+            }
+          ]
+        }
       }
     },
     created() {
@@ -217,6 +267,12 @@
       this.getSelectData()
     },
     methods: {
+      showSampleHandle() {
+        this.$refs.modal && this.$refs.modal.showModal()
+      },
+      hideExampleHandle() {
+        this.$refs.modal && this.$refs.modal.hideModal()
+      },
       /**
        * 设置默认数据 -> 编辑状态
        * @private
@@ -285,6 +341,23 @@
       setThirdlyValue(data) {
         this.msg.goods_material_category_id = data.id
       },
+      _addVideo(type, length, e) {
+        console.log(e.target.files)
+        this.uploadImg = type
+        this.showLoading = true
+        this.$vod.uploadFiles(e.target.files[0]).then((res) => {
+          this.showLoading = false
+          let obj = {
+            id: 0,
+            file_id: res.data.id,
+            full_url: res.data.full_url
+          }
+          this.$set(this.msg, type, [obj])
+        }).catch(e => {
+          this.showLoading = false
+        })
+        e.target.value = ''
+      },
       // 添加图片
       _addPic(type, length, e) {
         this.uploadImg = type
@@ -338,27 +411,6 @@
         } else if (this.goods_skus.base_unit === '') {
           this.$toast.show('请选择基本单位')
           return
-        } else if (this.goods_skus.base_sale_rate.length === 0) {
-          this.$toast.show('请输入销售规格')
-          return
-        } else if (this.goods_skus.base_sale_rate <= 0) {
-          this.$toast.show('请输入销售规格大于零')
-          return
-        } else if (this.goods_skus.sale_unit === '') {
-          this.$toast.show('请选择销售单位')
-          return
-        } else if (this.goods_skus.goods_sku_code.length === 0) {
-          this.$toast.show('请输入商品编码')
-          return
-        } else if (this.goods_skus.original_price.length === 0) {
-          this.$toast.show('请输入划线价')
-          return
-        } else if (this.goods_skus.trade_price.length === 0) {
-          this.$toast.show('请输入售价')
-          return
-        } else if (+this.goods_skus.original_price < +this.goods_skus.trade_price) {
-          this.$toast.show('请输入划线价大于售价')
-          return
         }
         this.msg.goods_material_skus[0] = this.goods_skus
         this.isSubmit = true
@@ -399,8 +451,12 @@
         this.goods_skus.sale_unit = data.name
       },
       // 删除图片
-      delPic(index) {
-        this.msg.goods_main_images.splice(index, 1)
+      delPic(index, key) {
+        if (key) {
+          this.msg[key].splice(index, 1)
+        } else {
+          this.msg.goods_main_images.splice(index, 1)
+        }
       },
       delPic2(index) {
         this.msg.goods_detail_images.splice(index, 1)
@@ -411,6 +467,55 @@
 
 <style scoped lang="stylus" rel="stylesheet/stylus">
   @import "~@design"
+
+  // 弹窗
+  .tip-wrapper
+    width: 534px
+    box-sizing :border-box
+    padding :0 20px
+    line-height: 1
+    background: #FFFFFF;
+    box-shadow: 0 0 5px 0 rgba(12,6,14,0.60);
+    border-radius: 3px;
+    position :relative
+    .icon-close
+      extend-click()
+      position: absolute
+      width: 8px
+      height: @width
+      right :20px
+      top:@right
+
+    .header
+      font-family: $font-family-medium
+      font-size: 16px;
+      color: #333333;
+      padding-top :26px
+    .example-wrapper
+      padding-top :30px
+      padding-bottom :23px
+      font-family: PingFangSC-Regular;
+      font-size: 14px;
+      .example
+        background: #F5F7FA;
+        border: 0.5 solid #E9ECEE;
+        margin-bottom :20px
+        &:last-child
+          margin-bottom : 0
+        .tip-icon
+          height :24px
+          width: 58px
+          box-sizing:border-box
+          background: #666666;
+          color: #FFFFFF;
+          border-radius: 0 0 20px 0;
+          line-height :24px
+          text-align :center
+        .tip-text
+          padding :18px 10px 19px
+          line-height :1.2
+          .mark
+            color: $color-main
 
   .edit-goods
     width: 100%
@@ -427,12 +532,29 @@
       color: #2A2A2A
       min-height: 40px
       margin-top: 24px
+      .edit-explain
+        align-self :center
+        font-family: $font-family-regular
+        font-size: 14px;
+        color: #ACACAC;
+        line-height: 1
+        padding-left :10px
+        .see-sample
+          padding-left :20px
+          text-decoration :underline
+          color: #3E77C3;
+          cursor :pointer
+      .edit-textarea
+        width: 400px
+        padding: 5px 14px
+        height: 94px
+        resize: none
       .edit-title
         margin-top: 7.5px
         font-size: $font-size-14
         font-family: $font-family-regular
         white-space: nowrap
-        text-align: left
+        text-align: right
         width: 64px
       .start
         display: inline-block
@@ -529,6 +651,10 @@
       border-radius: 2px
       position: relative
       overflow: hidden
+      .icon-video-button
+        width: 26px
+        height: @with
+        all-center()
       .img
         width :100%
         height :@width
