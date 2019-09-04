@@ -208,10 +208,6 @@
       },
       // 上下架
       switchBtn(item, index) {
-        if (item.nofull && item.is_online * 1 === 0) {
-          this.$toast.show('请先完善信息后再展示')
-          return
-        }
         if (item.goods_sku_code.length === 0 && item.is_online * 1 === 0) {
           this.$toast.show('请先补充商品编码再上架')
           return
@@ -229,10 +225,10 @@
             // this.goodsList[index].is_online = item.is_online * 1 === 1 ? 0 : 1
             this.oneBtn = true
             this.$refs.confirm.show(item.is_online * 1 === 1 ? '该商品已成功隐藏' : '该商品已成功展示')
-            this.getReqList()
           } else {
             this.$toast.show(res.message)
           }
+          this.getReqList()
         })
       },
       // 删除商品
