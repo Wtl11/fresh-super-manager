@@ -8,9 +8,9 @@
       <div class="down-item-small">
         <base-drop-down :select="secondSelect" @setValue="setSecondValue"></base-drop-down>
       </div>
-      <div class="down-item-small">
+      <!--<div class="down-item-small">
         <base-drop-down :select="thirdlySelect" @setValue="setThirdlyValue"></base-drop-down>
-      </div>
+      </div>-->
       <span class="down-tip">搜索</span>
       <div class="down-item">
         <base-search :infoText="keyWord" placeHolder="商品名称或编码" @search="changeKeyword"></base-search>
@@ -24,10 +24,10 @@
           <base-status-tab :statusList="statusTab" @setStatus="changeTradeType"></base-status-tab>
         </div>
         <div class="function-btn">
-          <router-link to="edit-goods" append class="btn-main btn-main-end">
+          <!--<router-link to="edit-goods" append class="btn-main btn-main-end">
             新建商品<span class="add-icon"></span>
           </router-link>
-          <a :href="downUrl" class="btn-main btn-main-end g-btn-item" target="_blank">商品模板导出</a>
+          <a :href="downUrl" class="btn-main btn-main-end g-btn-item" target="_blank">商品模板导出</a>-->
           <router-link to="lead-goods" append class="btn-main g-btn-item">
             批量新建
           </router-link>
@@ -48,8 +48,7 @@
             </div>
             <div class="list-item">{{item.goods_material_category}}</div>
             <div class="list-item">{{item.base_unit}}</div>
-            <div class="list-item">{{item.base_sale_rate}}{{item.base_unit}}/{{item.sale_unit}}</div>
-            <div class="list-item">￥{{item.trade_price}}/{{item.sale_unit}}</div>
+            <div class="list-item">{{item.add_time}}</div>
             <div class="list-item">
               <div class="list-item-btn" @click="switchBtn(item, index)">
                 <base-switch :status="item.is_online" confirmText="展示" cancelText="隐藏" switchColor="#922C88"></base-switch>
@@ -81,7 +80,7 @@
   import API from '@api'
   const PAGE_NAME = 'PRODUCT_LIST'
   const TITLE = '商品素材'
-  const LIST_TITLE = ['图片', '商品名称', '类目', '基本单位', '销售规格', '销售单价', '状态', '操作']
+  const LIST_TITLE = ['图片', '商品名称', '商品类目', '基本单位', '被添加次数', '状态', '操作']
 
   export default {
     name: PAGE_NAME,
@@ -209,6 +208,10 @@
       },
       // 上下架
       switchBtn(item, index) {
+        if (item.nofull && item.is_online * 1 === 0) {
+          this.$toast.show('请先完善信息后再展示')
+          return
+        }
         if (item.goods_sku_code.length === 0 && item.is_online * 1 === 0) {
           this.$toast.show('请先补充商品编码再上架')
           return

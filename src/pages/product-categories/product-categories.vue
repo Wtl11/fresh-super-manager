@@ -36,7 +36,7 @@
                 <div class="text">{{twoitem.name}} <span class="tip">({{twoitem.list && twoitem.list.length}}个子类)</span></div>
               </div>
               <div class="big-main-right">
-                <span class="list-operation" @click="addTwoCatee(item, index, twoitem, twoindex)">添加三级类目</span>
+                <!--<span class="list-operation" @click="addTwoCatee(item, index, twoitem, twoindex)">添加三级类目</span>-->
                 <span class="list-operation" @click="editTwoCatee(item, index, twoitem, twoindex)">修改</span>
                 <span class="list-operation" @click="delTwoCatee(item, index, twoitem, twoindex)">删除</span>
               </div>
@@ -83,7 +83,7 @@
     },
     data() {
       return {
-        statusTab: [{name: '一级类目', num: 0}, {name: '二级类目', num: 0}, {name: '三级类目', num: 0}],
+        statusTab: [{name: '一级类目', num: 0}, {name: '二级类目', num: 0}],
         categoryList: [],
         categoryType: 0,
         deteleType: 1,

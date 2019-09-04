@@ -22,13 +22,16 @@
         <div v-if="blankList.length !== 0" class="list">
           <div v-for="(item, index) in blankList" :key="index" class="list-content list-box">
             <div class="list-item list-double-row">
-              <div class="item-dark">{{item.name}}</div>
-              <div class="item-dark">{{item.goods_sku_code}}</div>
+              <div class="item-dark" :class="{'red': item.error_tips.name}">{{item.error_tips.name ? item.error_tips.name : item.name}}</div>
+              <!--<div class="item-dark">{{item.goods_sku_code}}</div>-->
             </div>
-            <div class="list-item"><span>{{item.category1}}</span><span v-if="item.category2">/{{item.category2}}</span><span v-if="item.category3">/{{item.category3}}</span></div>
-            <div class="list-item">{{item.base_unit}}</div>
-            <div class="list-item">{{item.base_sale_rate}}{{item.base_unit}}/{{item.sale_unit}}</div>
-            <div class="list-item">￥{{item.trade_price}}/{{item.sale_unit}}</div>
+            <div class="list-item" :class="{'red': item.error_tips.goods_material_category_name}">
+              <span>{{item.error_tips.goods_material_category_name ? item.error_tips.goods_material_category_name : item.category1}}</span>
+              <span v-if="item.category2 && !item.error_tips.goods_material_category_name">/{{item.category2}}</span>
+              <!--<span v-if="item.category3">/{{item.category3}}</span>-->
+            </div>
+            <div class="list-item" :class="{'red': item.error_tips.base_unit}">{{item.error_tips.base_unit ? item.error_tips.base_unit : item.base_unit}}</div>
+            <div class="list-item">{{item.describe}}</div>
           </div>
         </div>
         <!--<base-blank v-else></base-blank>-->
@@ -48,7 +51,7 @@
 
   const PAGE_NAME = 'PROCUREMENT_LEAD'
   const TITLE = '采购任务导入'
-  const COMMODITIES_LIST = ['商品名称', '类目', '基本单位', '销售规格', '销售单价']
+  const COMMODITIES_LIST = ['商品名称', '类目', '基本单位', '推荐语']
   export default {
     name: PAGE_NAME,
     page: {
@@ -131,7 +134,8 @@
           flex: 1.5
         &:nth-child(3), &:nth-child(4), &:nth-child(5)
           flex-wrap: nowrap
-
+      .red
+        color: #F53737
   .down-content
     align-items: flex-start
     padding: 5px 20px 25px

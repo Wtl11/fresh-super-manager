@@ -8,9 +8,9 @@
       <div class="down-item-small">
         <base-drop-down :select="secondSelect" @setValue="setSecondValue"></base-drop-down>
       </div>
-      <div class="down-item-small">
+      <!--<div class="down-item-small">
         <base-drop-down :select="thirdlySelect" @setValue="setThirdlyValue"></base-drop-down>
-      </div>
+      </div>-->
       <span class="down-tip">资料状态</span>
       <div class="down-item-small">
         <base-drop-down :select="infoStateSelect" @setValue="setSelectValue($event, 'complete_status')"></base-drop-down>
