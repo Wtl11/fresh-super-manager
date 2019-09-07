@@ -32,8 +32,11 @@
             <div class="open-item">
               <div class="open-item-line"></div>
               <div class="big-main-left hand" @click="openTwoList(index, twoindex)">
-                <div class="icon-hand" :class="twoitem.select ? 'open' : ''"></div>
-                <div class="text">{{twoitem.name}} <span class="tip">({{twoitem.list && twoitem.list.length}}个子类)</span></div>
+                <!--<div class="icon-hand" :class="twoitem.select ? 'open' : ''"></div>-->
+                <div class="text">
+                  {{twoitem.name}}
+                  <!--<span class="tip">({{twoitem.list && twoitem.list.length}}个子类)</span>-->
+                </div>
               </div>
               <div class="big-main-right">
                 <!--<span class="list-operation" @click="addTwoCatee(item, index, twoitem, twoindex)">添加三级类目</span>-->

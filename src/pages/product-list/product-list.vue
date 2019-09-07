@@ -13,7 +13,7 @@
       </div>-->
       <span class="down-tip">搜索</span>
       <div class="down-item">
-        <base-search :infoText="keyWord" placeHolder="商品名称或编码" @search="changeKeyword"></base-search>
+        <base-search :infoText="keyWord" placeHolder="商品名称" @search="changeKeyword"></base-search>
       </div>
     </div>
     <div class="table-content">
@@ -289,7 +289,7 @@
 
       &:last-child
         padding: 5px
-        max-width: 80px
+        max-width: 88px
         flex: 0.8
   .product-list
     width: 100%
