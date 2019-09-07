@@ -6,14 +6,18 @@
           <img src="./icon-product_list@2x.png" class="identification-icon">
           <p class="identification-name">商品导入</p>
         </div>
-        <div class="btn-main">
-          导入商品
-          <input
-            type="file"
-            class="stock-file hand"
-            @change="importStock($event, 1)"
-          >
+        <div class="function-btn">
+          <a :href="downUrl" class="btn-main btn-main-end" target="_blank">模板导出</a>
+          <div class="btn-main g-btn-item">
+            导入商品
+            <input
+              type="file"
+              class="stock-file hand"
+              @change="importStock($event, 1)"
+            >
+          </div>
         </div>
+
       </div>
       <div class="big-list" :class="blankList.length > 10 ? 'big-list-max' : ''">
         <div class="list-header list-box">
@@ -38,7 +42,7 @@
       </div>
       <div class="back">
         <div class="back-cancel back-btn hand" @click="_back">返回</div>
-        <div class="back-btn back-submit hand" @click="submitSure">创建</div>
+        <div class="back-btn back-submit hand" :class="{'btn-disable': hasError}" @click="submitSure">创建</div>
       </div>
     </div>
     <default-confirm ref="confirm" @confirm="confirm"></default-confirm>
@@ -64,17 +68,30 @@
       return {
         commodities: COMMODITIES_LIST,
         blankList: [],
-        isSubmit: true
+        isSubmit: true,
+        downUrl: '',
+        hasError: false
       }
     },
-    created() {},
+    created() {
+      this._getUrl()
+    },
     methods: {
       submitSure() {
+        if (this.hasError) return
         if (!this.blankList.length) {
           this.$toast.show('导入新建商品素材不能为空')
           return
         }
         this.$refs.confirm.show('是否批量导入新建商品素材？')
+      },
+      _getUrl() {
+        let currentId = this.getCurrentId()
+        let token = this.$storage.get('auth.currentUser', '')
+        let params = `access_token=${token.access_token}&
+        current_corp=${currentId}`
+
+        this.downUrl = process.env.VUE_APP_API + `/social-shopping/api/platform/create-goods-material-template?${params}`
       },
       async confirm() {
         if (!this.isSubmit) {
@@ -104,6 +121,14 @@
         this.$loading.hide()
         this.blankList = res.error === this.$ERR_OK ? res.data : []
         e.target.value = ''
+        res.data.forEach(item => {
+          for (let i in item.error_tips) { // eslint-disable-line
+            this.hasError = true
+          }
+        })
+        if (Object.keys(res.data.error_tips).length) {
+          this.hasError = true
+        }
         if (res.error !== this.$ERR_OK) {
           this.$toast.show(res.message)
         }

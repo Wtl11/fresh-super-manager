@@ -513,7 +513,7 @@
       font-size: 14px;
       .example
         background: #F5F7FA;
-        border: 0.5 solid #E9ECEE;
+        border: 0.5px solid #E9ECEE;
         margin-bottom :20px
         &:last-child
           margin-bottom : 0
