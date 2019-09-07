@@ -9,7 +9,7 @@
         <div class="function-btn">
           <a :href="downUrl" class="btn-main btn-main-end" target="_blank">模板导出</a>
           <div class="btn-main g-btn-item">
-            导入商品
+            导入素材
             <input
               type="file"
               class="stock-file hand"
@@ -26,16 +26,16 @@
         <div v-if="blankList.length !== 0" class="list">
           <div v-for="(item, index) in blankList" :key="index" class="list-content list-box">
             <div class="list-item list-double-row">
-              <div class="item-dark" :class="{'red': item.error_tips.name}">{{item.error_tips.name ? item.error_tips.name : item.name}}</div>
+              <div class="item-dark" :class="{'red': item.error_tips.name}">{{item.error_tips.name || item.name}}</div>
               <!--<div class="item-dark">{{item.goods_sku_code}}</div>-->
             </div>
             <div class="list-item" :class="{'red': item.error_tips.goods_material_category_name}">
-              <span>{{item.error_tips.goods_material_category_name ? item.error_tips.goods_material_category_name : item.category1}}</span>
+              <span>{{item.error_tips.goods_material_category_name || item.category1}}</span>
               <span v-if="item.category2 && !item.error_tips.goods_material_category_name">/{{item.category2}}</span>
               <!--<span v-if="item.category3">/{{item.category3}}</span>-->
             </div>
-            <div class="list-item" :class="{'red': item.error_tips.base_unit}">{{item.error_tips.base_unit ? item.error_tips.base_unit : item.base_unit}}</div>
-            <div class="list-item">{{item.describe}}</div>
+            <div class="list-item" :class="{'red': item.error_tips.base_unit}">{{item.error_tips.base_unit || item.base_unit}}</div>
+            <div class="list-item" :class="{'red': item.error_tips.describe}">{{item.error_tips.describe || item.describe}}</div>
           </div>
         </div>
         <!--<base-blank v-else></base-blank>-->
