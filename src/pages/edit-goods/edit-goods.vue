@@ -55,15 +55,15 @@
         </div>
         <div class="image-box">
           <div class="edit-image">
-            <draggable v-model="msg.goods_main_images" class="draggable" @update="_setSort()">
-              <div v-for="(item, index) in msg.goods_main_images" :key="index" class="show-image hand">
+            <draggable v-model="msg.goods_banner_images" class="draggable" @update="_setSort()">
+              <div v-for="(item, index) in msg.goods_banner_images" :key="index" class="show-image hand">
                 <img class="img" :src="item.image_url" alt="">
                 <span class="close" @click="delPic(index)"></span>
               </div>
             </draggable>
-            <div v-if="msg.goods_main_images.length < picNum" class="add-image hand">
-              <input type="file" class="sendImage hand" multiple="multiple" accept="image/*" @change="_addPic('goods_main_images', picNum, $event)">
-              <div v-if="showLoading && uploadImg === 'goods_main_images'" class="loading-mask">
+            <div v-if="msg.goods_banner_images.length < picNum" class="add-image hand">
+              <input type="file" class="sendImage hand" multiple="multiple" accept="image/*" @change="_addPic('goods_banner_images', picNum, $event)">
+              <div v-if="showLoading && uploadImg === 'goods_banner_images'" class="loading-mask">
                 <img src="./loading.gif" class="loading">
               </div>
             </div>
@@ -187,7 +187,8 @@
         msg: {
           name: '',
           goods_material_category_id: 0,
-          goods_main_images: [],
+          goods_banner_images: [],
+          // goods_main_images: [],
           goods_detail_images: [],
           goods_material_skus: [],
           goods_videos: [],
@@ -355,7 +356,6 @@
         this.msg.goods_material_category_id = data.id
       },
       _addVideo(type, length, e) {
-        console.log(e.target.files)
         this.uploadImg = type
         this.showLoading = true
         this.$vod.uploadFiles(e.target.files[0]).then((res) => {
@@ -415,7 +415,7 @@
         } else if (this.msg.goods_material_category_id <= 0) {
           this.$toast.show('请选择商品类目')
           return
-        } else if (this.msg.goods_main_images.length === 0) {
+        } else if (this.msg.goods_banner_images.length === 0) {
           this.$toast.show('请上传商品图片')
           return
         } else if (this.msg.goods_detail_images.length === 0) {
@@ -470,7 +470,7 @@
         if (key) {
           this.msg[key].splice(index, 1)
         } else {
-          this.msg.goods_main_images.splice(index, 1)
+          this.msg.goods_banner_images.splice(index, 1)
         }
       },
       delPic2(index) {
