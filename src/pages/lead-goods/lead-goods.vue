@@ -42,7 +42,7 @@
       </div>
       <div class="back">
         <div class="back-cancel back-btn hand" @click="_back">返回</div>
-        <div class="back-btn back-submit hand" @click="submitSure">创建</div>
+        <div class="back-btn back-submit hand" :class="{'btn-disable': hasError}" @click="submitSure">创建</div>
       </div>
     </div>
     <default-confirm ref="confirm" @confirm="confirm"></default-confirm>
@@ -69,7 +69,8 @@
         commodities: COMMODITIES_LIST,
         blankList: [],
         isSubmit: true,
-        downUrl: ''
+        downUrl: '',
+        hasError: false
       }
     },
     created() {
@@ -77,6 +78,7 @@
     },
     methods: {
       submitSure() {
+        if (this.hasError) return
         if (!this.blankList.length) {
           this.$toast.show('导入新建商品素材不能为空')
           return
@@ -119,6 +121,14 @@
         this.$loading.hide()
         this.blankList = res.error === this.$ERR_OK ? res.data : []
         e.target.value = ''
+        res.data.forEach(item => {
+          for (let i in item.error_tips) { // eslint-disable-line
+            this.hasError = true
+          }
+        })
+        if (Object.keys(res.data.error_tips).length) {
+          this.hasError = true
+        }
         if (res.error !== this.$ERR_OK) {
           this.$toast.show(res.message)
         }
