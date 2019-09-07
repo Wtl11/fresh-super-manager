@@ -20,7 +20,7 @@
       <div class="identification">
         <div class="identification-page">
           <img src="./icon-product_list@2x.png" class="identification-icon">
-          <p class="identification-name">商品中心</p>
+          <p class="identification-name">商品素材列表</p>
           <base-status-tab :statusList="statusTab" @setStatus="changeTradeType"></base-status-tab>
         </div>
         <div class="function-btn">

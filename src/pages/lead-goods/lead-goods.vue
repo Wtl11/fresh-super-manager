@@ -4,7 +4,7 @@
       <div class="identification">
         <div class="identification-page">
           <img src="./icon-product_list@2x.png" class="identification-icon">
-          <p class="identification-name">商品导入</p>
+          <p class="identification-name">商品素材导入</p>
         </div>
         <div class="function-btn">
           <a :href="downUrl" class="btn-main btn-main-end" target="_blank">模板导出</a>
