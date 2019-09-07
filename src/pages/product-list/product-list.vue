@@ -44,7 +44,7 @@
             </div>
             <div class="list-item list-double-row">
               <div class="item-dark">{{item.name}}</div>
-              <div class="item-dark">{{item.goods_sku_code}}</div>
+              <!--<div class="item-dark">{{item.goods_sku_code}}</div>-->
             </div>
             <div class="list-item">{{item.goods_material_category}}</div>
             <div class="list-item">{{item.base_unit}}</div>
