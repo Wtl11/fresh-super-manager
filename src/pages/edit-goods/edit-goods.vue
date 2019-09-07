@@ -148,6 +148,19 @@
   const PAGE_NAME = 'EDIT_GOODS'
   const TITLE = '新建商品'
 
+  // 死变态
+  function formatVideos(arr = []) {
+    return arr.map(item => {
+      if (item.id !== 0) {
+        item.file_id = item.id
+        return {
+          file_id: item.id
+        }
+      }
+      return item
+    })
+  }
+
   export default {
     name: PAGE_NAME,
     page: {
@@ -414,6 +427,8 @@
         }
         this.msg.goods_material_skus[0] = this.goods_skus
         this.isSubmit = true
+        // 转换视频字段
+        this.msg.goods_videos = formatVideos(this.msg.goods_videos) || []
         if (this.id) {
           API.Product.editGoods(this.id, this.msg).then((res) => {
             if (res.error === this.$ERR_OK) {
