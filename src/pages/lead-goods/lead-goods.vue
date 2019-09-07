@@ -115,6 +115,7 @@
       },
       //  导入商品新建模板
       async importStock(e, index) {
+        this.hasError = false
         let param = this._infoFile(e.target.files[0])
         this.$loading.show('上传中...')
         let res = await API.Product.checkGoodsData(param, true, 60000)
