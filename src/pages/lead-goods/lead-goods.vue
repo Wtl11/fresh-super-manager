@@ -122,6 +122,10 @@
         this.$loading.hide()
         this.blankList = res.error === this.$ERR_OK ? res.data : []
         e.target.value = ''
+        if (res.error !== this.$ERR_OK) {
+          this.$toast.show(res.message)
+        }
+
         res.data.forEach(item => {
           for (let i in item.error_tips) { // eslint-disable-line
             this.hasError = true
@@ -129,9 +133,6 @@
         })
         if (Object.keys(res.data.error_tips).length) {
           this.hasError = true
-        }
-        if (res.error !== this.$ERR_OK) {
-          this.$toast.show(res.message)
         }
       },
       // 格式化文件
