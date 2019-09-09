@@ -185,6 +185,7 @@
         opacity: 0.8
   .empty-con
     height: 100%
+    min-height: 400px
     layout()
     align-items: center
     justify-content: center
