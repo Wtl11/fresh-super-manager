@@ -131,9 +131,6 @@
             this.hasError = true
           }
         })
-        if (Object.keys(res.data.error_tips).length) {
-          this.hasError = true
-        }
       },
       // 格式化文件
       _infoFile(file) {
