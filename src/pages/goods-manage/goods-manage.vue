@@ -209,11 +209,13 @@
       },
       // 选择一级类目
       setStairValue(data) {
+        let obj = JSON.parse(JSON.stringify(data))
         this.secondSelect.content = '二级类目'
-        this.secondSelect.data = data.list
-        this.thirdlySelect.content = '三级类目'
-        this.thirdlySelect.data = ''
-        this.requestParams.goods_category_id = data.id
+        this.secondSelect.data = obj.list
+        this.secondSelect.data.unshift({name: '全部', id: obj.id, list: []})
+        // this.thirdlySelect.content = '三级类目'
+        // this.thirdlySelect.data = ''
+        this.requestParams.goods_category_id = obj.id
         this._getGoodsList()
       },
       // 选择二级类目

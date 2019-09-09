@@ -346,8 +346,9 @@
       setStairValue(data) {
         this.secondSelect.content = '二级类目'
         this.secondSelect.data = data.list
-        this.thirdlySelect.content = '三级类目'
-        this.thirdlySelect.data = ''
+        this.secondSelect.data.unshift({name: '全部', id: data.id, list: []})
+        // this.thirdlySelect.content = '三级类目'
+        // this.thirdlySelect.data = ''
         this.msg.goods_category_id = data.id
       },
       // 选择二级类目

@@ -154,11 +154,13 @@
       },
       // 选择一级类目
       setStairValue(data) {
+        let obj = JSON.parse(JSON.stringify(data))
         this.secondSelect.content = '二级类目'
-        this.secondSelect.data = data.list
-        this.thirdlySelect.content = '三级类目'
-        this.thirdlySelect.data = ''
-        this.categoryId = data.id
+        this.secondSelect.data = obj.list
+        this.secondSelect.data.unshift({name: '全部', id: obj.id, list: []})
+        // this.thirdlySelect.content = '三级类目'
+        // this.thirdlySelect.data = ''
+        this.categoryId = obj.id
         this.page = 1
         this.$refs.pagination.beginPage()
         this.getReqList()
