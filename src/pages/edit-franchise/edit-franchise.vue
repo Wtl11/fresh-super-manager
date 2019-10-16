@@ -15,19 +15,6 @@
       <div class="edit-item">
         <div class="edit-title">
           <span class="start">*</span>
-          加盟商账号
-        </div>
-        <div class="edit-input-box">
-          <!--onpaste="return false"-->
-          <div v-if="id" class="edit-change">{{stores.mobile}}</div>
-          <input v-else v-model="stores.mobile" type="number" class="edit-input" maxlength="11"
-                 placeholder="请填写加盟商账号"
-          >
-        </div>
-      </div>
-      <div class="edit-item">
-        <div class="edit-title">
-          <span class="start">*</span>
           加盟商名称
         </div>
         <div class="edit-input-box">
@@ -37,37 +24,36 @@
       <div class="edit-item">
         <div class="edit-title">
           <span class="start">*</span>
-          真实姓名
+          地区
         </div>
         <div class="edit-input-box">
-          <input v-model="stores.real_name" type="text" class="edit-input" placeholder="请输入真实姓名">
+          <city-select ref="city" @setValue="getCity"></city-select>
         </div>
-        <div class="edit-msg">请输入货款结算银行卡持卡人的真实姓名</div>
       </div>
       <div class="edit-item">
         <div class="edit-title">
           <span class="start">*</span>
-          身份证号
+          社区数量
         </div>
         <div class="edit-input-box">
-          <input v-model="stores.identity_cart" type="number" class="edit-input" placeholder="请输入身份证号">
-        </div>
-        <div class="edit-msg">请输入18位身份证号码</div>
-      </div>
-
-      <div class="edit-item">
-        <div class="edit-title">
-          <span class="start">*</span>
-          密码
-        </div>
-        <div class="edit-input-box">
-          <div v-if="!isChangePassword" class="list-operation edit-change" @click="changeType">修改密码</div>
-          <input v-else v-model="stores.password" type="text" class="edit-input" maxlength="11"
-                 placeholder="请填写加盟商登录密码"
+          <input v-model="stores.account_count" type="number" class="edit-input" maxlength="11"
+                 placeholder="请填写社区数量"
           >
         </div>
       </div>
       <div class="edit-item">
+        <div class="edit-title">
+          <span class="start">*</span>
+          平台服务费率(%)
+        </div>
+        <div class="edit-input-box">
+          <input v-model="stores.service_tariffing" type="number" class="edit-input">
+        </div>
+      </div>
+
+
+
+      <!--<div class="edit-item">
         <div class="edit-title">
           收款人
         </div>
@@ -99,36 +85,76 @@
                  placeholder="请填写加盟商收款银行账户"
           >
         </div>
+      </div>-->
+
+    </div>
+    <div class="content-header">
+      <div class="content-title">实名信息</div>
+    </div>
+    <div class="leader-box">
+      <div class="edit-item">
+        <div class="edit-title">
+          <span class="start">*</span>
+          真实姓名
+        </div>
+        <div class="edit-input-box">
+          <input v-model="stores.real_name"
+                 type="text"
+                 class="edit-input"
+                 :disabled="id && !editName"
+                 placeholder="请输入真实姓名"
+          >
+        </div>
+        <div class="edit-msg">请输入货款结算银行卡持卡人的真实姓名</div>
       </div>
       <div class="edit-item">
         <div class="edit-title">
           <span class="start">*</span>
-          社区数量
+          身份证号
         </div>
         <div class="edit-input-box">
-          <input v-model="stores.account_count" type="number" class="edit-input" maxlength="11"
-                 placeholder="请填写社区数量"
+          <input v-model="stores.identity_cart"
+                 type="number"
+                 class="edit-input"
+                 :disabled="id && !editName"
+                 placeholder="请输入身份证号"
+          >
+        </div>
+        <div class="edit-msg">请输入18位身份证号码</div>
+      </div>
+
+    </div>
+
+    <div class="content-header">
+      <div class="content-title">登录信息</div>
+    </div>
+    <div class="leader-box">
+      <div class="edit-item">
+        <div class="edit-title">
+          <span class="start">*</span>
+          账号
+        </div>
+        <div class="edit-input-box">
+          <!--onpaste="return false"-->
+          <div v-if="id" class="edit-change">{{stores.mobile}}</div>
+          <input v-else v-model="stores.mobile" type="number" class="edit-input" maxlength="11"
+                 placeholder="请填写加盟商账号"
           >
         </div>
       </div>
       <div class="edit-item">
         <div class="edit-title">
           <span class="start">*</span>
-          地区
+          密码
         </div>
         <div class="edit-input-box">
-          <city-select ref="city" @setValue="getCity"></city-select>
+          <div v-if="!isChangePassword" class="list-operation edit-change" @click="changeType">修改密码</div>
+          <input v-else v-model="stores.password" type="text" class="edit-input" maxlength="11"
+                 placeholder="请填写加盟商登录密码"
+          >
         </div>
       </div>
-      <div class="edit-item">
-        <div class="edit-title">
-          <span class="start">*</span>
-          平台服务费率(%)
-        </div>
-        <div class="edit-input-box">
-          <input v-model="stores.service_tariffing" type="number" class="edit-input">
-        </div>
-      </div>
+
     </div>
     <div class="back">
       <div class="back-cancel back-btn hand" @click="back">返回</div>
@@ -165,6 +191,7 @@
     data() {
       return {
         id: this.$route.query.id,
+        editName: this.$route.query.editName,
         isChangePassword: !this.$route.query.id,
         stores: {
           mobile: '',
@@ -172,17 +199,17 @@
           real_name: '',
           identity_cart: '',
           password: '',
-          user_name: '',
-          user_names: '',
-          withdrawal_card: '',
-          withdrawal_cards: '',
+          // user_name: '',
+          // user_names: '',
+          // withdrawal_card: '',
+          // withdrawal_cards: '',
           province: '',
           city: '',
           account_count: '',
           district: '',
           service_tariffing: 0.8,
-          banks: '',
-          bank: ''
+          // banks: '',
+          // bank: ''
         },
         isSubmit: true
       }
@@ -219,20 +246,8 @@
         if (!this.isSubmit) {
           return
         }
-        if (!this.id && !this.stores.mobile) {
-          this.$toast.show('请填写加盟商账号')
-          return
-        } else if (!this.id && !TELREG.test(this.stores.mobile)) {
-          this.$toast.show('请填写正确加盟商账号')
-          return
-        } else if (!this.stores.name) {
+        if (!this.stores.name) {
           this.$toast.show('请填写加盟商名称')
-          return
-        } else if (this.isChangePassword && !this.stores.password) {
-          this.$toast.show('请填写加盟商登录密码')
-          return
-        } else if (!this.stores.account_count) {
-          this.$toast.show('请填写社区数量')
           return
         } else if (!this.stores.province) {
           this.$toast.show('请选择省份')
@@ -243,8 +258,26 @@
         } else if (!this.stores.district) {
           this.$toast.show('请选择区/县')
           return
+        } else if (!this.stores.account_count) {
+          this.$toast.show('请填写社区数量')
+          return
         } else if (!this.stores.service_tariffing) {
           this.$toast.show('请填写平台服务费率')
+          return
+        } else if (!this.stores.real_name) {
+          this.$toast.show('请填写真实姓名')
+          return
+        } else if (!this.stores.identity_cart) {
+          this.$toast.show('请填写身份证号')
+          return
+        } else if (!this.id && !this.stores.mobile) {
+          this.$toast.show('请填写加盟商账号')
+          return
+        } else if (!this.id && !TELREG.test(this.stores.mobile)) {
+          this.$toast.show('请填写正确加盟商账号')
+          return
+        } else if (this.isChangePassword && !this.stores.password) {
+          this.$toast.show('请填写加盟商登录密码')
           return
         }
         this.isSubmit = false
@@ -281,4 +314,9 @@
   @import "~@style/edit"
   .edit-change
     line-height: 40px
+    .edit-input:disabled
+      background: #f9f9f9
+      font-family: $font-family-regular
+      color: $color-text-assist
+      cursor: not-allowed
 </style>

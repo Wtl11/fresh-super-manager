@@ -99,6 +99,9 @@ export const mutations = {
   },
   SET_FRANCHISE_DETAIL(state, franchiseDetail) {
     state.franchiseDetail = franchiseDetail
+  },
+  SET_FRAN_DATA(state, object) {
+    state = Object.assign({}, state, object)
   }
 }
 
@@ -171,6 +174,11 @@ export const actions = {
     commit('SET_SETTLEMENT_KEYWORD', keyword)
     commit('SET_SETTLEMENT_PAGE', 1)
     dispatch('getFranchiseSettlement')
+  },
+  setfranData({commit, dispatch}, object) {
+    commit('SET_FRAN_DATA', object)
+    commit('SET_FRAN_LIST_PAGE', 1)
+    dispatch('getFranchiseList')
   },
   // 加盟商列表
   getFranchiseList({commit, dispatch}) {

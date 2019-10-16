@@ -80,7 +80,8 @@ export const franchiseMethods = mapActions('franchise', [
   'setfranKeyword',
   'setfranTime',
   'setfranListKeyword',
-  'setfranListPage'
+  'setfranListPage',
+  'setfranData'
 ])
 
 // 意向单
