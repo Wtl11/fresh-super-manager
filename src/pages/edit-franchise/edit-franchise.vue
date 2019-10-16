@@ -37,6 +37,27 @@
       <div class="edit-item">
         <div class="edit-title">
           <span class="start">*</span>
+          真实姓名
+        </div>
+        <div class="edit-input-box">
+          <input v-model="stores.real_name" type="text" class="edit-input" placeholder="请输入真实姓名">
+        </div>
+        <div class="edit-msg">请输入货款结算银行卡持卡人的真实姓名</div>
+      </div>
+      <div class="edit-item">
+        <div class="edit-title">
+          <span class="start">*</span>
+          身份证号
+        </div>
+        <div class="edit-input-box">
+          <input v-model="stores.identity_cart" type="number" class="edit-input" placeholder="请输入身份证号">
+        </div>
+        <div class="edit-msg">请输入18位身份证号码</div>
+      </div>
+
+      <div class="edit-item">
+        <div class="edit-title">
+          <span class="start">*</span>
           密码
         </div>
         <div class="edit-input-box">
@@ -148,6 +169,8 @@
         stores: {
           mobile: '',
           name: '',
+          real_name: '',
+          identity_cart: '',
           password: '',
           user_name: '',
           user_names: '',
