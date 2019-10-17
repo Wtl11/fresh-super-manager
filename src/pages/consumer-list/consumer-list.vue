@@ -14,7 +14,7 @@
     <div class="table-content">
       <div class="identification">
         <div class="identification-page">
-          <img src="./icon-product_list@2x.png" class="identification-icon">
+          <img src="./icon-consumer_list@2x.png" class="identification-icon">
           <p class="identification-name">消费者列表</p>
         </div>
       </div>
