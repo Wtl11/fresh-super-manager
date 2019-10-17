@@ -7,7 +7,7 @@
       </div>
       <span class="down-tip">搜索</span>
       <div class="down-item">
-        <base-search :infoText="keyword" placeHolder="消费者名称或帐号" @search="changeKeyword"></base-search>
+        <base-search :infoText="keyword" placeHolder="消费者名称或手机号" @search="changeKeyword"></base-search>
       </div>
     </div>
 
