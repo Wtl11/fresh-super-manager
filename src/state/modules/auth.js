@@ -80,6 +80,18 @@ const CUSTOMER = [
         isLight: false
       },
       {
+        title: '团长',
+        url: '/home/leader-list',
+        key: 'leader-list',
+        isLight: false
+      },
+      {
+        title: '消费者',
+        url: '/home/consumer-list',
+        key: 'consumer-list',
+        isLight: false
+      },
+      {
         title: '意向单',
         url: '/home/intent-list',
         key: 'intent-list',
