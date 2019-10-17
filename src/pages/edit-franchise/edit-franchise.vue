@@ -101,7 +101,7 @@
           <input v-model="stores.real_name"
                  type="text"
                  class="edit-input"
-                 :disabled="id && !editName"
+                 :disabled="stores.is_certification"
                  placeholder="请输入真实姓名"
           >
         </div>
@@ -114,9 +114,9 @@
         </div>
         <div class="edit-input-box">
           <input v-model="stores.identity_cart"
-                 type="number"
+                 :type="stores.is_certification ? 'text' : 'number'"
                  class="edit-input"
-                 :disabled="id && !editName"
+                 :disabled="stores.is_certification"
                  placeholder="请输入身份证号"
           >
         </div>

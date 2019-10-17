@@ -73,7 +73,6 @@
             <div class="list-item">{{item.created_at}}</div>
             <div class="list-item">
               <router-link :to="`edit-franchise?id=${item.id}`" append class="list-operation">编辑</router-link>
-              <router-link v-if="!item.is_certification" :to="`edit-franchise?id=${item.id}&editName=1`" append class="list-operation">实名信息</router-link>
             </div>
           </div>
         </div>
@@ -190,7 +189,7 @@
       &:last-child
         padding: 0
         flex: 2
-        max-width: 108px
+        max-width: 32px
     .see-icon
       width: 20px
       height: 12px
