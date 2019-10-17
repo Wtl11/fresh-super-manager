@@ -5,10 +5,10 @@
       <div class="down-item">
         <base-drop-down :select="nameList" @setValue="setName"></base-drop-down>
       </div>
-      <span class="down-tip">绑卡</span>
+      <!--<span class="down-tip">绑卡</span>
       <div class="down-item">
         <base-drop-down :select="cardList" @setValue="setCard"></base-drop-down>
-      </div>
+      </div>-->
 
       <span class="down-tip">搜索</span>
       <div class="down-item">
@@ -38,30 +38,42 @@
             <div class="list-item">{{item.province}} {{item.city}} {{item.district}}</div>
             <div class="list-item">{{item.service_tariffing}}%</div>
             <div class="list-item">
-              {{'已实名'}}
-              <img src="./icon-eye@2x.png" alt="" class="see-icon" @mouseenter="showName(index)" @mouseleave="hideName">
+              {{item.is_certification ? '已实名' : '未实名'}}
+              <img v-if="item.is_certification"
+                   src="./icon-eye@2x.png"
+                   alt=""
+                   class="see-icon"
+                   @mouseenter="showName(index)"
+                   @mouseleave="hideName"
+              >
               <transition name="fade">
                 <div v-if="nameShow === index" class="name-content">
-                  <span class="text">姓名: **峰</span>
-                  <span class="text">身份证号： 420**************3</span>
+                  <span class="text">姓名: {{item.real_name}}</span>
+                  <span class="text">身份证号： {{item.identity_cart}}</span>
                 </div>
               </transition>
             </div>
             <div class="list-item">
-              {{'已绑卡'}}
-              <img src="./icon-eye@2x.png" alt="" class="see-icon" @mouseenter="showCard(index)" @mouseleave="hideCard">
+              {{item.withdrawal_card ? '已绑卡' : '未绑卡'}}
+              <img v-if="item.withdrawal_card"
+                   src="./icon-eye@2x.png"
+                   alt=""
+                   class="see-icon"
+                   @mouseenter="showCard(index)"
+                   @mouseleave="hideCard"
+              >
               <transition name="fade">
                 <div v-if="cardShow === index" class="card-content">
-                  <span class="text">卡号： ****************321</span>
+                  <span class="text">卡号： {{item.withdrawal_card}}</span>
                 </div>
               </transition>
             </div>
-            <div class="list-item">{{'启用中'}}</div>
+            <div class="list-item">{{item.is_freeze ? '已失效' : '启用中'}}</div>
             <div class="list-item">{{item.account_count}}</div>
             <div class="list-item">{{item.created_at}}</div>
             <div class="list-item">
               <router-link :to="`edit-franchise?id=${item.id}`" append class="list-operation">编辑</router-link>
-              <router-link :to="`edit-franchise?id=${item.id}&editName=1`" append class="list-operation">实名信息</router-link>
+              <router-link v-if="!item.is_certification" :to="`edit-franchise?id=${item.id}&editName=1`" append class="list-operation">实名信息</router-link>
             </div>
           </div>
         </div>
@@ -106,11 +118,25 @@
     data() {
       return {
         listTitle: LIST_TITLE,
-        nameList: [],
-        cardList: [],
+        nameList: {
+          check: false,
+          show: false,
+          content: '全部',
+          type: 'default',
+          data: [{name: '全部', id: ''}, {name: '已实名', id: 1}, {name: '未实名', id: 0}]
+        },
+        cardList: {
+          check: false,
+          show: false,
+          content: '全部',
+          type: 'default',
+          data: [{name: '全部', id: ''}, {name: '已绑卡', id: 1}, {name: '未绑卡', id: 0}]
+        },
+        is_certification: '',
         nameShow: '',
         cardShow: '',
-        timer: ''
+        timer: '',
+        timer1: ''
       }
     },
     computed: {
@@ -122,7 +148,8 @@
         this.setfranData({})
       },
       setName(item) {
-        this.setfranData({})
+        this.setfranData({isCertification: item.id})
+        this.$refs.pagination.beginPage()
       },
       changeKeyword(keyword) {
         this.setfranListKeyword(keyword)
@@ -138,11 +165,11 @@
         }, 300)
       },
       showCard(index) {
-        clearTimeout(this.timer)
+        clearTimeout(this.timer1)
         this.cardShow = index
       },
       hideCard() {
-        this.timer = setTimeout(() => {
+        this.timer1 = setTimeout(() => {
           this.cardShow = ''
         }, 300)
       }

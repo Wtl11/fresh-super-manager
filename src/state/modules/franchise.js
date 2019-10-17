@@ -6,6 +6,7 @@ export const state = {
   settlementStart: '',
   settlementEnd: '',
   settlementKeyword: '',
+  isCertification: '',
   settlementStatus: '',
   pageTotal: {
     total: 1,
@@ -101,7 +102,9 @@ export const mutations = {
     state.franchiseDetail = franchiseDetail
   },
   SET_FRAN_DATA(state, object) {
-    state = Object.assign({}, state, object)
+    for (let i in object) {
+      state[i] = object[i]
+    }
   }
 }
 
@@ -175,17 +178,13 @@ export const actions = {
     commit('SET_SETTLEMENT_PAGE', 1)
     dispatch('getFranchiseSettlement')
   },
-  setfranData({commit, dispatch}, object) {
-    commit('SET_FRAN_DATA', object)
-    commit('SET_FRAN_LIST_PAGE', 1)
-    dispatch('getFranchiseList')
-  },
   // 加盟商列表
   getFranchiseList({commit, dispatch}) {
-    const {franListKeyword, franListPage} = state
+    const {franListKeyword, franListPage, isCertification} = state
     let data = {
       keyword: franListKeyword,
-      page: franListPage
+      page: franListPage,
+      is_certification: isCertification
     }
     return API.Franchise.franchiseList(data)
       .then((res) => {
@@ -217,6 +216,11 @@ export const actions = {
   },
   setfranListPage({commit, dispatch}, page) {
     commit('SET_FRAN_LIST_PAGE', page)
+    dispatch('getFranchiseList')
+  },
+  setfranData({commit, dispatch}, object) {
+    commit('SET_FRAN_DATA', object)
+    commit('SET_FRAN_LIST_PAGE', 1)
     dispatch('getFranchiseList')
   }
 }
