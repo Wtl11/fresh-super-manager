@@ -26,7 +26,7 @@
           <div v-for="(item, index) in consumerList" :key="index" class="list-content list-box">
             <div v-for="(title) in listTitle" :key="title.key" :class="title.class" class="list-item">
               <img v-if="title.key === 'head_image_url'" :src="item.head_image_url" class="consumer-header">
-              <template v-else-if="title.key === 'is_identification'">{{item.is_freeze ? '已开通' : '未开通'}}</template>
+              <template v-else-if="title.key === 'is_identification'">{{item.is_identification ? '已开通' : '未开通'}}</template>
               <template v-else>{{item[title.key]}}</template>
             </div>
           </div>
