@@ -69,7 +69,8 @@ export const franchiseComputed = {
     'franchiseList',
     'franListKeyword',
     'franListPageTotal',
-    'franListPage'
+    'franListPage',
+    'isCertification'
   ])
 }
 

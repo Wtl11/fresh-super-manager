@@ -42,6 +42,16 @@ export default {
     return request.get(url, data, loading)
   },
   /**
+   *  加盟商状态数量
+   * @param data
+   * @param loading
+   * @returns {AxiosPromise<any> | * | IDBRequest<IDBValidKey> | Promise<void>}
+   */
+  franchiseStatus(data, loading = false) {
+    let url = `/social-shopping/api/platform/stores-status`
+    return request.get(url, data, loading)
+  },
+  /**
    *  加盟商列表
    * @param data
    * @param loading

@@ -54,7 +54,7 @@
     {name: '消费者头像', key: 'head_image_url'},
     {name: '消费者名称', key: 'nickname'},
     {name: '消费者手机', key: 'mobile'},
-    {name: '联通账户', key: 'is_identification'},
+    {name: '通联账户', key: 'is_identification'},
     {name: '注册时间', key: 'created_at'}
   ]
 

@@ -61,6 +61,9 @@ export const getters = {
   },
   franchiseDetail(state) {
     return state.franchiseDetail
+  },
+  isCertification(state) {
+    return state.isCertification
   }
 }
 

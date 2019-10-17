@@ -20,6 +20,7 @@
         <div class="identification-page">
           <img src="./icon-new_commodity@2x.png" class="identification-icon">
           <p class="identification-name">交易记录</p>
+          <base-status-tab :statusList="statusTab" @setStatus="changeStatus"></base-status-tab>
         </div>
         <div class="function-btn">
           <router-link to="edit-franchise" append class="btn-main btn-main-end">
@@ -53,7 +54,7 @@
                 </div>
               </transition>
             </div>
-            <div class="list-item">
+            <!--<div class="list-item">
               {{item.withdrawal_card ? '已绑卡' : '未绑卡'}}
               <img v-if="item.withdrawal_card"
                    src="./icon-eye@2x.png"
@@ -67,7 +68,7 @@
                   <span class="text">卡号： {{item.withdrawal_card}}</span>
                 </div>
               </transition>
-            </div>
+            </div>-->
             <div class="list-item">{{item.is_freeze ? '已失效' : '启用中'}}</div>
             <div class="list-item">{{item.account_count}}</div>
             <div class="list-item">{{item.created_at}}</div>
@@ -93,6 +94,7 @@
 
 <script type="text/ecmascript-6">
   import {franchiseComputed, franchiseMethods} from '@state/helpers'
+  import API from '@api'
 
   const PAGE_NAME = 'FRANCHISE_LIST'
   const TITLE = '加盟商'
@@ -102,7 +104,7 @@
     '所在地区',
     '服务费率',
     '是否实名',
-    '是否绑卡',
+    // '是否绑卡',
     '状态',
     '社区数量',
     '创建时间',
@@ -124,6 +126,7 @@
           type: 'default',
           data: [{name: '全部', id: ''}, {name: '已实名', id: 1}, {name: '未实名', id: 0}]
         },
+        statusTab: [{name: '全部', num: 0}, {name: '启用中', num: 0}, {name: '已失效', num: 0}],
         cardList: {
           check: false,
           show: false,
@@ -141,17 +144,43 @@
     computed: {
       ...franchiseComputed
     },
+    created() {
+      this._setName()
+      this.getStatus()
+    },
     methods: {
       ...franchiseMethods,
       setCard(item) {
         this.setfranData({})
       },
+      _setName() {
+        let item = this.nameList.data.find((item) => item.id === this.isCertification)
+        this.nameList.content = item.name || '全部'
+      },
+      getStatus() {
+        API.Franchise.franchiseStatus({is_certification: this.isCertification, keyword: this.franListKeyword})
+          .then(res => {
+            this.statusTab = res.data.map(item => {
+              return {
+                name: item.status_str,
+                value: item.status,
+                num: item.statistic
+              }
+            })
+          })
+      },
+      changeStatus(item) {
+        this.setfranData({status: item.value})
+        this.$refs.pagination.beginPage()
+      },
       setName(item) {
         this.setfranData({isCertification: item.id})
+        this.getStatus()
         this.$refs.pagination.beginPage()
       },
       changeKeyword(keyword) {
         this.setfranListKeyword(keyword)
+        this.getStatus()
         this.$refs.pagination.beginPage()
       },
       showName(index) {
@@ -182,7 +211,7 @@
   .list-box
     .list-item
       position: relative
-      &:nth-child(1), &:nth-child(2), &:nth-child(3), &:nth-child(9)
+      &:nth-child(1), &:nth-child(2), &:nth-child(3), &:nth-child(8)
         flex: 1.5
       &:nth-child(5),&:nth-child(6)
         overflow: inherit

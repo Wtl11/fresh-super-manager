@@ -53,7 +53,7 @@
 
 
 
-      <!--<div class="edit-item">
+      <div class="edit-item">
         <div class="edit-title">
           收款人
         </div>
@@ -85,7 +85,7 @@
                  placeholder="请填写加盟商收款银行账户"
           >
         </div>
-      </div>-->
+      </div>
 
     </div>
     <div class="content-header">
@@ -199,17 +199,17 @@
           real_name: '',
           identity_cart: '',
           password: '',
-          // user_name: '',
-          // user_names: '',
-          // withdrawal_card: '',
-          // withdrawal_cards: '',
+          user_name: '',
+          user_names: '',
+          withdrawal_card: '',
+          withdrawal_cards: '',
           province: '',
           city: '',
           account_count: '',
           district: '',
           service_tariffing: 0.8,
-          // banks: '',
-          // bank: ''
+          banks: '',
+          bank: ''
         },
         isSubmit: true
       }

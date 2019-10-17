@@ -120,7 +120,7 @@
           })
       },
       getStatus() {
-        API.Leader.getStatus()
+        API.Leader.getStatus({is_certification: this.is_certification, keyword: this.keyword})
           .then(res => {
             this.statusTab = res.data.map(item => {
               return {
