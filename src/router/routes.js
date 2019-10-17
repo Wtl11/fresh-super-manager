@@ -56,6 +56,24 @@ export default [
           }
         }
       },
+      // 加盟商
+      {
+        path: 'leader-list',
+        name: 'leader-list',
+        component: () => lazyLoadView(import('@pages/leader-list/leader-list')),
+        meta: {
+          titles: ['客户', '团长']
+        }
+      },
+      // 加盟商
+      {
+        path: 'consumer-list',
+        name: 'consumer-list',
+        component: () => lazyLoadView(import('@pages/consumer-list/consumer-list')),
+        meta: {
+          titles: ['客户', '消费者']
+        }
+      },
       // 意向单
       {
         path: 'intent-list',

@@ -51,5 +51,25 @@ export default {
   getShopBillType(data = {}, loading = false) {
     let url = '/social-shopping/api/platform/shop-order-type'
     return request.get(url, data, loading)
+  },
+  /**
+   * 获取团长列表
+   * @param data
+   * @param loading
+   * @returns {*}
+   */
+  getLeaderList(data = {}, loading = false) {
+    let url = '/social-shopping/api/platform/shops'
+    return request.get(url, data, loading)
+  },
+  /**
+   * 获取团长状态数
+   * @param data
+   * @param loading
+   * @returns {*}
+   */
+  getStatus(data = {}, loading = false) {
+    let url = '/social-shopping/api/platform/shops-status'
+    return request.get(url, data, loading)
   }
 }
