@@ -53,7 +53,7 @@
 
   const LIST_CONFIG = [
     {name: '团长名称', key: 'name'},
-    {name: '团长账号', key: 'listTitle'},
+    {name: '团长账号', key: 'mobile'},
     {name: '社区名称', key: 'social_name'},
     {name: '所属加盟商', key: 'store_name'},
     {name: '是否实名', key: 'is_certification'},
