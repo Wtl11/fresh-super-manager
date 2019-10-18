@@ -8,6 +8,7 @@ export const state = {
   settlementKeyword: '',
   isCertification: '',
   settlementStatus: '',
+  status: 0,
   pageTotal: {
     total: 1,
     per_page: 10,
@@ -183,11 +184,12 @@ export const actions = {
   },
   // 加盟商列表
   getFranchiseList({commit, dispatch}) {
-    const {franListKeyword, franListPage, isCertification} = state
+    const {franListKeyword, franListPage, isCertification, status} = state
     let data = {
       keyword: franListKeyword,
       page: franListPage,
-      is_certification: isCertification
+      is_certification: isCertification,
+      status: status
     }
     return API.Franchise.franchiseList(data)
       .then((res) => {
