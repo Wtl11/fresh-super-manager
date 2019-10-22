@@ -27,7 +27,7 @@
           <div v-for="(item, index) in leaderList" :key="index" class="list-content list-box">
             <div v-for="(title) in listTitle" :key="title.key" :class="title.class" class="list-item">
               <template v-if="title.key === 'is_certification'">{{item.is_certification ? '已实名' : '未实名'}}</template>
-              <template v-else-if="title.key === 'is_freeze'">{{item.is_freeze ? '已冻结' : '未冻结'}}</template>
+              <template v-else-if="title.key === 'is_freeze'">{{item.is_freeze ? '禁用' : '启用'}}</template>
               <template v-else>{{item[title.key]}}</template>
             </div>
           </div>
